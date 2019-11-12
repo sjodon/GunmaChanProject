@@ -31,7 +31,6 @@ import asu.gunma.DbContainers.VocabWord;
 import asu.gunma.speech.ActionResolver;
 import asu.gunma.ui.screen.menu.MainMenuScreen;
 import asu.gunma.ui.util.Animator;
-import asu.gunma.ui.util.AssetManagement.GameAssets;
 import asu.gunma.ui.util.BackgroundDrawer;
 import asu.gunma.ui.util.GradeSystem;
 import asu.gunma.ui.util.lives.LivesDrawer;
@@ -52,6 +51,11 @@ public class GameScreen implements Screen {
     DbInterface dbCallback;
     private Game game;
     private Music gameMusic;
+    private Music correctSound;
+    private Music incorrectSound;
+    private Music gameOverSound;
+    private Music evilLaugh;
+    private Music threeRow;
     public static float masterVolume = 5;
     public ActionResolver speechGDX;
     private Screen previousScreen;
@@ -60,9 +64,9 @@ public class GameScreen implements Screen {
     private int score = 0;
     private int listCounter = 0;
     private String displayWord;
+    private int row = 0;
     private List<VocabWord> dbListWords;
     public ArrayList<VocabWord> activeVList;
-    private GameAssets gameAssets;
 
     // Using these are unnecessary but will make our lives easier.
     private Stage stage;
@@ -73,8 +77,13 @@ public class GameScreen implements Screen {
 
     private int lives;
     private float enemyPosition;
+    private float happyPosition;
+    private float sweetRollLocation;
+    private float gameOverPos;
+    private float satisfiedOnion;
 
     private boolean isGameOver;
+    private boolean willDisappear;
 
     /*
         We will need 5 different buttons for this menu:
@@ -97,11 +106,14 @@ public class GameScreen implements Screen {
     FreeTypeFontGenerator.FreeTypeFontParameter parameter2;
 
     private Texture gunmaSprite;
+    private Texture happyOnion;
+   // private Texture onionWithBag;
     private Texture gunmaFaintedSprite;
     private Texture onionIdleSprite;
     private Texture background;
     private Texture correctSprite;
     private Texture incorrectSprite;
+    private Texture sweetRoll;
 
     private GlyphLayout displayWordLayout;
     private int targetWidth = 400;
@@ -109,11 +121,16 @@ public class GameScreen implements Screen {
     // Animation declarations
     private Animator onionWalkAnimation;
     private Animator gunmaWalkAnimation;
+    private Animator onionHungryWalkAnimation;
+    private Animator onionStealAnimation;
+    private Animator onionSatisfiedAnimation;
 
     private BackgroundDrawer backgroundDrawer;
     private LivesDrawer livesDrawer;
 
     boolean isPaused = false;
+    boolean check = false;
+    boolean endCheck = false;
 
     private GradeSystem gradeSystem;
     String incomingWord = null;
@@ -127,7 +144,7 @@ public class GameScreen implements Screen {
 
     Preferences prefs;
 
-    public GameScreen(Game game, ActionResolver speechGDX, Music music, DbInterface dbCallback, Screen previous, ArrayList<VocabWord> activeList, Preferences prefs, GameAssets gameAssets) {
+    public GameScreen(Game game, ActionResolver speechGDX, Music music, DbInterface dbCallback, Screen previous, ArrayList<VocabWord> activeList, Preferences prefs) {
         this.game = game;
         this.prefs = prefs;
         this.speechGDX = speechGDX;
@@ -135,8 +152,7 @@ public class GameScreen implements Screen {
         this.previousScreen = previous;
         this.gameMusic = music;
         this.activeVList = activeList;
-        this.gameAssets = gameAssets;
-        gameMusic = Gdx.audio.newMusic(Gdx.files.internal(gameAssets.introMusicPath));
+        gameMusic = Gdx.audio.newMusic(Gdx.files.internal("IntroMusic.mp3"));
         gameMusic.setLooping(false);
         gameMusic.setVolume(masterVolume);
         gameMusic.play();
@@ -153,26 +169,37 @@ public class GameScreen implements Screen {
         stage = new Stage();
 
         batch = new SpriteBatch();
-        gunmaSprite = new Texture(gameAssets.gunmaSpritePath);
-        this.gunmaFaintedSprite = new Texture(gameAssets.gunmaFaintedSpritePath);
+       // this.onionWithBag = new Texture("FrenemyWithBag.png");
+        gunmaSprite = new Texture("sprite_gunma.png");
+        this.gunmaFaintedSprite = new Texture("gunma_fainted.png");
+        this.happyOnion = new Texture("happyVeggie.png");
+        this.sweetRoll = new Texture("sweetRoll.png");
         //onionIdleSprite = new Texture("")
 
-        background = new Texture(gameAssets.backgroundImagePath);
+        background = new Texture("BG_temp.png");
         backgroundDrawer = new BackgroundDrawer(this.batch, this.SCREEN_BOTTOM_ADJUST);
         this.livesDrawer = new LivesDrawer(this.batch);
 
         // Animation initializations
-        this.onionWalkAnimation = new Animator(gameAssets.onionWalkAnimationPath, 4, 2, 0.1f);
-        this.gunmaWalkAnimation = new Animator(gameAssets.gunmaWalkAnimationPath, 8, 1, 0.1f);
-
+        this.onionWalkAnimation = new Animator("onion_sheet.png", 4, 2, 0.1f);
+        this.gunmaWalkAnimation = new Animator("Gunma_with_bag.png", 8, 1, 0.1f);
+        this.onionHungryWalkAnimation = new Animator("onion_sheetSweetRoll.png", 4, 2, 0.1f);
+        this.onionStealAnimation = new Animator("onion_sheet.png", 4, 2, 0.1f);
+        this.onionSatisfiedAnimation = new Animator("onion_sheetSmile.png", 4, 2, 0.1f);
         // Game feedback
-        this.correctSprite = new Texture(gameAssets.correctSpritePath);
-        this.incorrectSprite = new Texture(gameAssets.incorrectSpritePath);
+        this.correctSprite = new Texture("background/correct.png");
+        this.incorrectSprite = new Texture("background/incorrect.png");
 
         // Spawning variables
         this.enemyPosition = Gdx.graphics.getWidth();
+        this.happyPosition = Gdx.graphics.getWidth();
+        this.sweetRollLocation = Gdx.graphics.getWidth();
+        this.gameOverPos = Gdx.graphics.getWidth();
+        this.satisfiedOnion = Gdx.graphics.getWidth();
+
         this.lives = 5;
         this.isGameOver = false;
+        this.willDisappear = false;
 
         Gdx.input.setInputProcessor(stage);
 
@@ -184,7 +211,8 @@ public class GameScreen implements Screen {
         table.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         //font file
-        generator = new FreeTypeFontGenerator(Gdx.files.internal(gameAssets.fontPath));
+        final String FONT_PATH = "irohamaru-mikami-Regular.ttf";
+        generator = new FreeTypeFontGenerator(Gdx.files.internal(FONT_PATH));
 
         //font for vocab word
         parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -279,11 +307,11 @@ public class GameScreen implements Screen {
                 speechGDX.stopRecognition();
                 isPaused = true;
                 gameMusic.dispose();
-                gameMusic = Gdx.audio.newMusic(Gdx.files.internal(gameAssets.introMusicPath));
+                gameMusic = Gdx.audio.newMusic(Gdx.files.internal("IntroMusic.mp3"));
                 gameMusic.setLooping(false);
                 gameMusic.setVolume(masterVolume);
                 gameMusic.play();
-                game.setScreen(new MainMenuScreen(game, speechGDX,  gameMusic, dbCallback,activeVList, prefs, gameAssets));
+                game.setScreen(new MainMenuScreen(game, speechGDX,  gameMusic, dbCallback,activeVList, prefs));
                 previousScreen.dispose();
                 dispose(); // dispose of current GameScreen
             }
@@ -339,7 +367,28 @@ public class GameScreen implements Screen {
                 // Start correct icon display
                 this.correctDisplayTimer = this.CORRECT_DISPLAY_DURATION;
                 score = score + 1;
-                this.defeatEnemy();
+                row = row + 1;
+               if(row == 3){
+                   gameMusic.dispose();
+                   // incorrectSound.dispose();
+                    //correctSound.dispose();
+                    threeRow = Gdx.audio.newMusic(Gdx.files.internal("correct_threeinarow.mp3"));
+                    threeRow.setLooping(false);
+                    threeRow.setVolume(masterVolume);
+                    threeRow.play();
+                }
+               else {
+                   gameMusic.dispose();
+                   // incorrectSound.dispose();
+                   correctSound = Gdx.audio.newMusic(Gdx.files.internal("correct_sweetdog.mp3"));
+                   correctSound.setLooping(false);
+                   correctSound.setVolume(masterVolume);
+                   correctSound.play();
+               }
+                this.sweetRollLocation = 220;
+                check = true;
+
+
 
                 gameWords.remove(currentWordIndex);
 
@@ -370,6 +419,14 @@ public class GameScreen implements Screen {
                 correctWordList = cWords.split("\\s*,\\s*");
                 // Start incorrect icon display
                 this.incorrectDisplayTimer = this.INCORRECT_DISPLAY_DURATION;
+                row = 0;
+
+                gameMusic.dispose();
+                //correctSound.dispose();
+                incorrectSound = Gdx.audio.newMusic(Gdx.files.internal("incorrect_youcandoit.mp3"));
+                incorrectSound.setLooping(false);
+                incorrectSound.setVolume(masterVolume);
+                incorrectSound.play();
             }
 
             if (!this.isPaused) {
@@ -377,18 +434,43 @@ public class GameScreen implements Screen {
             } else {
                 batch.draw(this.gunmaWalkAnimation.getCurrentFrame(0), 90, 35 + this.SCREEN_BOTTOM_ADJUST);
             }
+            this.sweetRollThrow(delta);
             this.walkOntoScreenFromRight(delta);
-        } else {
-            speechGDX.stopRecognition();
+            this.walkOntoScreenFromLeft(delta);
+            this.satisfyOnionWalk(delta);
+         //   this.gameOverWalk(delta);
+            this.defeatEnemy();
 
-            if(win) {
-                font2.draw(batch, "You Win!", 450, 380);
-                // batch.draw(supergunma, 70, 10 + this.SCREEN_BOTTOM_ADJUST);
+
+        } else {
+
+                speechGDX.stopRecognition();
+
+            while(!endCheck){
+                this.gameOverWalk(delta);
             }
-            else{
-                font2.draw(batch, "You Lose!", 450, 380);
-                batch.draw(this.gunmaFaintedSprite, 70, 10 + this.SCREEN_BOTTOM_ADJUST);
-            }
+
+                if (win) {
+                    font2.draw(batch, "You Win!", 450, 380);
+                    // batch.draw(supergunma, 70, 10 + this.SCREEN_BOTTOM_ADJUST);
+                } else {
+                    font2.draw(batch, "You Lose!", 450, 380);
+                    batch.draw(this.gunmaFaintedSprite, 70, 10 + this.SCREEN_BOTTOM_ADJUST);
+                    //batch.draw(this.onionWithBag, 100, 10 + this.SCREEN_BOTTOM_ADJUST);
+                     gameMusic.dispose();
+                    // correctSound.dispose();
+                    // incorrectSound.dispose();
+                     gameOverSound = Gdx.audio.newMusic(Gdx.files.internal("enemytakessatchel.mp3"));
+                     gameOverSound.setLooping(false);
+                     gameOverSound.setVolume(masterVolume);
+                     gameOverSound.play();
+                  //  evilLaugh = Gdx.audio.newMusic(Gdx.files.internal("enemytakessatchel.mp3"));
+                  // evilLaugh.setLooping(false);
+                  //  evilLaugh.setVolume(masterVolume);
+                   //evilLaugh.play();
+
+                }
+
         }
 
         if(correctDisplayTimer > 0) { this.correctAnswerGraphic();}
@@ -445,7 +527,7 @@ public class GameScreen implements Screen {
             batch.draw(tmp, this.enemyPosition, 40 + this.SCREEN_BOTTOM_ADJUST);
             tmp.flip(true, false);
             this.enemyPosition -= 1.15;
-            if (this.enemyPosition < 100) {
+            if (this.enemyPosition < 200) {
                 this.takeDamage();
             }
         } else {
@@ -456,18 +538,89 @@ public class GameScreen implements Screen {
         }
     }
 
+    private void walkOntoScreenFromLeft(float delta) {
+        if (!isPaused) {
+            TextureRegion tmp = onionHungryWalkAnimation.getCurrentFrame(delta);
+            batch.draw(tmp, this.happyPosition, 40 + this.SCREEN_BOTTOM_ADJUST);
+            this.happyPosition += 1.15;
+            if (this.happyPosition > 350) {
+                //this.happyDisappear();
+           }
+        } else {
+            TextureRegion tmp = onionHungryWalkAnimation.getCurrentFrame(0);
+            batch.draw(tmp, this.happyPosition, 40 + this.SCREEN_BOTTOM_ADJUST);
+        }
+    }
+    private void satisfyOnionWalk(float delta) {
+        if (!isPaused) {
+            TextureRegion tmp = onionSatisfiedAnimation.getCurrentFrame(delta);
+            batch.draw(tmp, this.satisfiedOnion, 40 + this.SCREEN_BOTTOM_ADJUST);
+            this.satisfiedOnion += 1.15;
+
+        } else {
+            TextureRegion tmp = onionSatisfiedAnimation.getCurrentFrame(delta);
+            batch.draw(tmp, this.satisfiedOnion, 40 + this.SCREEN_BOTTOM_ADJUST);
+        }
+    }
+    private void sweetRollThrow(float delta) {
+        if (!isPaused) {
+            batch.draw(this.sweetRoll, this.sweetRollLocation, 80 + this.SCREEN_BOTTOM_ADJUST);
+            this.sweetRollLocation += 1.25;
+            if(this.sweetRollLocation > this.enemyPosition){
+                this.disappear();
+            }
+
+        } else {
+            batch.draw(this.sweetRoll, this.sweetRollLocation, 40 + this.SCREEN_BOTTOM_ADJUST);
+        }
+    }
+
+    private void gameOverWalk(float delta) {
+
+            TextureRegion tmp = onionStealAnimation.getCurrentFrame(delta);
+            batch.draw(tmp, gameOverPos, 40 + this.SCREEN_BOTTOM_ADJUST);
+            this.gameOverPos += 1.15;
+            if(gameOverPos > 400 & this.lives == 0){
+                //this.isGameOver = true;
+                this.endCheck = true;
+            }
+
+    }
+
     private void takeDamage() {
         this.enemyPosition = Gdx.graphics.getWidth() + 50;
+        this.happyPosition = 240;
         this.lives--;
+        this.row = 0;
         this.livesDrawer.takeLife();
 
         if (this.lives == 0) {
+           // this.gameOverPos = 70;
+           // speechGDX.stopRecognition();
+          //  batch.draw(this.gunmaFaintedSprite, 70, 10 + this.SCREEN_BOTTOM_ADJUST);
             this.isGameOver = true;
         }
     }
 
+    private void disappear() {
+        this.sweetRollLocation = Gdx.graphics.getWidth() + 50;
+    }
+    private void happyDisappear(){
+        this.happyPosition = Gdx.graphics.getWidth() + 50;
+    }
+
+
     private void defeatEnemy() {
-        this.enemyPosition = Gdx.graphics.getWidth();
+        //batch.draw(this.happyOnion, 100, 10 + this.SCREEN_BOTTOM_ADJUST);
+        if(check == true){
+            if(this.sweetRollLocation > this.enemyPosition){
+                 this.satisfiedOnion = this.enemyPosition;
+                 this.enemyPosition = Gdx.graphics.getWidth();
+
+                 check = false;
+            }
+        }
+
         // However you want to change the current vocab would go here
     }
 
