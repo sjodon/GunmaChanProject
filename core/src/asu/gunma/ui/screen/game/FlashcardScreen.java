@@ -5,20 +5,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
@@ -30,7 +26,7 @@ import asu.gunma.DatabaseInterface.DbInterface;
 import asu.gunma.DbContainers.VocabWord;
 import asu.gunma.speech.ActionResolver;
 import asu.gunma.ui.screen.menu.MainMenuScreen;
-import asu.gunma.ui.util.SimpleDirectionGestureDetector;
+import asu.gunma.ui.util.AssetManagement.GameAssets;
 import asu.gunma.ui.util.GradeSystem;
 
 
@@ -48,6 +44,7 @@ public class FlashcardScreen implements Screen {
     private String displayWord;
     private List<VocabWord> dbListWords;
     public ArrayList<VocabWord> vocabWordArrayList;
+    private GameAssets gameAssets;
   
     private final int CORRECT_GREENCIRCLE_DURATION = 80;
     private final int INCORRECT_REDX_DURATION = 80;
@@ -94,7 +91,7 @@ public class FlashcardScreen implements Screen {
 
 
     public FlashcardScreen (Game game, ActionResolver speechGDX, Music music,
-                            DbInterface dbCallback, Screen previousScreen, ArrayList<VocabWord> arrayList, Preferences prefs) {
+                            DbInterface dbCallback, Screen previousScreen, ArrayList<VocabWord> arrayList, Preferences prefs, GameAssets gameAssets) {
         this.game = game;
         this.prefs = prefs;
         this.speechGDX = speechGDX;
@@ -102,7 +99,8 @@ public class FlashcardScreen implements Screen {
         this.dbCallback = dbCallback;
         this.previousScreen = previousScreen;
         this.vocabWordArrayList = arrayList;
-        gameMusic = Gdx.audio.newMusic(Gdx.files.internal("IntroMusic.mp3"));
+        this.gameAssets = gameAssets;
+        gameMusic = Gdx.audio.newMusic(Gdx.files.internal(gameAssets.introMusicPath));
         gameMusic.setLooping(false);
         gameMusic.setVolume(masterVolume);
         gameMusic.play();
@@ -110,7 +108,8 @@ public class FlashcardScreen implements Screen {
 
     @Override
     public void show() {
-        Gdx.gl.glClearColor(1, .8f, 1, 1);
+        Color bgColor = gameAssets.backgroundColor;
+        Gdx.gl.glClearColor(bgColor.r, bgColor.g, bgColor.b, bgColor.a);
         stage = new Stage();
         batch = new SpriteBatch();
         Gdx.input.setInputProcessor(stage);
@@ -123,11 +122,10 @@ public class FlashcardScreen implements Screen {
         konjackun = new Texture("konjackun.jpg");
         negisan = new Texture("negisan.png");
         index_card = new Texture("index_card.png");*/
-        greenCircle = new Texture("greenCircle.png");
-        redX = new Texture("redX.png");
+        greenCircle = new Texture(gameAssets.greenCirclePath);
+        redX = new Texture(gameAssets.redXPath);
 
-        final String FONT_PATH = "irohamaru-mikami-Regular.ttf";
-        generator = new FreeTypeFontGenerator(Gdx.files.internal(FONT_PATH));
+        generator = new FreeTypeFontGenerator(Gdx.files.internal(gameAssets.fontPath));
         //font for vocab word
         parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
 
@@ -313,11 +311,11 @@ public class FlashcardScreen implements Screen {
         backButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 gameMusic.dispose();
-                gameMusic = Gdx.audio.newMusic(Gdx.files.internal("IntroMusic.mp3"));
+                gameMusic = Gdx.audio.newMusic(Gdx.files.internal(gameAssets.introMusicPath));
                 gameMusic.setLooping(false);
                 gameMusic.setVolume(masterVolume);
                 gameMusic.play();
-                game.setScreen(new MainMenuScreen(game, speechGDX, gameMusic, dbCallback, vocabWordArrayList, prefs));
+                game.setScreen(new MainMenuScreen(game, speechGDX, gameMusic, dbCallback, vocabWordArrayList, prefs, gameAssets));
                 previousScreen.dispose();
                 dispose(); // dispose of current FlashScreen
             }
