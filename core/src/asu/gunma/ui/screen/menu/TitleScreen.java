@@ -4,6 +4,7 @@ import asu.gunma.DatabaseInterface.DbInterface;
 import asu.gunma.DbContainers.VocabWord;
 import asu.gunma.speech.ActionResolver;
 import asu.gunma.ui.screen.menu.MainMenuScreen;
+import asu.gunma.ui.util.AssetManagement.GameAssets;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -26,6 +27,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.audio.Music;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 
 public class TitleScreen implements Screen {
@@ -42,6 +44,7 @@ public class TitleScreen implements Screen {
     private Table table;
     public static float masterVolume = 10;
     public ArrayList<VocabWord> activeVList;
+    private GameAssets gameAssets;
 
     private int testInt = 0;
 
@@ -68,7 +71,7 @@ public class TitleScreen implements Screen {
     FreeTypeFontGenerator.FreeTypeFontParameter parameter2;
     public Preferences prefs;
 
-    public TitleScreen(Game game, ActionResolver speechGDX, DbInterface dbCallback, Music music, ArrayList<VocabWord> arrayList, Preferences prefs) {
+    public TitleScreen(Game game, ActionResolver speechGDX, DbInterface dbCallback, Music music, ArrayList<VocabWord> arrayList, Preferences prefs, GameAssets gameAssets) {
 
         this.game = game;
         this.prefs = prefs;
@@ -76,8 +79,10 @@ public class TitleScreen implements Screen {
         this.dbCallback = dbCallback;
         this.gameMusic = music;
         this.activeVList = arrayList;
+        this.gameAssets = gameAssets;
         //font file
         final String FONT_PATH = "irohamaru-mikami-Regular.ttf";
+
         generator = new FreeTypeFontGenerator(Gdx.files.internal(FONT_PATH));
 
         //font for vocab word
@@ -107,7 +112,9 @@ public class TitleScreen implements Screen {
 
         parameter.size = 30;
         parameter.color = Color.BLACK;
-        font = generator.generateFont(parameter);
+//        font = generator.generateFont(parameter);
+
+        font = gameAssets.getFont();
 
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
         //textButtonStyle.up = skin.getDrawable("button.up");
@@ -117,12 +124,12 @@ public class TitleScreen implements Screen {
         textButtonStyle.font = font;
 
         // IMPORTANT: needs localization support
-        buttonTutorial = new TextButton("Play", textButtonStyle);
+        buttonTutorial = new TextButton(gameAssets.getResourceBundle().getString("Start"), textButtonStyle);
 
         Label.LabelStyle headingStyle = new Label.LabelStyle(font, Color.BLACK);
         //
 
-        heading = new Label("Gunma-chan Takes a Hike", headingStyle);
+        heading = new Label(gameAssets.getResourceBundle().getString("GameName"), headingStyle);
         heading.setFontScale(2);
         //
 
@@ -138,7 +145,7 @@ public class TitleScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("Going from TitleScreen to MainMenuScreen");
-                game.setScreen(new MainMenuScreen(game, speechGDX, gameMusic, dbCallback, activeVList, prefs));
+                game.setScreen(new MainMenuScreen(game, speechGDX, gameMusic, dbCallback, activeVList, prefs, gameAssets));
             }
         });
 

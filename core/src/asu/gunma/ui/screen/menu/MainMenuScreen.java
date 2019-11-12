@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -21,12 +22,16 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.audio.Music;
 
 import java.util.ArrayList;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import asu.gunma.DatabaseInterface.DbInterface;
 import asu.gunma.DbContainers.VocabWord;
 import asu.gunma.speech.ActionResolver;
 import asu.gunma.ui.screen.game.FlashcardScreen;
 import asu.gunma.ui.screen.game.GameScreen;
+import asu.gunma.ui.util.AssetManagement.GameAssets;
+import asu.gunma.ui.util.AssetManagement.MyResources;
 
 public class MainMenuScreen implements Screen {
 
@@ -36,6 +41,7 @@ public class MainMenuScreen implements Screen {
     public Music gameMusic;
     public static float masterVolume = 5;
     public ArrayList<VocabWord> activeVList = new ArrayList<>();
+    private GameAssets gameAssets;
 
     // Using these are unnecessary but will make our lives easier.
     private Stage stage;
@@ -68,30 +74,22 @@ public class MainMenuScreen implements Screen {
     FreeTypeFontGenerator.FreeTypeFontParameter parameter2;
     Preferences prefs;
 
-    public MainMenuScreen(Game game, ActionResolver speechGDX, Music music, DbInterface dbCallback, ArrayList<VocabWord> activeList, Preferences prefs) {
+    public MainMenuScreen(Game game, ActionResolver speechGDX, Music music, DbInterface dbCallback, ArrayList<VocabWord> activeList, Preferences prefs, GameAssets gameAssets) {
         this.game = game;
         this.prefs = prefs;
         this.speechGDX = speechGDX;
         this.gameMusic = music;
         this.dbCallback = dbCallback;
         this.activeVList = activeList;
+        this.gameAssets = gameAssets;
     }
 
     @Override
     public void show() {
         //font file
-        final String FONT_PATH = "irohamaru-mikami-Regular.ttf";
-        generator = new FreeTypeFontGenerator(Gdx.files.internal(FONT_PATH));
+        final String FONT_PATH = "rounded-mgenplus-1c-medium.ttf";
 
-        //font for vocab word
-        parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-
-        //font for other words
-        parameter2 = new FreeTypeFontGenerator.FreeTypeFontParameter();
-
-        parameter.size = 30;
-        parameter.color = Color.BLACK;
-        font = generator.generateFont(parameter);
+        font = gameAssets.getFont();
 
         Gdx.gl.glClearColor(.8f, 1, 1, 1);
         stage = new Stage();
@@ -116,17 +114,17 @@ public class MainMenuScreen implements Screen {
         textButtonStyle.font = font;
 
         // IMPORTANT: needs localization support
-        buttonTutorial = new TextButton("Video Tutorials", textButtonStyle);
-        buttonFlashcard = new TextButton("Flashcards", textButtonStyle);
-        buttonGameFirst = new TextButton("Game #1", textButtonStyle);
-        buttonOptionMenu = new TextButton("Options Menu", textButtonStyle);
+        buttonTutorial = new TextButton(gameAssets.getResourceBundle().getString("VideoTutorials"), textButtonStyle);
+        buttonFlashcard = new TextButton(gameAssets.getResourceBundle().getString("Flashcards"), textButtonStyle);
+        buttonGameFirst = new TextButton(gameAssets.getResourceBundle().getString("Game1"), textButtonStyle);
+        buttonOptionMenu = new TextButton(gameAssets.getResourceBundle().getString("OptionsMenu"), textButtonStyle);
 
 
         Label.LabelStyle headingStyle = new Label.LabelStyle(font, Color.BLACK);
         //
 
 
-        heading = new Label("Select Type:", headingStyle);
+        heading = new Label(gameAssets.getResourceBundle().getString("SelectType"), headingStyle);
         heading.setFontScale(2);
         //
 
@@ -156,7 +154,7 @@ public class MainMenuScreen implements Screen {
                 gameMusic.dispose();
                 //play flashcard music
                 //gameMusic = new Music
-                game.setScreen(new FlashcardScreen(game, speechGDX, gameMusic, dbCallback, game.getScreen(), activeVList, prefs));
+                game.setScreen(new FlashcardScreen(game, speechGDX, gameMusic, dbCallback, game.getScreen(), activeVList, prefs, gameAssets));
             }
         });
         buttonGameFirst.addListener(new ClickListener() {
@@ -166,7 +164,7 @@ public class MainMenuScreen implements Screen {
                 gameMusic.dispose();
                 //play GameFirst music
                 // gameMusic = new Music
-                game.setScreen(new GameScreen(game, speechGDX, gameMusic, dbCallback, game.getScreen(), activeVList, prefs));
+                game.setScreen(new GameScreen(game, speechGDX, gameMusic, dbCallback, game.getScreen(), activeVList, prefs,gameAssets));
 
             }
         });
@@ -178,7 +176,7 @@ public class MainMenuScreen implements Screen {
                 gameMusic.dispose();
                 //play OptionMenu music
                 //gameMusic = new Music
-                game.setScreen(new OptionMenu(game, speechGDX, gameMusic, dbCallback, game.getScreen(),  activeVList, prefs));
+                game.setScreen(new OptionMenu(game, speechGDX, gameMusic, dbCallback, game.getScreen(),  activeVList, prefs, gameAssets));
             }
         });
 

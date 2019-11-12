@@ -12,6 +12,7 @@ import asu.gunma.DatabaseInterface.DbInterface;
 import asu.gunma.DbContainers.VocabWord;
 import asu.gunma.speech.ActionResolver;
 import asu.gunma.ui.screen.menu.TitleScreen;
+import asu.gunma.ui.util.AssetManagement.GameAssets;
 
 
 public class GunmaChan extends Game {
@@ -256,7 +257,8 @@ public class GunmaChan extends Game {
 				System.out.println(v.getEngSpelling());
 			}
 			System.out.println(activeVocabList.size());
-			this.setScreen(new TitleScreen(this, speechGDX, dbCallback, background_music, activeVocabList, prefs));
+			GameAssets gameAssets = new GameAssets();
+			this.setScreen(new TitleScreen(this, speechGDX, dbCallback, background_music, activeVocabList, prefs, gameAssets));
 		}
 
 		@Override
