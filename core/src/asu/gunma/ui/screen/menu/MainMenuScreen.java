@@ -24,6 +24,12 @@ import java.util.ArrayList;
 
 import asu.gunma.DatabaseInterface.DbInterface;
 import asu.gunma.DbContainers.VocabWord;
+import asu.gunma.MiniGames.Controllers.AsteroidGameController;
+import asu.gunma.MiniGames.Controllers.WordScrambleGameController;
+import asu.gunma.MiniGames.Models.AsteroidGameModel;
+import asu.gunma.MiniGames.Models.WordScrambleGameModel;
+import asu.gunma.MiniGames.Views.AsteroidGameView;
+import asu.gunma.MiniGames.Views.WordScrambleGameView;
 import asu.gunma.speech.ActionResolver;
 import asu.gunma.ui.screen.game.FlashcardScreen;
 import asu.gunma.ui.screen.game.GameScreen;
@@ -55,7 +61,7 @@ public class MainMenuScreen implements Screen {
         This is based on the Project Proposal, I'd like to change this
         before the final release.
      */
-    private TextButton buttonTutorial, buttonFlashcard, buttonGameFirst, buttonOptionMenu;
+    private TextButton buttonTutorial, buttonFlashcard, buttonGameFirst, buttonMiniGameFirst, buttonMiniGameSecond, buttonOptionMenu;
 
     private SpriteBatch batch;
     private Texture texture;
@@ -119,6 +125,8 @@ public class MainMenuScreen implements Screen {
         buttonTutorial = new TextButton("Video Tutorials", textButtonStyle);
         buttonFlashcard = new TextButton("Flashcards", textButtonStyle);
         buttonGameFirst = new TextButton("Game #1", textButtonStyle);
+        buttonMiniGameFirst = new TextButton("Minigame #1", textButtonStyle);
+        buttonMiniGameSecond = new TextButton("Minigame #2", textButtonStyle);
         buttonOptionMenu = new TextButton("Options Menu", textButtonStyle);
 
 
@@ -134,6 +142,8 @@ public class MainMenuScreen implements Screen {
         buttonTutorial.pad(20);
         buttonFlashcard.pad(20);
         buttonGameFirst.pad(20);
+        buttonMiniGameFirst.pad(20);
+        buttonMiniGameSecond.pad(20);
         buttonOptionMenu.pad(20);
 
 
@@ -170,6 +180,34 @@ public class MainMenuScreen implements Screen {
 
             }
         });
+        // we can change where the following two buttons are located on the main menu or elsewhere, but I put these in for debugging purposes
+        buttonMiniGameFirst.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                gameMusic.pause();
+                gameMusic.dispose();
+                WordScrambleGameModel wordScrambleModel = new WordScrambleGameModel(0, activeVList);
+                WordScrambleGameController wordScrambleController = new WordScrambleGameController(wordScrambleModel);
+                WordScrambleGameView wordScrambleView = new WordScrambleGameView(game, speechGDX, gameMusic, game.getScreen(), prefs, wordScrambleController);
+                game.setScreen(wordScrambleView);
+
+                // debugging
+                System.out.println("PRINTING ACTIVE VOCAB LIST!");
+                for (VocabWord itr : wordScrambleModel.getActiveVocabList())
+                    System.out.println(itr.getEngSpelling());
+            }
+        });
+        buttonMiniGameSecond.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                gameMusic.pause();
+                gameMusic.dispose();
+                AsteroidGameModel asteroidGameModel = new AsteroidGameModel(1, 0, activeVList);
+                AsteroidGameController asteroidController = new AsteroidGameController(asteroidGameModel);
+                AsteroidGameView asteroidView = new AsteroidGameView(game, speechGDX, gameMusic, game.getScreen(), prefs, asteroidController);
+                game.setScreen(asteroidView);
+            }
+        });
         buttonOptionMenu.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -190,6 +228,10 @@ public class MainMenuScreen implements Screen {
         table.add(buttonFlashcard);
         table.row();
         table.add(buttonGameFirst);
+        table.row();
+        table.add(buttonMiniGameFirst);
+        table.row();
+        table.add(buttonMiniGameSecond);
         table.row();
         table.add(buttonOptionMenu);
         table.row();
