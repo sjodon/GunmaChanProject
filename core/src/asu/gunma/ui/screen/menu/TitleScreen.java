@@ -3,7 +3,7 @@ package asu.gunma.ui.screen.menu;
 import asu.gunma.DatabaseInterface.DbInterface;
 import asu.gunma.DbContainers.VocabWord;
 import asu.gunma.speech.ActionResolver;
-import asu.gunma.ui.screen.menu.MainMenuScreen;
+import asu.gunma.ui.util.AssetManagement.GameAssets;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -18,6 +18,8 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -42,6 +44,7 @@ public class TitleScreen implements Screen {
     private Table table;
     public static float masterVolume = 10;
     public ArrayList<VocabWord> activeVList;
+    private GameAssets gameAssets;
 
     private int testInt = 0;
 
@@ -68,7 +71,7 @@ public class TitleScreen implements Screen {
     FreeTypeFontGenerator.FreeTypeFontParameter parameter2;
     public Preferences prefs;
 
-    public TitleScreen(Game game, ActionResolver speechGDX, DbInterface dbCallback, Music music, ArrayList<VocabWord> arrayList, Preferences prefs) {
+    public TitleScreen(Game game, ActionResolver speechGDX, DbInterface dbCallback, Music music, ArrayList<VocabWord> arrayList, Preferences prefs, GameAssets gameAssets) {
 
         this.game = game;
         this.prefs = prefs;
@@ -76,9 +79,9 @@ public class TitleScreen implements Screen {
         this.dbCallback = dbCallback;
         this.gameMusic = music;
         this.activeVList = arrayList;
+        this.gameAssets = gameAssets;
         //font file
-        final String FONT_PATH = "irohamaru-mikami-Regular.ttf";
-        generator = new FreeTypeFontGenerator(Gdx.files.internal(FONT_PATH));
+        generator = new FreeTypeFontGenerator(Gdx.files.internal(gameAssets.fontPath));
 
         //font for vocab word
         parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -90,11 +93,12 @@ public class TitleScreen implements Screen {
 
     @Override
     public void show() {
-        Gdx.gl.glClearColor(.8f, 1, 1, 1);
+        Color bgColor = gameAssets.backgroundColor;
+        Gdx.gl.glClearColor(bgColor.r, bgColor.g, bgColor.b, bgColor.a);
         stage = new Stage();
 
         batch = new SpriteBatch();
-        texture = new Texture("title_gunma.png");
+        texture = new Texture(gameAssets.titleGunmaPath);
 
         Gdx.input.setInputProcessor(stage);
 
@@ -109,15 +113,18 @@ public class TitleScreen implements Screen {
         parameter.color = Color.BLACK;
         font = generator.generateFont(parameter);
 
+        Skin skin = gameAssets.getColorSkin(gameAssets.color3, "color3");
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
         //textButtonStyle.up = skin.getDrawable("button.up");
         //textButtonStyle.down = skin.getDrawable("button.down");
         textButtonStyle.pressedOffsetX = 1;
         textButtonStyle.pressedOffsetY = -1;
         textButtonStyle.font = font;
+        textButtonStyle.up = skin.newDrawable("color3", gameAssets.color3);
 
         // IMPORTANT: needs localization support
         buttonTutorial = new TextButton("Play", textButtonStyle);
+        buttonTutorial.setColor(23, 43, 2, 1);
 
         Label.LabelStyle headingStyle = new Label.LabelStyle(font, Color.BLACK);
         //
@@ -138,11 +145,11 @@ public class TitleScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("Going from TitleScreen to MainMenuScreen");
-                game.setScreen(new MainMenuScreen(game, speechGDX, gameMusic, dbCallback, activeVList, prefs));
+                game.setScreen(new MainMenuScreen(game, speechGDX, gameMusic, dbCallback, activeVList, prefs, gameAssets));
             }
         });
 
-        table.add(heading);
+        table.add(heading).padBottom(30);
         table.row();
         table.add(buttonTutorial);
         table.row();

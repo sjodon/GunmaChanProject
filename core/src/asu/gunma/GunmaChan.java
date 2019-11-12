@@ -12,6 +12,7 @@ import asu.gunma.DatabaseInterface.DbInterface;
 import asu.gunma.DbContainers.VocabWord;
 import asu.gunma.speech.ActionResolver;
 import asu.gunma.ui.screen.menu.TitleScreen;
+import asu.gunma.ui.util.AssetManagement.GameAssets;
 
 
 public class GunmaChan extends Game {
@@ -243,7 +244,7 @@ public class GunmaChan extends Game {
 			if(!prefs.contains("active15"))
 				prefs.putBoolean("active15", false);
 
-			background_music = Gdx.audio.newMusic(Gdx.files.internal("IntroMusic.mp3"));
+			background_music = Gdx.audio.newMusic(Gdx.files.internal(GameAssets.introMusicPath));
 			background_music.setLooping(false);
 			background_music.setVolume(masterVolume);
 			background_music.play();
@@ -256,7 +257,9 @@ public class GunmaChan extends Game {
 				System.out.println(v.getEngSpelling());
 			}
 			System.out.println(activeVocabList.size());
-			this.setScreen(new TitleScreen(this, speechGDX, dbCallback, background_music, activeVocabList, prefs));
+
+			GameAssets gameAssets = new GameAssets();
+			this.setScreen(new TitleScreen(this, speechGDX, dbCallback, background_music, activeVocabList, prefs, gameAssets));
 		}
 
 		@Override
