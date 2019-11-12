@@ -22,6 +22,8 @@ import com.badlogic.gdx.audio.Music;
 
 import java.util.ArrayList;
 
+import asu.gunma.ui.util.Animator;
+import asu.gunma.ui.util.BackgroundDrawer;
 import asu.gunma.DatabaseInterface.DbInterface;
 import asu.gunma.DbContainers.VocabWord;
 import asu.gunma.speech.ActionResolver;
@@ -36,6 +38,7 @@ public class MainMenuScreen implements Screen {
     public DbInterface dbCallback;
     public Music gameMusic;
     public static float masterVolume = 5;
+    private final int SCREEN_BOTTOM_ADJUST = 35;
     public ArrayList<VocabWord> activeVList = new ArrayList<>();
     private GameAssets gameAssets;
 
@@ -44,6 +47,7 @@ public class MainMenuScreen implements Screen {
     private TextureAtlas atlas;
     private Skin skin;
     private Table table;
+    private Texture background;
 
     private int testInt = 0;
 
@@ -61,6 +65,9 @@ public class MainMenuScreen implements Screen {
 
     private SpriteBatch batch;
     private Texture texture;
+    private Animator onionWalkAnimation;
+    private Animator gunmaWalkAnimation;
+    private BackgroundDrawer backgroundDrawer;
 
     private BitmapFont font;
     private Label heading;
@@ -101,6 +108,11 @@ public class MainMenuScreen implements Screen {
 
         batch = new SpriteBatch();
         texture = new Texture(gameAssets.titleGunmaPath);
+
+        background = new Texture("BG_temp.png");
+        backgroundDrawer = new BackgroundDrawer(this.batch, this.SCREEN_BOTTOM_ADJUST);
+        this.onionWalkAnimation = new Animator("onion_sheet.png", 4, 2, 0.1f);
+        this.gunmaWalkAnimation = new Animator("gunma_sheet.png", 8, 1, 0.1f);
 
         Gdx.input.setInputProcessor(stage);
 
@@ -171,7 +183,7 @@ public class MainMenuScreen implements Screen {
                 gameMusic.dispose();
                 //play GameFirst music
                 // gameMusic = new Music
-                game.setScreen(new GameScreen(game, speechGDX, gameMusic, dbCallback, game.getScreen(), activeVList, prefs, gameAssets));
+                game.setScreen(new GameScreen(game, speechGDX, gameMusic, dbCallback, game.getScreen(), activeVList, prefs));
 
             }
         });
@@ -209,6 +221,9 @@ public class MainMenuScreen implements Screen {
 
         // SpriteBatch is resource intensive, try to use it for only brief moments
         batch.begin();
+        backgroundDrawer.render(false,false);
+        batch.draw(this.onionWalkAnimation.getCurrentFrame(delta), 60, 35 + this.SCREEN_BOTTOM_ADJUST);
+        batch.draw(this.gunmaWalkAnimation.getCurrentFrame(delta), 200, 35 + this.SCREEN_BOTTOM_ADJUST);
         batch.draw(texture, Gdx.graphics.getWidth()/2 - texture.getWidth()/4 + 400, Gdx.graphics.getHeight()/4 - texture.getHeight()/2 + 400, texture.getWidth()/2, texture.getHeight()/2);
         batch.end();
 
