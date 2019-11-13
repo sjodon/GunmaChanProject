@@ -136,7 +136,7 @@ public class GameScreen implements Screen {
         this.gameMusic = music;
         this.activeVList = activeList;
         this.gameAssets = gameAssets;
-        gameMusic = Gdx.audio.newMusic(Gdx.files.internal("IntroMusic.mp3"));
+        gameMusic = Gdx.audio.newMusic(Gdx.files.internal(gameAssets.introMusicPath));
         gameMusic.setLooping(false);
         gameMusic.setVolume(masterVolume);
         gameMusic.play();
@@ -153,21 +153,21 @@ public class GameScreen implements Screen {
         stage = new Stage();
 
         batch = new SpriteBatch();
-        gunmaSprite = new Texture("sprite_gunma.png");
-        this.gunmaFaintedSprite = new Texture("gunma_fainted.png");
+        gunmaSprite = new Texture(gameAssets.gunmaSpritePath);
+        this.gunmaFaintedSprite = new Texture(gameAssets.gunmaFaintedSpritePath);
         //onionIdleSprite = new Texture("")
 
-        background = new Texture("BG_temp.png");
+        background = new Texture(gameAssets.backgroundImagePath);
         backgroundDrawer = new BackgroundDrawer(this.batch, this.SCREEN_BOTTOM_ADJUST);
         this.livesDrawer = new LivesDrawer(this.batch);
 
         // Animation initializations
-        this.onionWalkAnimation = new Animator("onion_sheet.png", 4, 2, 0.1f);
-        this.gunmaWalkAnimation = new Animator("gunma_sheet.png", 8, 1, 0.1f);
+        this.onionWalkAnimation = new Animator(gameAssets.onionWalkAnimationPath, 4, 2, 0.1f);
+        this.gunmaWalkAnimation = new Animator(gameAssets.gunmaWalkAnimationPath, 8, 1, 0.1f);
 
         // Game feedback
-        this.correctSprite = new Texture("background/correct.png");
-        this.incorrectSprite = new Texture("background/incorrect.png");
+        this.correctSprite = new Texture(gameAssets.correctSpritePath);
+        this.incorrectSprite = new Texture(gameAssets.incorrectSpritePath);
 
         // Spawning variables
         this.enemyPosition = Gdx.graphics.getWidth();
@@ -184,8 +184,7 @@ public class GameScreen implements Screen {
         table.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         //font file
-        final String FONT_PATH = "irohamaru-mikami-Regular.ttf";
-        generator = new FreeTypeFontGenerator(Gdx.files.internal(FONT_PATH));
+        generator = new FreeTypeFontGenerator(Gdx.files.internal(gameAssets.fontPath));
 
         //font for vocab word
         parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -281,7 +280,7 @@ public class GameScreen implements Screen {
                 speechGDX.stopRecognition();
                 isPaused = true;
                 gameMusic.dispose();
-                gameMusic = Gdx.audio.newMusic(Gdx.files.internal("IntroMusic.mp3"));
+                gameMusic = Gdx.audio.newMusic(Gdx.files.internal(gameAssets.introMusicPath));
                 gameMusic.setLooping(false);
                 gameMusic.setVolume(masterVolume);
                 gameMusic.play();

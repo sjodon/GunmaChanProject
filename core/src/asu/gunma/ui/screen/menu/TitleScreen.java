@@ -19,6 +19,8 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -81,6 +83,7 @@ public class TitleScreen implements Screen {
         this.activeVList = arrayList;
         this.gameAssets = gameAssets;
         //font file
+//        generator = new FreeTypeFontGenerator(Gdx.files.internal(gameAssets.fontPath));
         final String FONT_PATH = "irohamaru-mikami-Regular.ttf";
 
         generator = new FreeTypeFontGenerator(Gdx.files.internal(FONT_PATH));
@@ -95,11 +98,12 @@ public class TitleScreen implements Screen {
 
     @Override
     public void show() {
-        Gdx.gl.glClearColor(.8f, 1, 1, 1);
+        Color bgColor = gameAssets.backgroundColor;
+        Gdx.gl.glClearColor(bgColor.r, bgColor.g, bgColor.b, bgColor.a);
         stage = new Stage();
 
         batch = new SpriteBatch();
-        texture = new Texture("title_gunma.png");
+        texture = new Texture(gameAssets.titleGunmaPath);
 
         Gdx.input.setInputProcessor(stage);
 
@@ -116,12 +120,14 @@ public class TitleScreen implements Screen {
 
         font = gameAssets.getFont();
 
+        Skin skin = gameAssets.getColorSkin(gameAssets.color3, "color3");
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
         //textButtonStyle.up = skin.getDrawable("button.up");
         //textButtonStyle.down = skin.getDrawable("button.down");
         textButtonStyle.pressedOffsetX = 1;
         textButtonStyle.pressedOffsetY = -1;
         textButtonStyle.font = font;
+        textButtonStyle.up = skin.newDrawable("color3", gameAssets.color3);
 
         // IMPORTANT: needs localization support
         buttonTutorial = new TextButton(gameAssets.getResourceBundle().getString("Start"), textButtonStyle);
@@ -149,7 +155,7 @@ public class TitleScreen implements Screen {
             }
         });
 
-        table.add(heading);
+        table.add(heading).padBottom(30);
         table.row();
         table.add(buttonTutorial);
         table.row();

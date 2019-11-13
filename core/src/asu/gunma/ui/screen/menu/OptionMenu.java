@@ -24,19 +24,17 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 
-import com.badlogic.gdx.utils.Array;
 import asu.gunma.DatabaseInterface.DbInterface;
 import asu.gunma.DbContainers.VocabWord;
 import asu.gunma.speech.ActionResolver;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
+import asu.gunma.ui.util.AssetManagement.GameAssets;
 import asu.gunma.DatabaseInterface.DbInterface;
 import asu.gunma.speech.ActionResolver;
-import asu.gunma.ui.util.AssetManagement.GameAssets;
 
 public class OptionMenu implements Screen {
 
@@ -99,7 +97,7 @@ public class OptionMenu implements Screen {
         this.previousScreen = previousScreen;
         this.activeVocabList = arrayList;
         this.gameAssets = gameAssets;
-        gameMusic = Gdx.audio.newMusic(Gdx.files.internal("IntroMusic.mp3"));
+        gameMusic = Gdx.audio.newMusic(Gdx.files.internal(gameAssets.introMusicPath));
         gameMusic.setLooping(false);
         gameMusic.setVolume(masterVolume);
         gameMusic.play();
@@ -113,7 +111,7 @@ public class OptionMenu implements Screen {
         this.dbInterface = dbInterface;
         this.previousScreen = previousScreen;
         this.gameAssets = gameAssets;
-        gameMusic = Gdx.audio.newMusic(Gdx.files.internal("IntroMusic.mp3"));
+        gameMusic = Gdx.audio.newMusic(Gdx.files.internal(gameAssets.introMusicPath));
         gameMusic.setLooping(false);
         gameMusic.setVolume(masterVolume);
         gameMusic.play();
@@ -128,10 +126,11 @@ public class OptionMenu implements Screen {
     @Override
     public void show() {
         int count = 0;
-        Gdx.gl.glClearColor(.8f, 1, 1, 1);
+        Color bgColor = gameAssets.backgroundColor;
+        Gdx.gl.glClearColor(bgColor.r, bgColor.g, bgColor.b, bgColor.a);
         stage = new Stage();
         batch = new SpriteBatch();
-        texture = new Texture("title_gunma.png");
+        texture = new Texture(gameAssets.titleGunmaPath);
 
         Gdx.input.setInputProcessor(stage);
         assetManager = new AssetManager();
@@ -1258,7 +1257,7 @@ public class OptionMenu implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 gameMusic.pause();
                 gameMusic.dispose();
-                gameMusic = Gdx.audio.newMusic(Gdx.files.internal("IntroMusic.mp3"));
+                gameMusic = Gdx.audio.newMusic(Gdx.files.internal(gameAssets.introMusicPath));
                 gameMusic.setLooping(false);
                 gameMusic.setVolume(masterVolume);
                 gameMusic.play();

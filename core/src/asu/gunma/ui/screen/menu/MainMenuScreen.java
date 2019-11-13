@@ -91,11 +91,12 @@ public class MainMenuScreen implements Screen {
 
         font = gameAssets.getFont();
 
-        Gdx.gl.glClearColor(.8f, 1, 1, 1);
+        Color bgColor = gameAssets.backgroundColor;
+        Gdx.gl.glClearColor(bgColor.r, bgColor.g, bgColor.b, bgColor.a);
         stage = new Stage();
 
         batch = new SpriteBatch();
-        texture = new Texture("title_gunma.png");
+        texture = new Texture(gameAssets.titleGunmaPath);
 
         Gdx.input.setInputProcessor(stage);
 
@@ -106,12 +107,14 @@ public class MainMenuScreen implements Screen {
         table = new Table();
         table.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
+        Skin skin = gameAssets.getColorSkin(gameAssets.color2, "color2");
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
         //textButtonStyle.up = skin.getDrawable("button.up");
         //textButtonStyle.down = skin.getDrawable("button.down");
         textButtonStyle.pressedOffsetX = 1;
         textButtonStyle.pressedOffsetY = -1;
         textButtonStyle.font = font;
+        textButtonStyle.up = skin.newDrawable("color2", gameAssets.color2);
 
         // IMPORTANT: needs localization support
         buttonTutorial = new TextButton(gameAssets.getResourceBundle().getString("VideoTutorials"), textButtonStyle);
@@ -164,7 +167,7 @@ public class MainMenuScreen implements Screen {
                 gameMusic.dispose();
                 //play GameFirst music
                 // gameMusic = new Music
-                game.setScreen(new GameScreen(game, speechGDX, gameMusic, dbCallback, game.getScreen(), activeVList, prefs,gameAssets));
+                game.setScreen(new GameScreen(game, speechGDX, gameMusic, dbCallback, game.getScreen(), activeVList, prefs, gameAssets));
 
             }
         });
@@ -181,13 +184,13 @@ public class MainMenuScreen implements Screen {
         });
 
 
-        table.add(heading);
+        table.add(heading).padBottom(15);
         table.row();
-        table.add(buttonTutorial);
+        table.add(buttonTutorial).padBottom(15);
         table.row();
-        table.add(buttonFlashcard);
+        table.add(buttonFlashcard).padBottom(15);
         table.row();
-        table.add(buttonGameFirst);
+        table.add(buttonGameFirst).padBottom(15);
         table.row();
         table.add(buttonOptionMenu);
         table.row();
