@@ -50,9 +50,28 @@ public class MyResources extends ListResourceBundle {
             {"Flip", "Flip"},
             {"Pause", "Pause"},
             {"Correct", "Correct "},
+            {"Asteroids", "Asteroids"},
+            {"WordScramble", "Word Scramble"},
+
+            {"GameTime", "Game Time"},
+            {"1minute", "1 minute"},
+            {"2minutes", "2 minutes"},
+            {"3minutes", "3 minutes"},
+            {"4minutes", "4 minutes"},
+            {"5minutes", "5 minutes"},
+
+            {"Sound", "Sound"},
+            {"BackgroundMusic", "Background Music"},
+            {"SoundEffect", "Sound Effect"},
+            {"Support", "Support"},
+            {"About", "About"},
+
+            {"Language", "Language"},
+            {"English", "English"},
+            {"Japanese", "Japanese"},
 
 
-            {"setLanguageMessage", "Change Language to Japanese"},
+            {"setLanguageMessage", "日本語"},
         };
     }
 }

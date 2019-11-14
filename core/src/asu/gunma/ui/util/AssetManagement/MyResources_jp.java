@@ -29,7 +29,48 @@ public class MyResources_jp extends MyResources{
             {"VocabularySetName", "単語セット名を記入してください。"},
             {"Cancel", "キャンセル "},
             {"Done", "終了 "},
-            {"setLanguageMessage", "Change Language to English"},
+
+            {"GameName", "ぐんまちゃんのハイキング"},
+            {"Game1", "ゲーム＃１"},
+            {"OptionsMenu", "オプション"},
+            {"SelectType", "Select Type:"},
+            {"Back", "戻る"},
+            {"Delete", "削除"},
+            {"SelectFile", "ファイルを選択"},
+            {"HomeKeyUnlocked", "Home key unlocked"},
+            {"GoogleLogin", "Google Login"},
+            {"GoogleLogout", "Google Logout"},
+            {"Listen", "Listen"},
+            {"Speak", "Speak"},
+            {"Previous", "前へ"},
+            {"Next", "次へ"},
+            {"Flip", "裏返す"},
+            {"Pause", "一時停止"},
+            {"Correct", "正解 "},
+
+            {"Asteroids", "Asteroids"},
+            {"WordScramble", "並び替え"},
+
+            {"GameTime", "時間の設定"},
+            {"1minute", "１分"},
+            {"2minutes", "2 分"},
+            {"3minutes", "3 分"},
+            {"4minutes", "4 分"},
+            {"5minutes", "5 分"},
+
+            {"Sound", "音量設定"},
+            {"BackgroundMusic", "BGM"},
+            {"SoundEffect", "効果音"},
+            {"Support", "サポート"},
+            {"About", "このアプリについて"},
+
+            {"Language", "言語設定"},
+            {"English", "英語"},
+            {"Japanese", "日本語"},
+
+
+
+            {"setLanguageMessage", "English"},
         };
     }
 }
