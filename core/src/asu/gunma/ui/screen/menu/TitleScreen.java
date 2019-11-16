@@ -3,6 +3,7 @@ package asu.gunma.ui.screen.menu;
 import asu.gunma.DatabaseInterface.DbInterface;
 import asu.gunma.DbContainers.VocabWord;
 import asu.gunma.speech.ActionResolver;
+import asu.gunma.ui.screen.menu.MainMenuScreen;
 import asu.gunma.ui.util.AssetManagement.GameAssets;
 
 import com.badlogic.gdx.Game;
@@ -28,6 +29,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.audio.Music;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 
 public class TitleScreen implements Screen {
@@ -81,7 +83,10 @@ public class TitleScreen implements Screen {
         this.activeVList = arrayList;
         this.gameAssets = gameAssets;
         //font file
-        generator = new FreeTypeFontGenerator(Gdx.files.internal(gameAssets.fontPath));
+//        generator = new FreeTypeFontGenerator(Gdx.files.internal(gameAssets.fontPath));
+        final String FONT_PATH = "irohamaru-mikami-Regular.ttf";
+
+        generator = new FreeTypeFontGenerator(Gdx.files.internal(FONT_PATH));
 
         //font for vocab word
         parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -111,7 +116,9 @@ public class TitleScreen implements Screen {
 
         parameter.size = 30;
         parameter.color = Color.BLACK;
-        font = generator.generateFont(parameter);
+//        font = generator.generateFont(parameter);
+
+        font = gameAssets.getFont();
 
         Skin skin = gameAssets.getColorSkin(gameAssets.color3, "color3");
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
@@ -123,13 +130,12 @@ public class TitleScreen implements Screen {
         textButtonStyle.up = skin.newDrawable("color3", gameAssets.color3);
 
         // IMPORTANT: needs localization support
-        buttonTutorial = new TextButton("Play", textButtonStyle);
-        buttonTutorial.setColor(23, 43, 2, 1);
+        buttonTutorial = new TextButton(gameAssets.getResourceBundle().getString("Start"), textButtonStyle);
 
         Label.LabelStyle headingStyle = new Label.LabelStyle(font, Color.BLACK);
         //
 
-        heading = new Label("Gunma-chan Takes a Hike", headingStyle);
+        heading = new Label(gameAssets.getResourceBundle().getString("GameName"), headingStyle);
         heading.setFontScale(2);
         //
 
