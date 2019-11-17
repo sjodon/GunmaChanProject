@@ -30,6 +30,7 @@ import asu.gunma.DbContainers.VocabWord;
 import asu.gunma.speech.ActionResolver;
 import asu.gunma.ui.screen.game.FlashcardScreen;
 import asu.gunma.ui.screen.game.GameScreen;
+import asu.gunma.ui.screen.game.MountainScreen;
 import asu.gunma.ui.util.AssetManagement.GameAssets;
 import asu.gunma.ui.util.AssetManagement.MyResources;
 
@@ -167,7 +168,7 @@ public class MainMenuScreen implements Screen {
                 gameMusic.dispose();
                 //play GameFirst music
                 // gameMusic = new Music
-                game.setScreen(new GameScreen(game, speechGDX, gameMusic, dbCallback, game.getScreen(), activeVList, prefs, gameAssets));
+                game.setScreen(new MountainScreen(game, speechGDX, gameMusic, dbCallback, game.getScreen(), activeVList, prefs, gameAssets));
 
             }
         });
