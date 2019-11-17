@@ -9,9 +9,11 @@ import asu.gunma.DbContainers.VocabWord;
 public class AsteroidGameModel
 {
     private int level; // current level that the player is on (levels 1 - 5)
-    private int score = 0;
+    private int score;
+    private int lives;
     private ArrayList<VocabWord> activeVocabList; // list of words that may be included in the mini-game
     private ArrayList<Asteroid> asteroidList;
+    private Player player;
 
     public AsteroidGameModel(int level, int score, ArrayList<VocabWord> activeVocabList)
     {
@@ -25,6 +27,11 @@ public class AsteroidGameModel
     public int getScore()
     {
         return score;
+    }
+
+    public int getLives()
+    {
+        return lives;
     }
 
     public int getLevel()
@@ -49,6 +56,14 @@ public class AsteroidGameModel
             this.score = score;
         else
             this.score = 0;
+    }
+
+    public void setLives(int lives)
+    {
+        if (lives >= 1 && lives <= 5)
+            this.lives = lives;
+        else
+            this.lives = 5;
     }
 
     public void setLevel(int level)
