@@ -1,11 +1,5 @@
 package asu.gunma.ui.screen.menu;
 
-import asu.gunma.DatabaseInterface.DbInterface;
-import asu.gunma.DbContainers.VocabWord;
-import asu.gunma.speech.ActionResolver;
-import asu.gunma.ui.screen.menu.MainMenuScreen;
-import asu.gunma.ui.util.AssetManagement.GameAssets;
-
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
@@ -19,8 +13,6 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -29,8 +21,15 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.audio.Music;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
+import asu.gunma.ui.util.Animator;
+import asu.gunma.ui.util.BackgroundDrawer;
+import asu.gunma.DatabaseInterface.DbInterface;
+import asu.gunma.DbContainers.VocabWord;
+import asu.gunma.speech.ActionResolver;
+import asu.gunma.ui.screen.game.FlashcardScreen;
+import asu.gunma.ui.screen.game.GameScreen;
+import asu.gunma.ui.util.AssetManagement.GameAssets;
 
 public class TitleScreen implements Screen {
 
@@ -39,6 +38,8 @@ public class TitleScreen implements Screen {
     public ActionResolver speechGDX;
     public DbInterface dbCallback;
     public Music gameMusic;
+    private final int SCREEN_BOTTOM_ADJUST = 35;
+
     // Using these are unnecessary but will make our lives easier.
     private Stage stage;
     private TextureAtlas atlas;
@@ -47,6 +48,7 @@ public class TitleScreen implements Screen {
     public static float masterVolume = 10;
     public ArrayList<VocabWord> activeVList;
     private GameAssets gameAssets;
+    private Texture background;
 
     private int testInt = 0;
 
@@ -63,7 +65,9 @@ public class TitleScreen implements Screen {
     private TextButton buttonTutorial, buttonFlashcard, buttonGameFirst, buttonGameSecond, buttonGameThird;
 
     private SpriteBatch batch;
-    private Texture texture;
+    private Animator onionWalkAnimation;
+    private Animator gunmaWalkAnimation;
+    private BackgroundDrawer backgroundDrawer;
 
     private BitmapFont font;
     private Label heading;
@@ -82,6 +86,7 @@ public class TitleScreen implements Screen {
         this.gameMusic = music;
         this.activeVList = arrayList;
         this.gameAssets = gameAssets;
+
         //font file
 //        generator = new FreeTypeFontGenerator(Gdx.files.internal(gameAssets.fontPath));
         final String FONT_PATH = "irohamaru-mikami-Regular.ttf";
@@ -94,6 +99,7 @@ public class TitleScreen implements Screen {
         //font for other words
         parameter2 = new FreeTypeFontGenerator.FreeTypeFontParameter();
 
+        font = gameAssets.getFont();
     }
 
     @Override
@@ -103,7 +109,11 @@ public class TitleScreen implements Screen {
         stage = new Stage();
 
         batch = new SpriteBatch();
-        texture = new Texture(gameAssets.titleGunmaPath);
+
+        background = new Texture("BG_temp.png");
+        backgroundDrawer = new BackgroundDrawer(this.batch, this.SCREEN_BOTTOM_ADJUST);
+        this.onionWalkAnimation = new Animator("onion_sheet.png", 4, 2, 0.1f);
+        this.gunmaWalkAnimation = new Animator("gunma_sheet.png", 8, 1, 0.1f);
 
         Gdx.input.setInputProcessor(stage);
 
@@ -114,20 +124,13 @@ public class TitleScreen implements Screen {
         table = new Table();
         table.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-        parameter.size = 30;
-        parameter.color = Color.BLACK;
-//        font = generator.generateFont(parameter);
-
-        font = gameAssets.getFont();
-
-        Skin skin = gameAssets.getColorSkin(gameAssets.color3, "color3");
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
         //textButtonStyle.up = skin.getDrawable("button.up");
         //textButtonStyle.down = skin.getDrawable("button.down");
         textButtonStyle.pressedOffsetX = 1;
         textButtonStyle.pressedOffsetY = -1;
         textButtonStyle.font = font;
-        textButtonStyle.up = skin.newDrawable("color3", gameAssets.color3);
+        textButtonStyle.fontColor = Color.BLACK;
 
         // IMPORTANT: needs localization support
         buttonTutorial = new TextButton(gameAssets.getResourceBundle().getString("Start"), textButtonStyle);
@@ -171,13 +174,16 @@ public class TitleScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        // SpriteBatch is resource intensive, try to use it for only brief moments
+        batch.begin();
+        backgroundDrawer.render(false,false);
+        batch.draw(this.onionWalkAnimation.getCurrentFrame(delta), 60, 35 + this.SCREEN_BOTTOM_ADJUST);
+        batch.draw(this.gunmaWalkAnimation.getCurrentFrame(delta), 200, 35 + this.SCREEN_BOTTOM_ADJUST);
+        batch.end();
+
         stage.act(delta); // optional to pass delta value
         stage.draw();
 
-        // SpriteBatch is resource intensive, try to use it for only brief moments
-        batch.begin();
-        batch.draw(texture, Gdx.graphics.getWidth()/2 - texture.getWidth()/4 + 400, Gdx.graphics.getHeight()/4 - texture.getHeight()/2 + 400, texture.getWidth()/2, texture.getHeight()/2);
-        batch.end();
     }
 
     @Override
@@ -202,7 +208,9 @@ public class TitleScreen implements Screen {
 
     @Override
     public void dispose() {
-
+        font.dispose();
+        batch.dispose();
+        stage.dispose();
     }
 
 }
