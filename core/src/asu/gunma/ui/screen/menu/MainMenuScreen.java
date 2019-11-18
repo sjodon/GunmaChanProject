@@ -202,7 +202,7 @@ public class MainMenuScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 gameMusic.pause();
                 gameMusic.dispose();
-                AsteroidGameModel asteroidGameModel = new AsteroidGameModel(1, 0, activeVList);
+                AsteroidGameModel asteroidGameModel = new AsteroidGameModel(1, 0, 5, activeVList);
                 AsteroidGameController asteroidController = new AsteroidGameController(asteroidGameModel);
                 AsteroidGameView asteroidView = new AsteroidGameView(game, speechGDX, gameMusic, game.getScreen(), prefs, asteroidController);
                 game.setScreen(asteroidView);

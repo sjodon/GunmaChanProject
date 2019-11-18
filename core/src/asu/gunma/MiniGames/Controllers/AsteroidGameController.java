@@ -15,7 +15,7 @@ public class AsteroidGameController
         if (model != null)
             this.model = model;
         else
-            this.model = new AsteroidGameModel(1, 0, null);
+            this.model = new AsteroidGameModel(1, 0, 5, null);
     }
 
     // get methods

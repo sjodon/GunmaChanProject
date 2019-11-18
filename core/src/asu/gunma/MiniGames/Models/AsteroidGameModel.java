@@ -1,26 +1,43 @@
 package asu.gunma.MiniGames.Models;
 
 import com.badlogic.gdx.math.Vector2;
-
 import java.util.ArrayList;
-
 import asu.gunma.DbContainers.VocabWord;
 
 public class AsteroidGameModel
 {
+    // private fields
     private int level; // current level that the player is on (levels 1 - 5)
     private int score;
-    private int lives;
+    private int numLives;
     private ArrayList<VocabWord> activeVocabList; // list of words that may be included in the mini-game
     private ArrayList<Asteroid> asteroidList;
-    private Player player;
+    private AsteroidPlayer player;
 
-    public AsteroidGameModel(int level, int score, ArrayList<VocabWord> activeVocabList)
+    // constants
+    public static final int MIN_LEVEL = 1;
+    public static final int MAX_LEVEL = 5;
+    public static final int DEFAULT_LEVEL = 1;
+    public static final int MIN_SCORE = 0;
+    public static final int DEFAULT_SCORE = 0;
+    public static final int MAX_LIVES = 5;
+    public static final int MIN_LIVES = 1;
+    public static final int DEFAULT_NUM_LIVES = 5;
+    public static final int MIN_NUM_ASTEROIDS = 0;
+    public static final float DEFAULT_VELOCITY = 1f;
+    public static final float DEFAULT_DIRECTION = 0f;
+    public static final Vector2 DEFAULT_ASTEROID_POS = new Vector2(0f, 0f);
+    public static final Vector2 DEFAULT_PLAYER_POS = new Vector2(0f, 0f);
+
+    // constructor
+    public AsteroidGameModel(int level, int score, int numLives, ArrayList<VocabWord> activeVocabList)
     {
         setLevel(level);
         setScore(score);
+        setNumLives(numLives);
         setActiveVocabList(activeVocabList);
         setAsteroidList(null);
+        setPlayer(null);
     }
 
     // get methods
@@ -29,9 +46,9 @@ public class AsteroidGameModel
         return score;
     }
 
-    public int getLives()
+    public int getNumLives()
     {
-        return lives;
+        return numLives;
     }
 
     public int getLevel()
@@ -49,29 +66,34 @@ public class AsteroidGameModel
         return asteroidList;
     }
 
+    public AsteroidPlayer getPlayer()
+    {
+        return player;
+    }
+
     // set methods
     public void setScore(int score)
     {
-        if (score >= 0)
+        if (score >= MIN_SCORE)
             this.score = score;
         else
-            this.score = 0;
+            this.score = DEFAULT_SCORE;
     }
 
-    public void setLives(int lives)
+    public void setNumLives(int numLives)
     {
-        if (lives >= 1 && lives <= 5)
-            this.lives = lives;
+        if (numLives >= MIN_LIVES && numLives <= MAX_LIVES)
+            this.numLives = numLives;
         else
-            this.lives = 5;
+            this.numLives = DEFAULT_NUM_LIVES;
     }
 
     public void setLevel(int level)
     {
-        if (level >= 1 && level <= 5)
+        if (level >= MIN_LEVEL && level <= MAX_LEVEL)
             this.level = level;
         else
-            this.level = 1;
+            this.level = DEFAULT_LEVEL;
     }
 
     public void setActiveVocabList(ArrayList<VocabWord> activeVocabList)
@@ -90,7 +112,7 @@ public class AsteroidGameModel
 
             for (int i = 0; i < level; i++)
             {
-                Asteroid asteroid = new Asteroid(null, 1, 0, new Vector2(0, 0));
+                Asteroid asteroid = new Asteroid(null, DEFAULT_VELOCITY, DEFAULT_DIRECTION, DEFAULT_ASTEROID_POS);
                 asteroidList.add(asteroid);
             }
 
@@ -107,15 +129,23 @@ public class AsteroidGameModel
                 asteroidList.remove(i);
             }
         }
-        else if (asteroidList.size() < level)
+        else if (size < level)
         {
             for (int i = size - 1; i < level; i++)
             {
-                Asteroid asteroid = new Asteroid(null, 1, 0, new Vector2(0, 0));
+                Asteroid asteroid = new Asteroid(null, DEFAULT_VELOCITY, DEFAULT_DIRECTION, DEFAULT_ASTEROID_POS);
                 asteroidList.add(asteroid);
             }
         }
         else
             this.asteroidList = asteroidList;
+    }
+
+    public void setPlayer(AsteroidPlayer player)
+    {
+        if (player != null)
+            this.player = player;
+        else
+            this.player = new AsteroidPlayer(DEFAULT_PLAYER_POS);
     }
 }

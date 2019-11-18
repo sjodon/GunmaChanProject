@@ -2,13 +2,13 @@ package asu.gunma.MiniGames.Models;
 
 import com.badlogic.gdx.math.Vector2;
 
-public class Player
+public class AsteroidPlayer
 {
-    Vector2 position;
+    private Vector2 position;
 
-    public Player(Vector2 position)
+    public AsteroidPlayer(Vector2 position)
     {
-
+        setPosition(position);
     }
 
     // get methods
