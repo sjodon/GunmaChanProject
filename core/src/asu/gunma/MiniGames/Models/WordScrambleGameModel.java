@@ -7,9 +7,15 @@ import asu.gunma.DbContainers.VocabWord;
 
 public class WordScrambleGameModel
 {
+    // private fields
     private int score;
     private ArrayList<VocabWord> activeVocabList; // list of words that may be included in the mini-game
     private ArrayList<String> scrambledList; // list of individual words in their scrambled form
+
+    // constants
+    private static final int DEFAULT_SCORE = 0;
+    private static final int MIN_SCORE = 0;
+    private static final int SCORE_INCREASE = 1;
 
     // constructor
     public WordScrambleGameModel (int score, ArrayList<VocabWord> activeVocabList)
@@ -50,10 +56,10 @@ public class WordScrambleGameModel
     // set methods
     public void setScore(int score)
     {
-        if (score >= 0)
+        if (score >= MIN_SCORE)
             this.score = score;
         else
-            this.score = 0;
+            this.score = DEFAULT_SCORE;
     }
 
     public void setActiveVocabList(ArrayList<VocabWord> activeVocabList)
@@ -75,7 +81,7 @@ public class WordScrambleGameModel
     // other methods
     public int increaseScore()
     {
-        score += 1;
+        score += SCORE_INCREASE;
         return score;
     }
 

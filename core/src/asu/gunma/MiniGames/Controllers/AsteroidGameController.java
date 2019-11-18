@@ -97,4 +97,19 @@ public class AsteroidGameController
     {
         model.getAsteroidList().get(index).transformPosition(x, y);
     }
+
+    public int increaseScore()
+    {
+        return model.increaseScore();
+    }
+
+    public int decreaseNumLives()
+    {
+        return model.decreaseNumLives();
+    }
+
+    public void destroyAsteroid(String vocabWord)
+    {
+        model.destroyAsteroid(vocabWord);
+    }
 }

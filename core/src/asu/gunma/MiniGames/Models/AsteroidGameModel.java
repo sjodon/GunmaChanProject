@@ -19,16 +19,18 @@ public class AsteroidGameModel
     public static final int DEFAULT_LEVEL = 1;
     public static final int MIN_SCORE = 0;
     public static final int DEFAULT_SCORE = 0;
-    public static final int MAX_LIVES = 5;
+    public static final int MAX_LIVES = 3;
     public static final int MIN_LIVES = 1;
     public static final int DEFAULT_NUM_LIVES = 5;
     public static final int MIN_NUM_ASTEROIDS = 0;
     public static final float DEFAULT_VELOCITY = 1f;
-    public static final float DEFAULT_DIRECTION = 0f;
+    public static final float DEFAULT_ASTEROID_DIRECTION = 0f;
     public static final float DEFAULT_ASTEROID_X_POS = 0f;
     public static final float DEFAULT_ASTEROID_Y_POS = 0f;
     public static final float DEFAULT_PLAYER_X_POS = 0f;
     public static final float DEFAULT_PLAYER_Y_POS = 0f;
+    public static final float DEFAULT_PLAYER_DIRECTION = 0f;
+    public static final int SCORE_INCREASE = 1;
 
     // constructor
     public AsteroidGameModel(int level, int score, int numLives, ArrayList<VocabWord> activeVocabList)
@@ -113,7 +115,7 @@ public class AsteroidGameModel
 
             for (int i = 0; i < level; i++)
             {
-                AsteroidModel asteroid = new AsteroidModel(null, DEFAULT_VELOCITY, DEFAULT_DIRECTION, DEFAULT_ASTEROID_X_POS, DEFAULT_ASTEROID_Y_POS);
+                AsteroidModel asteroid = new AsteroidModel(null, DEFAULT_VELOCITY, DEFAULT_ASTEROID_DIRECTION, DEFAULT_ASTEROID_X_POS, DEFAULT_ASTEROID_Y_POS);
                 asteroidList.add(asteroid);
             }
 
@@ -134,7 +136,7 @@ public class AsteroidGameModel
         {
             for (int i = size - 1; i < level; i++)
             {
-                AsteroidModel asteroid = new AsteroidModel(null, DEFAULT_VELOCITY, DEFAULT_DIRECTION, DEFAULT_ASTEROID_X_POS, DEFAULT_ASTEROID_Y_POS);
+                AsteroidModel asteroid = new AsteroidModel(null, DEFAULT_VELOCITY, DEFAULT_ASTEROID_DIRECTION, DEFAULT_ASTEROID_X_POS, DEFAULT_ASTEROID_Y_POS);
                 asteroidList.add(asteroid);
             }
         }
@@ -147,6 +149,36 @@ public class AsteroidGameModel
         if (player != null)
             this.player = player;
         else
-            this.player = new AsteroidPlayerModel(DEFAULT_PLAYER_X_POS, DEFAULT_PLAYER_Y_POS);
+            this.player = new AsteroidPlayerModel(DEFAULT_PLAYER_X_POS, DEFAULT_PLAYER_Y_POS, DEFAULT_PLAYER_DIRECTION);
+    }
+
+    // other methods
+    public int increaseScore()
+    {
+        score += SCORE_INCREASE;
+        return score;
+    }
+
+    public int decreaseNumLives()
+    {
+        if (numLives <= MIN_LIVES)
+            numLives = 0;
+        else
+            numLives--;
+
+        return numLives;
+    }
+
+    public void destroyAsteroid(String vocabWord)
+    {
+        int index = 0;
+
+        for (index = 0; index < asteroidList.size(); index++)
+        {
+            if (asteroidList.get(index).getWord().getEngSpelling() == vocabWord)
+                break;
+        }
+
+        asteroidList.remove(index);
     }
 }

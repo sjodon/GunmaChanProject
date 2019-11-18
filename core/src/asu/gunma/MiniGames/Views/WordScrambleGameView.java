@@ -31,7 +31,6 @@ import asu.gunma.ui.util.GradeSystem;
 // You'll want to use the WordScrambleGameController class
 public class WordScrambleGameView implements Screen
 {
-    //DbInterface dbCallback;
     private WordScrambleGameController controller;
     private GradeSystem gradeSystem;
     private String displayWord;
