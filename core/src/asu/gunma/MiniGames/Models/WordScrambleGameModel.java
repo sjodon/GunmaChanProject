@@ -11,6 +11,7 @@ public class WordScrambleGameModel
     private ArrayList<VocabWord> activeVocabList; // list of words that may be included in the mini-game
     private ArrayList<String> scrambledList; // list of individual words in their scrambled form
 
+    // constructor
     public WordScrambleGameModel (int score, ArrayList<VocabWord> activeVocabList)
     {
         setScore(score);

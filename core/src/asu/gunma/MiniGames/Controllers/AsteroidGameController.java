@@ -1,15 +1,17 @@
 package asu.gunma.MiniGames.Controllers;
 
 import java.util.ArrayList;
-
 import asu.gunma.DbContainers.VocabWord;
-import asu.gunma.MiniGames.Models.Asteroid;
+import asu.gunma.MiniGames.Models.AsteroidModel;
 import asu.gunma.MiniGames.Models.AsteroidGameModel;
+import asu.gunma.MiniGames.Models.AsteroidPlayerModel;
 
 public class AsteroidGameController
 {
+    // private fields
     private AsteroidGameModel model;
 
+    // constructor
     public AsteroidGameController(AsteroidGameModel model)
     {
         if (model != null)
@@ -34,14 +36,24 @@ public class AsteroidGameController
         return model.getScore();
     }
 
+    public int getNumLives()
+    {
+        return model.getNumLives();
+    }
+
     public ArrayList<VocabWord> getActiveVocabList()
     {
         return model.getActiveVocabList();
     }
 
-    public ArrayList<Asteroid> getAsteroidList()
+    public ArrayList<AsteroidModel> getAsteroidList()
     {
         return model.getAsteroidList();
+    }
+
+    public AsteroidPlayerModel getPlayer()
+    {
+        return model.getPlayer();
     }
 
     // set methods
@@ -60,14 +72,24 @@ public class AsteroidGameController
         model.setScore(score);
     }
 
+    public void setNumLives(int numLives)
+    {
+        model.setNumLives(numLives);
+    }
+
     public void setActiveVocabList(ArrayList<VocabWord> activeVocabList)
     {
         model.setActiveVocabList(activeVocabList);
     }
 
-    public void setAsteroidList(ArrayList<Asteroid> asteroidList)
+    public void setAsteroidList(ArrayList<AsteroidModel> asteroidList)
     {
         model.setAsteroidList(asteroidList);
+    }
+
+    public void setPlayer(AsteroidPlayerModel player)
+    {
+        model.setPlayer(player);
     }
 
     // other methods

@@ -1,6 +1,5 @@
 package asu.gunma.MiniGames.Models;
 
-import com.badlogic.gdx.math.Vector2;
 import java.util.ArrayList;
 import asu.gunma.DbContainers.VocabWord;
 
@@ -11,8 +10,8 @@ public class AsteroidGameModel
     private int score;
     private int numLives;
     private ArrayList<VocabWord> activeVocabList; // list of words that may be included in the mini-game
-    private ArrayList<Asteroid> asteroidList;
-    private AsteroidPlayer player;
+    private ArrayList<AsteroidModel> asteroidList;
+    private AsteroidPlayerModel player;
 
     // constants
     public static final int MIN_LEVEL = 1;
@@ -26,8 +25,10 @@ public class AsteroidGameModel
     public static final int MIN_NUM_ASTEROIDS = 0;
     public static final float DEFAULT_VELOCITY = 1f;
     public static final float DEFAULT_DIRECTION = 0f;
-    public static final Vector2 DEFAULT_ASTEROID_POS = new Vector2(0f, 0f);
-    public static final Vector2 DEFAULT_PLAYER_POS = new Vector2(0f, 0f);
+    public static final float DEFAULT_ASTEROID_X_POS = 0f;
+    public static final float DEFAULT_ASTEROID_Y_POS = 0f;
+    public static final float DEFAULT_PLAYER_X_POS = 0f;
+    public static final float DEFAULT_PLAYER_Y_POS = 0f;
 
     // constructor
     public AsteroidGameModel(int level, int score, int numLives, ArrayList<VocabWord> activeVocabList)
@@ -61,12 +62,12 @@ public class AsteroidGameModel
         return activeVocabList;
     }
 
-    public ArrayList<Asteroid> getAsteroidList()
+    public ArrayList<AsteroidModel> getAsteroidList()
     {
         return asteroidList;
     }
 
-    public AsteroidPlayer getPlayer()
+    public AsteroidPlayerModel getPlayer()
     {
         return player;
     }
@@ -104,15 +105,15 @@ public class AsteroidGameModel
             this.activeVocabList = new ArrayList<VocabWord>();
     }
 
-    public void setAsteroidList(ArrayList<Asteroid> asteroidList)
+    public void setAsteroidList(ArrayList<AsteroidModel> asteroidList)
     {
         if (asteroidList == null)
         {
-            asteroidList = new ArrayList<Asteroid>();
+            asteroidList = new ArrayList<AsteroidModel>();
 
             for (int i = 0; i < level; i++)
             {
-                Asteroid asteroid = new Asteroid(null, DEFAULT_VELOCITY, DEFAULT_DIRECTION, DEFAULT_ASTEROID_POS);
+                AsteroidModel asteroid = new AsteroidModel(null, DEFAULT_VELOCITY, DEFAULT_DIRECTION, DEFAULT_ASTEROID_X_POS, DEFAULT_ASTEROID_Y_POS);
                 asteroidList.add(asteroid);
             }
 
@@ -133,7 +134,7 @@ public class AsteroidGameModel
         {
             for (int i = size - 1; i < level; i++)
             {
-                Asteroid asteroid = new Asteroid(null, DEFAULT_VELOCITY, DEFAULT_DIRECTION, DEFAULT_ASTEROID_POS);
+                AsteroidModel asteroid = new AsteroidModel(null, DEFAULT_VELOCITY, DEFAULT_DIRECTION, DEFAULT_ASTEROID_X_POS, DEFAULT_ASTEROID_Y_POS);
                 asteroidList.add(asteroid);
             }
         }
@@ -141,11 +142,11 @@ public class AsteroidGameModel
             this.asteroidList = asteroidList;
     }
 
-    public void setPlayer(AsteroidPlayer player)
+    public void setPlayer(AsteroidPlayerModel player)
     {
         if (player != null)
             this.player = player;
         else
-            this.player = new AsteroidPlayer(DEFAULT_PLAYER_POS);
+            this.player = new AsteroidPlayerModel(DEFAULT_PLAYER_X_POS, DEFAULT_PLAYER_Y_POS);
     }
 }
