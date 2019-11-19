@@ -39,7 +39,7 @@ public class AsteroidGameModel
         setScore(score);
         setNumLives(numLives);
         setActiveVocabList(activeVocabList);
-        setAsteroidList(null);
+        setAsteroidList();
         setPlayer(null);
     }
 
@@ -107,41 +107,16 @@ public class AsteroidGameModel
             this.activeVocabList = new ArrayList<VocabWord>();
     }
 
-    public void setAsteroidList(ArrayList<AsteroidModel> asteroidList)
+    public void setAsteroidList()
     {
         if (asteroidList == null)
         {
             asteroidList = new ArrayList<AsteroidModel>();
-
-            for (int i = 0; i < level; i++)
-            {
-                AsteroidModel asteroid = new AsteroidModel(null, DEFAULT_VELOCITY, DEFAULT_ASTEROID_DIRECTION, DEFAULT_ASTEROID_X_POS, DEFAULT_ASTEROID_Y_POS);
-                asteroidList.add(asteroid);
-            }
-
-            return;
         }
-
-        int size = asteroidList.size();
 
         // the number of asteroids sent towards the player must be equal to the level number
-        if (size > level)
-        {
-            for (int i = size - 1; i >= level; i--)
-            {
-                asteroidList.remove(i);
-            }
-        }
-        else if (size < level)
-        {
-            for (int i = size - 1; i < level; i++)
-            {
-                AsteroidModel asteroid = new AsteroidModel(null, DEFAULT_VELOCITY, DEFAULT_ASTEROID_DIRECTION, DEFAULT_ASTEROID_X_POS, DEFAULT_ASTEROID_Y_POS);
-                asteroidList.add(asteroid);
-            }
-        }
-        else
-            this.asteroidList = asteroidList;
+        for (int i = 0; i < level; i++)
+            addAsteroid();
     }
 
     public void setPlayer(AsteroidPlayerModel player)
@@ -185,14 +160,22 @@ public class AsteroidGameModel
 
         // remove the asteroid
         asteroidList.remove(index);
-        addAsteroid("a");
+        addAsteroid();
         return true;
     }
 
-    private boolean addAsteroid(String vocabWord)
+    private boolean addAsteroid()
     {
+        // the asteroid list has space to add an asteroid
+        if (asteroidList.size() < level)
+        {
+            // add first available vocab word from the vocab list
+            AsteroidModel asteroid = new AsteroidModel(activeVocabList.get(0), AsteroidModel.DEFAULT_VELOCITY, AsteroidModel.DEFAULT_DIRECTION, AsteroidModel.DEFAULT_X_POS, AsteroidModel.DEFAULT_Y_POS);
+            asteroidList.add(asteroid);
+            return true;
+        }
 
-
-        return true;
+        // asteroid list is full
+        return false;
     }
 }
