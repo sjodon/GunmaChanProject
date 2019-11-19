@@ -172,6 +172,7 @@ public class AsteroidGameModel
             // add first available vocab word from the vocab list
             AsteroidModel asteroid = new AsteroidModel(activeVocabList.get(0), AsteroidModel.DEFAULT_VELOCITY, AsteroidModel.DEFAULT_DIRECTION, AsteroidModel.DEFAULT_X_POS, AsteroidModel.DEFAULT_Y_POS);
             asteroidList.add(asteroid);
+            activeVocabList.remove(0);
             return true;
         }
 

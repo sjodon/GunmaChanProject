@@ -18,6 +18,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 
+import java.util.ArrayList;
+
 import asu.gunma.MiniGames.Controllers.AsteroidGameController;
 import asu.gunma.MiniGames.Controllers.WordScrambleGameController;
 import asu.gunma.MiniGames.Models.AsteroidGameModel;
@@ -45,17 +47,23 @@ public class AsteroidGameView implements Screen
     private SpriteBatch batch;
     private Texture asteroidTexture;
     private BitmapFont font;
+    private ArrayList<BitmapFont> fontList;
 
     FreeTypeFontGenerator generator;
-    FreeTypeFontGenerator.FreeTypeFontParameter parameter;
+    ArrayList<FreeTypeFontGenerator.FreeTypeFontParameter> parameterList;
     FreeTypeFontGenerator.FreeTypeFontParameter parameter2;
     public Preferences prefs;
 
     private TextButton speakButton;
 
     private int listCounter = 0;
-    private GlyphLayout displayWordLayout;
+    private ArrayList<GlyphLayout> wordLayoutList;
     private int targetWidth = 400;
+
+    private ArrayList<String> asteroidWordList;
+
+    // constants
+    private static final int DEFAULT_ASTEROID_SIZE = 128;
 
     public AsteroidGameView(Game game, ActionResolver speechGDX, Music music, Screen previous, Preferences prefs, AsteroidGameController controller)
     {
@@ -69,10 +77,12 @@ public class AsteroidGameView implements Screen
         //font file
         final String FONT_PATH = "irohamaru-mikami-Regular.ttf";
         generator = new FreeTypeFontGenerator(Gdx.files.internal(FONT_PATH));
-        parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameterList = new ArrayList<FreeTypeFontGenerator.FreeTypeFontParameter>();
         parameter2 = new FreeTypeFontGenerator.FreeTypeFontParameter();
-
+        fontList = new ArrayList<BitmapFont>();
         asteroidTexture = new Texture("circle-xxl.png");
+        asteroidWordList = new ArrayList<String>();
+        wordLayoutList = new ArrayList<GlyphLayout>();
     }
 
     // Override Screen class methods
@@ -84,6 +94,24 @@ public class AsteroidGameView implements Screen
         stage = new Stage();
         batch = new SpriteBatch();
         Gdx.input.setInputProcessor(stage);
+
+        // for displaying words on asteroids
+        for (int i = 0; i < controller.getAsteroidList().size(); i++)
+        {
+            asteroidWordList.add(controller.getAsteroidList().get(i).getWord().getEngSpelling());
+            FreeTypeFontGenerator.FreeTypeFontParameter tempParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+            tempParameter.characters = asteroidWordList.get(i);
+            tempParameter.size = 30;
+            tempParameter.color = Color.BLACK;
+            parameterList.add(tempParameter);
+            BitmapFont tempFont = new BitmapFont();
+            tempFont = generator.generateFont(parameterList.get(i));
+            fontList.add(tempFont);
+            GlyphLayout tempLayout = new GlyphLayout();
+            tempLayout.setText(fontList.get(i), asteroidWordList.get(i), Color.BLACK,
+                    DEFAULT_ASTEROID_SIZE, Align.center, true);
+            wordLayoutList.add(tempLayout);
+        }
 
         parameter2.size = 30;
         parameter2.color = Color.WHITE;
@@ -112,8 +140,17 @@ public class AsteroidGameView implements Screen
         transformAsteroids(delta);
 
         batch.begin();
-        batch.draw(asteroidTexture, controller.getAsteroidList().get(1).getPosition().x,
-                controller.getAsteroidList().get(1).getPosition().y, 100, 100);
+
+        for (int i = 0; i < controller.getAsteroidList().size(); i++)
+        {
+            batch.draw(asteroidTexture, controller.getAsteroidList().get(i).getPosition().x,
+                    controller.getAsteroidList().get(i).getPosition().y, DEFAULT_ASTEROID_SIZE,
+                    DEFAULT_ASTEROID_SIZE);
+            fontList.get(i).draw(batch, wordLayoutList.get(i),
+                    controller.getAsteroidList().get(i).getPosition().x,
+                    controller.getAsteroidList().get(i).getPosition().y);
+        }
+
         batch.end();
     }
 

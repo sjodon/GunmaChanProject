@@ -14,16 +14,16 @@ public class AsteroidModel
     // constants
     public static final float MIN_VELOCITY = 0.01f;
     public static final float MAX_VELOCITY = 100f;
-    public static final float DEFAULT_VELOCITY = 1f;
+    public static final float DEFAULT_VELOCITY = 10f;
     public static final float MIN_DIRECTION = 0f;
     public static final float MAX_DIRECTION = 2f * (float)Math.PI;
-    public static final float DEFAULT_DIRECTION = 0f;
+    public static final float DEFAULT_DIRECTION = (float)Math.PI; // down the screen
     public static final float MAX_X_POS= 1024f;
     public static final float MAX_Y_POS = 600f;
     public static final float MIN_X_POS = 0f;
     public static final float MIN_Y_POS = 0f;
-    public static final float DEFAULT_X_POS = 0f;
-    public static final float DEFAULT_Y_POS = 0f;
+    public static final float DEFAULT_X_POS = MAX_X_POS / 2;
+    public static final float DEFAULT_Y_POS = MAX_Y_POS + 100;
 
     // constructor
     public AsteroidModel(VocabWord word, float velocity, float direction, float xPos, float yPos)

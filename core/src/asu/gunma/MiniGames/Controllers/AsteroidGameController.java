@@ -84,7 +84,7 @@ public class AsteroidGameController
 
     public void setAsteroidList(ArrayList<AsteroidModel> asteroidList)
     {
-        model.setAsteroidList(asteroidList);
+        model.setAsteroidList();
     }
 
     public void setPlayer(AsteroidPlayerModel player)
