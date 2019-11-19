@@ -61,13 +61,12 @@ public class MainMenuScreen implements Screen {
         This is based on the Project Proposal, I'd like to change this
         before the final release.
      */
-    private TextButton buttonTutorial, buttonFlashcard, buttonGameFirst, buttonOptionMenu;
+    private TextButton buttonTutorial, buttonFlashcard, buttonGameFirst, buttonGameSecond, buttonGameThird, buttonOptionMenu;
 
     private SpriteBatch batch;
     private Texture texture;
 
     private BitmapFont font;
-    private Label heading;
 
     FreeTypeFontGenerator generator;
     FreeTypeFontGenerator.FreeTypeFontParameter parameter;
@@ -119,22 +118,17 @@ public class MainMenuScreen implements Screen {
         // IMPORTANT: needs localization support
         buttonTutorial = new TextButton(gameAssets.getResourceBundle().getString("VideoTutorials"), textButtonStyle);
         buttonFlashcard = new TextButton(gameAssets.getResourceBundle().getString("Flashcards"), textButtonStyle);
-        buttonGameFirst = new TextButton(gameAssets.getResourceBundle().getString("Game1"), textButtonStyle);
+        buttonGameFirst = new TextButton(gameAssets.getResourceBundle().getString("GameName"), textButtonStyle);
+        buttonGameSecond = new TextButton(gameAssets.getResourceBundle().getString("Asteroids"), textButtonStyle);
+        buttonGameThird = new TextButton(gameAssets.getResourceBundle().getString("WordScramble"), textButtonStyle);
         buttonOptionMenu = new TextButton(gameAssets.getResourceBundle().getString("OptionsMenu"), textButtonStyle);
-
-
-        Label.LabelStyle headingStyle = new Label.LabelStyle(font, Color.BLACK);
-        //
-
-
-        heading = new Label(gameAssets.getResourceBundle().getString("SelectType"), headingStyle);
-        heading.setFontScale(2);
-        //
 
         // Actually, should probably custom class this process
         buttonTutorial.pad(20);
         buttonFlashcard.pad(20);
         buttonGameFirst.pad(20);
+        buttonGameSecond.pad(20);
+        buttonGameThird.pad(20);
         buttonOptionMenu.pad(20);
 
 
@@ -171,6 +165,28 @@ public class MainMenuScreen implements Screen {
 
             }
         });
+
+        buttonGameSecond.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                // TODO: link to asteroids game
+//                gameMusic.pause();
+//                gameMusic.dispose();
+//                game.setScreen(new GameScreen(game, speechGDX, gameMusic, dbCallback, game.getScreen(), activeVList, prefs, gameAssets));
+            }
+        });
+
+        buttonGameThird.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                // TODO: link to word scramble game
+//                gameMusic.pause();
+//                gameMusic.dispose();
+//                game.setScreen(new GameScreen(game, speechGDX, gameMusic, dbCallback, game.getScreen(), activeVList, prefs, gameAssets));
+
+            }
+        });
+
         buttonOptionMenu.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -184,13 +200,15 @@ public class MainMenuScreen implements Screen {
         });
 
 
-        table.add(heading).padBottom(15);
-        table.row();
         table.add(buttonTutorial).padBottom(15);
         table.row();
         table.add(buttonFlashcard).padBottom(15);
         table.row();
         table.add(buttonGameFirst).padBottom(15);
+        table.row();
+        table.add(buttonGameSecond).padBottom(15);
+        table.row();
+        table.add(buttonGameThird).padBottom(15);
         table.row();
         table.add(buttonOptionMenu);
         table.row();
