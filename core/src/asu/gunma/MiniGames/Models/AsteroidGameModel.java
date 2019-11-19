@@ -169,16 +169,30 @@ public class AsteroidGameModel
         return numLives;
     }
 
-    public void destroyAsteroid(String vocabWord)
+    public boolean destroyAsteroid(String vocabWord)
     {
         int index = 0;
 
         for (index = 0; index < asteroidList.size(); index++)
         {
+            // found the asteroid to be destroyed
             if (asteroidList.get(index).getWord().getEngSpelling() == vocabWord)
                 break;
+            // the asteroid doesn't exist in the current asteroid list
+            else if (index == asteroidList.size() - 1)
+                return false;
         }
 
+        // remove the asteroid
         asteroidList.remove(index);
+        addAsteroid("a");
+        return true;
+    }
+
+    private boolean addAsteroid(String vocabWord)
+    {
+
+
+        return true;
     }
 }

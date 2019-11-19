@@ -91,10 +91,10 @@ public class AsteroidModel
     // other methods
 
     // transforms the position of the asteroid, adding x to the current x-position and y to the current y-position
-    public void transformPosition(float x, float y)
+    public void transformPosition(float deltaTime)
     {
-        float newXPos = position.x + x;
-        float newYPos = position.y + y;
-        this.position = new Vector2(newXPos, newYPos);
+        // movement in the x-direction is different from the y-direction
+        this.position = new Vector2(position.x + velocity * (float)Math.sin(direction) * deltaTime,
+                position.y + velocity * (float)Math.cos(direction) * deltaTime);
     }
 }

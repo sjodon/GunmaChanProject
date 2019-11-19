@@ -93,9 +93,9 @@ public class AsteroidGameController
     }
 
     // other methods
-    public void transformAsteroidPosition(float x, float y, int index)
+    public void transformAsteroidPosition(float delta, int index)
     {
-        model.getAsteroidList().get(index).transformPosition(x, y);
+        model.getAsteroidList().get(index).transformPosition(delta);
     }
 
     public int increaseScore()

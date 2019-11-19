@@ -24,8 +24,8 @@ import asu.gunma.MiniGames.Models.AsteroidGameModel;
 import asu.gunma.speech.ActionResolver;
 import asu.gunma.ui.util.GradeSystem;
 
-// Use this class for the front-end of the word scramble mini-game
-// You'll want to use the WordScrambleGameController class
+// Use this class for the front-end of the asteroid mini-game
+// You'll want to use the AsteroidGameController class
 public class AsteroidGameView implements Screen
 {
     private AsteroidGameController controller;
@@ -72,7 +72,7 @@ public class AsteroidGameView implements Screen
         parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter2 = new FreeTypeFontGenerator.FreeTypeFontParameter();
 
-        asteroidTexture = new Texture("circle.png");
+        asteroidTexture = new Texture("circle-xxl.png");
     }
 
     // Override Screen class methods
@@ -109,8 +109,11 @@ public class AsteroidGameView implements Screen
         stage.act(delta);
         stage.draw();
 
+        transformAsteroids(delta);
+
         batch.begin();
-        batch.draw(asteroidTexture, 300, 300, 100, 100);
+        batch.draw(asteroidTexture, controller.getAsteroidList().get(1).getPosition().x,
+                controller.getAsteroidList().get(1).getPosition().y, 100, 100);
         batch.end();
     }
 
@@ -144,5 +147,15 @@ public class AsteroidGameView implements Screen
         font.dispose();
         batch.dispose();
         stage.dispose();
+    }
+
+    // other methods
+    private void transformAsteroids(float delta)
+    {
+        for (int i = 0; i < controller.getAsteroidList().size(); i++)
+        {
+            // transforms asteroid according to the change in time, the asteroid's velocity, direction, etc.
+            controller.getAsteroidList().get(i).transformPosition(delta);
+        }
     }
 }
