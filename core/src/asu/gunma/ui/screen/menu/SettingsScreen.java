@@ -21,7 +21,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 
+import java.util.ArrayList;
+
 import asu.gunma.DatabaseInterface.DbInterface;
+import asu.gunma.DbContainers.VocabWord;
 import asu.gunma.speech.ActionResolver;
 import asu.gunma.ui.util.AssetManagement.GameAssets;
 
@@ -57,13 +60,15 @@ public class SettingsScreen implements Screen {
     private boolean signedIn = false;
     public Preferences prefs;
     private GameAssets gameAssets;
+    public ArrayList<VocabWord> activeVocabList = new ArrayList<>();
 
-    public SettingsScreen(Game game, ActionResolver speechGDX, Music music, DbInterface dbInterface, Screen previousScreen, Preferences prefs, GameAssets gameAssets){
+    public SettingsScreen(Game game, ActionResolver speechGDX, Music music, DbInterface dbInterface, Screen previousScreen, ArrayList<VocabWord> arrayList, Preferences prefs, GameAssets gameAssets){
         this.game = game;
         this.prefs = prefs;
         this.speechGDX = speechGDX;
         this.dbInterface = dbInterface;
         this.previousScreen = previousScreen;
+        this.activeVocabList = arrayList;
         this.gameMusic = music;
         this.gameAssets = gameAssets;
         gameMusic = Gdx.audio.newMusic(Gdx.files.internal(gameAssets.introMusicPath));
@@ -170,7 +175,7 @@ public class SettingsScreen implements Screen {
                 googleLoginMessage = "";
                 gameMusic.pause();
                 gameMusic.dispose();
-                game.setScreen(new SettingsScreen(game, speechGDX, gameMusic, dbInterface, game.getScreen(), prefs, gameAssets));
+                game.setScreen(new SettingsScreen(game, speechGDX, gameMusic, dbInterface, game.getScreen(), activeVocabList, prefs, gameAssets));
             }
         });
 
@@ -179,7 +184,12 @@ public class SettingsScreen implements Screen {
                 googleLoginMessage = "";
                 gameMusic.pause();
                 gameMusic.dispose();
-                game.setScreen(new OptionMenu(game, speechGDX, gameMusic, dbInterface, previousScreen, prefs, gameAssets));
+                gameMusic = Gdx.audio.newMusic(Gdx.files.internal(gameAssets.introMusicPath));
+                gameMusic.setLooping(false);
+                gameMusic.setVolume(masterVolume);
+                gameMusic.play();
+                game.setScreen(new MainMenuScreen(game, speechGDX, gameMusic, dbInterface, activeVocabList, prefs, gameAssets));
+                previousScreen.dispose();
                 dispose(); // dispose of current GameScreen
             }
         });
