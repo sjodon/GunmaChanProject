@@ -13,8 +13,8 @@ public class AsteroidPlayerModel
     public static final float MAX_Y_POS = 600f;
     public static final float MIN_X_POS = 0f;
     public static final float MIN_Y_POS = 0f;
-    public static final float DEFAULT_X_POS = 0f;
-    public static final float DEFAULT_Y_POS = 0f;
+    public static final float DEFAULT_X_POS = MAX_X_POS / 2 - 64;
+    public static final float DEFAULT_Y_POS = 8f;
     public static final float MIN_DIRECTION = 0f;
     public static final float MAX_DIRECTION = 2f * (float)Math.PI;
     public static final float DEFAULT_DIRECTION = 0f;

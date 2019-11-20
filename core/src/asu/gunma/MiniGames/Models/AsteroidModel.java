@@ -22,8 +22,8 @@ public class AsteroidModel
     public static final float MAX_Y_POS = 600f;
     public static final float MIN_X_POS = 0f;
     public static final float MIN_Y_POS = 0f;
-    public static final float DEFAULT_X_POS = MAX_X_POS / 2;
-    public static final float DEFAULT_Y_POS = MAX_Y_POS + 100;
+    public static final float DEFAULT_X_POS = MAX_X_POS / 2 - 64;
+    public static final float DEFAULT_Y_POS = MAX_Y_POS;
 
     // constructor
     public AsteroidModel(VocabWord word, float velocity, float direction, float xPos, float yPos)

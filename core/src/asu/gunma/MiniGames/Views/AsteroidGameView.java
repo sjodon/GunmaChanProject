@@ -39,13 +39,12 @@ public class AsteroidGameView implements Screen
     public ActionResolver speechGDX;
     private Screen previousScreen;
 
-    boolean isPaused = false;
-
     // UI variables
     private Stage stage;
 
     private SpriteBatch batch;
     private Texture asteroidTexture;
+    private Texture rocketTexture;
     private BitmapFont font;
     private ArrayList<BitmapFont> fontList;
 
@@ -56,10 +55,7 @@ public class AsteroidGameView implements Screen
 
     private TextButton speakButton;
 
-    private int listCounter = 0;
     private ArrayList<GlyphLayout> wordLayoutList;
-    private int targetWidth = 400;
-
     private ArrayList<String> asteroidWordList;
 
     // constants
@@ -81,6 +77,7 @@ public class AsteroidGameView implements Screen
         parameter2 = new FreeTypeFontGenerator.FreeTypeFontParameter();
         fontList = new ArrayList<BitmapFont>();
         asteroidTexture = new Texture("circle-xxl.png");
+        rocketTexture = new Texture("rocket2.png");
         asteroidWordList = new ArrayList<String>();
         wordLayoutList = new ArrayList<GlyphLayout>();
     }
@@ -104,8 +101,7 @@ public class AsteroidGameView implements Screen
             tempParameter.size = 30;
             tempParameter.color = Color.BLACK;
             parameterList.add(tempParameter);
-            BitmapFont tempFont = new BitmapFont();
-            tempFont = generator.generateFont(parameterList.get(i));
+            BitmapFont tempFont = generator.generateFont(parameterList.get(i));
             fontList.add(tempFont);
             GlyphLayout tempLayout = new GlyphLayout();
             tempLayout.setText(fontList.get(i), asteroidWordList.get(i), Color.BLACK,
@@ -143,12 +139,16 @@ public class AsteroidGameView implements Screen
 
         for (int i = 0; i < controller.getAsteroidList().size(); i++)
         {
+            batch.draw(rocketTexture, controller.getPlayer().getPosition().x,
+                    controller.getPlayer().getPosition().y, DEFAULT_ASTEROID_SIZE,
+                    DEFAULT_ASTEROID_SIZE);
             batch.draw(asteroidTexture, controller.getAsteroidList().get(i).getPosition().x,
                     controller.getAsteroidList().get(i).getPosition().y, DEFAULT_ASTEROID_SIZE,
                     DEFAULT_ASTEROID_SIZE);
             fontList.get(i).draw(batch, wordLayoutList.get(i),
                     controller.getAsteroidList().get(i).getPosition().x,
-                    controller.getAsteroidList().get(i).getPosition().y);
+                    controller.getAsteroidList().get(i).getPosition().y
+                            + 2 * DEFAULT_ASTEROID_SIZE / 3);
         }
 
         batch.end();
@@ -191,7 +191,8 @@ public class AsteroidGameView implements Screen
     {
         for (int i = 0; i < controller.getAsteroidList().size(); i++)
         {
-            // transforms asteroid according to the change in time, the asteroid's velocity, direction, etc.
+            // transforms asteroid according to the change in time, the asteroid's velocity,
+            // direction, etc.
             controller.getAsteroidList().get(i).transformPosition(delta);
         }
     }

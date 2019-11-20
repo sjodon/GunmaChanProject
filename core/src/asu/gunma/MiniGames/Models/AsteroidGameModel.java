@@ -1,6 +1,8 @@
 package asu.gunma.MiniGames.Models;
 
 import java.util.ArrayList;
+import java.util.Collections;
+
 import asu.gunma.DbContainers.VocabWord;
 
 public class AsteroidGameModel
@@ -14,6 +16,8 @@ public class AsteroidGameModel
     private AsteroidPlayerModel player;
 
     // constants
+    public static final float MAX_X_POS= 1024f;
+    public static final float MAX_Y_POS = 600f;
     public static final int MIN_LEVEL = 1;
     public static final int MAX_LEVEL = 5;
     public static final int DEFAULT_LEVEL = 1;
@@ -27,13 +31,14 @@ public class AsteroidGameModel
     public static final float DEFAULT_ASTEROID_DIRECTION = 0f;
     public static final float DEFAULT_ASTEROID_X_POS = 0f;
     public static final float DEFAULT_ASTEROID_Y_POS = 0f;
-    public static final float DEFAULT_PLAYER_X_POS = 0f;
-    public static final float DEFAULT_PLAYER_Y_POS = 0f;
+    public static final float DEFAULT_PLAYER_X_POS = MAX_X_POS / 2 - 64;
+    public static final float DEFAULT_PLAYER_Y_POS = 8f;
     public static final float DEFAULT_PLAYER_DIRECTION = 0f;
     public static final int SCORE_INCREASE = 1;
 
     // constructor
-    public AsteroidGameModel(int level, int score, int numLives, ArrayList<VocabWord> activeVocabList)
+    public AsteroidGameModel(int level, int score, int numLives,
+                             ArrayList<VocabWord> activeVocabList)
     {
         setLevel(level);
         setScore(score);
@@ -105,6 +110,10 @@ public class AsteroidGameModel
             this.activeVocabList = activeVocabList;
         else
             this.activeVocabList = new ArrayList<VocabWord>();
+
+        // shuffle the vocab words so the asteroids travel towards the player in a different order
+        // in every play
+        Collections.shuffle(this.activeVocabList);
     }
 
     public void setAsteroidList()
@@ -124,7 +133,8 @@ public class AsteroidGameModel
         if (player != null)
             this.player = player;
         else
-            this.player = new AsteroidPlayerModel(DEFAULT_PLAYER_X_POS, DEFAULT_PLAYER_Y_POS, DEFAULT_PLAYER_DIRECTION);
+            this.player = new AsteroidPlayerModel(DEFAULT_PLAYER_X_POS, DEFAULT_PLAYER_Y_POS,
+                    DEFAULT_PLAYER_DIRECTION);
     }
 
     // other methods
@@ -170,7 +180,9 @@ public class AsteroidGameModel
         if (asteroidList.size() < level)
         {
             // add first available vocab word from the vocab list
-            AsteroidModel asteroid = new AsteroidModel(activeVocabList.get(0), AsteroidModel.DEFAULT_VELOCITY, AsteroidModel.DEFAULT_DIRECTION, AsteroidModel.DEFAULT_X_POS, AsteroidModel.DEFAULT_Y_POS);
+            AsteroidModel asteroid = new AsteroidModel(activeVocabList.get(0),
+                    AsteroidModel.DEFAULT_VELOCITY, AsteroidModel.DEFAULT_DIRECTION,
+                    AsteroidModel.DEFAULT_X_POS, AsteroidModel.DEFAULT_Y_POS);
             asteroidList.add(asteroid);
             activeVocabList.remove(0);
             return true;
