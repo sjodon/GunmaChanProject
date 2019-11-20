@@ -98,7 +98,7 @@ public class AsteroidGameView implements Screen
             asteroidWordList.add(controller.getAsteroidList().get(i).getWord().getEngSpelling());
             FreeTypeFontGenerator.FreeTypeFontParameter tempParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
             tempParameter.characters = asteroidWordList.get(i);
-            tempParameter.size = 30;
+            tempParameter.size = 20;
             tempParameter.color = Color.BLACK;
             parameterList.add(tempParameter);
             BitmapFont tempFont = generator.generateFont(parameterList.get(i));
@@ -119,10 +119,18 @@ public class AsteroidGameView implements Screen
         textButtonStyle.font = font;
         textButtonStyle.fontColor = Color.WHITE;
 
-        speakButton = new TextButton("Speak", textButtonStyle);
-        speakButton.setPosition(100 , Gdx.graphics.getHeight() - 550);
+        //speakButton = new TextButton("Speak", textButtonStyle);
+        //speakButton.setPosition(100 , Gdx.graphics.getHeight() - 550);
 
-        stage.addActor(speakButton);
+        //stage.addActor(speakButton);
+
+        // initiate speech recognition
+        try {
+            speechGDX.startRecognition();
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 
     @Override
@@ -152,6 +160,18 @@ public class AsteroidGameView implements Screen
         }
 
         batch.end();
+
+        String spokenWord = speechGDX.getWord();
+        String cWords = controller.getAsteroidList().get(0).getWord().getCorrectWords();
+        //System.out.println(cWords);
+        String[] correctWords = cWords.split("\\s*,\\s*");
+        boolean correct = gradeSystem.grade(correctWords, spokenWord);
+
+        if (correct)
+        {
+            System.out.println("Correct!");
+            System.out.println(controller.increaseScore());
+        }
     }
 
     @Override

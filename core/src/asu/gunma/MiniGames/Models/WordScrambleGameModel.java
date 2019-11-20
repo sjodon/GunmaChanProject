@@ -1,6 +1,7 @@
 package asu.gunma.MiniGames.Models;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import asu.gunma.DbContainers.VocabWord;
@@ -68,6 +69,9 @@ public class WordScrambleGameModel
             this.activeVocabList = activeVocabList;
         else
             this.activeVocabList = new ArrayList<VocabWord>();
+
+        // shuffle the vocab words so the scrambled words appear in a different order for every play
+        Collections.shuffle(activeVocabList);
     }
 
     public void setScrambledList(ArrayList<String> scrambledList)
