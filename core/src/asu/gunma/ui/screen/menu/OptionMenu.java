@@ -1336,7 +1336,7 @@ public class OptionMenu implements Screen {
         stage.addActor(table6);
         stage.addActor(newButton);
         stage.addActor(deleteButton);
-        stage.addActor(settingsButton);
+//        stage.addActor(settingsButton);
         stage.addActor(backButton);
 
         if(prefs.contains("activeLimit")){

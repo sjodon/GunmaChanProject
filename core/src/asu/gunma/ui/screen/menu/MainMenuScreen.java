@@ -10,11 +10,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -22,8 +20,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.audio.Music;
 
 import java.util.ArrayList;
-import java.util.Locale;
-import java.util.ResourceBundle;
 
 import asu.gunma.DatabaseInterface.DbInterface;
 import asu.gunma.DbContainers.VocabWord;
@@ -31,7 +27,6 @@ import asu.gunma.speech.ActionResolver;
 import asu.gunma.ui.screen.game.FlashcardScreen;
 import asu.gunma.ui.screen.game.GameScreen;
 import asu.gunma.ui.util.AssetManagement.GameAssets;
-import asu.gunma.ui.util.AssetManagement.MyResources;
 
 public class MainMenuScreen implements Screen {
 
@@ -61,7 +56,7 @@ public class MainMenuScreen implements Screen {
         This is based on the Project Proposal, I'd like to change this
         before the final release.
      */
-    private TextButton buttonTutorial, buttonFlashcard, buttonGameFirst, buttonGameSecond, buttonGameThird, buttonOptionMenu;
+    private TextButton buttonTutorial, buttonFlashcard, buttonGameFirst, buttonGameSecond, buttonGameThird, buttonSettings;
 
     private SpriteBatch batch;
     private Texture texture;
@@ -121,7 +116,7 @@ public class MainMenuScreen implements Screen {
         buttonGameFirst = new TextButton(gameAssets.getResourceBundle().getString("GameName"), textButtonStyle);
         buttonGameSecond = new TextButton(gameAssets.getResourceBundle().getString("Asteroids"), textButtonStyle);
         buttonGameThird = new TextButton(gameAssets.getResourceBundle().getString("WordScramble"), textButtonStyle);
-        buttonOptionMenu = new TextButton(gameAssets.getResourceBundle().getString("OptionsMenu"), textButtonStyle);
+        buttonSettings = new TextButton(gameAssets.getResourceBundle().getString("Settings"), textButtonStyle);
 
         // Actually, should probably custom class this process
         buttonTutorial.pad(20);
@@ -129,7 +124,7 @@ public class MainMenuScreen implements Screen {
         buttonGameFirst.pad(20);
         buttonGameSecond.pad(20);
         buttonGameThird.pad(20);
-        buttonOptionMenu.pad(20);
+        buttonSettings.pad(20);
 
 
             /*
@@ -187,7 +182,7 @@ public class MainMenuScreen implements Screen {
             }
         });
 
-        buttonOptionMenu.addListener(new ClickListener() {
+        buttonSettings.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 //testing sign in method when option menu is selected
@@ -195,7 +190,7 @@ public class MainMenuScreen implements Screen {
                 gameMusic.dispose();
                 //play OptionMenu music
                 //gameMusic = new Music
-                game.setScreen(new OptionMenu(game, speechGDX, gameMusic, dbCallback, game.getScreen(),  activeVList, prefs, gameAssets));
+                game.setScreen(new SettingsScreen(game, speechGDX, gameMusic, dbCallback, game.getScreen(), activeVList, prefs, gameAssets));
             }
         });
 
@@ -210,7 +205,7 @@ public class MainMenuScreen implements Screen {
         table.row();
         table.add(buttonGameThird).padBottom(15);
         table.row();
-        table.add(buttonOptionMenu);
+        table.add(buttonSettings);
         table.row();
 
         stage.addActor(table);

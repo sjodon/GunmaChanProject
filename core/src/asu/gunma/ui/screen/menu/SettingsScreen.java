@@ -45,7 +45,7 @@ public class SettingsScreen implements Screen {
     private Skin testSkin;
     private Table table, table2, table3, table4, table5, table6;
 
-    private TextButton homeScreenLockButton, googleLoginButton,backButton, googleLogoutButton, setLanguageButton;
+    private TextButton homeScreenLockButton, googleLoginButton,backButton, googleLogoutButton, setLanguageButton, optionMenuButton;
 
     private SpriteBatch batch;
     private Texture texture;
@@ -104,26 +104,32 @@ public class SettingsScreen implements Screen {
         homeScreenLockButton = new TextButton(gameAssets.getResourceBundle().getString("HomeKeyUnlocked"), testSkin, "default");
         homeScreenLockButton.setTransform(true);
         homeScreenLockButton.setScale(0.5f);
-        homeScreenLockButton.setPosition(50, 400);
+        homeScreenLockButton.setPosition(50, 450);
         homeScreenLockButton.getLabel().setAlignment(Align.center);
 
         googleLoginButton = new TextButton(gameAssets.getResourceBundle().getString("GoogleLogin"), testSkin, "default");
         googleLoginButton.setTransform(true);
         googleLoginButton.setScale(0.5f);
-        googleLoginButton.setPosition(50, 300);
+        googleLoginButton.setPosition(50, 375);
         googleLoginButton.getLabel().setAlignment(Align.center);
 
         googleLogoutButton = new TextButton(gameAssets.getResourceBundle().getString("GoogleLogout"), testSkin, "default");
         googleLogoutButton.setTransform(true);
         googleLogoutButton.setScale(0.5f);
-        googleLogoutButton.setPosition(50, 200);
+        googleLogoutButton.setPosition(50, 300);
         googleLogoutButton.getLabel().setAlignment(Align.center);
 
         setLanguageButton = new TextButton(gameAssets.getResourceBundle().getString("setLanguageMessage"), testSkin, "default");
         setLanguageButton.setTransform(true);
         setLanguageButton.setScale(0.5f);
-        setLanguageButton.setPosition(50, 100);
+        setLanguageButton.setPosition(50, 225);
         setLanguageButton.getLabel().setAlignment(Align.center);
+
+        optionMenuButton = new TextButton(gameAssets.getResourceBundle().getString("OptionsMenu"), testSkin, "default");
+        optionMenuButton.setTransform(true);
+        optionMenuButton.setScale(0.5f);
+        optionMenuButton.setPosition(50, 150);
+        optionMenuButton.getLabel().setAlignment(Align.center);
 
         //font file
 //        final String FONT_PATH = "irohamaru-mikami-Regular.ttf";
@@ -179,6 +185,15 @@ public class SettingsScreen implements Screen {
             }
         });
 
+        optionMenuButton.addListener(new ClickListener(){
+            public void clicked(InputEvent event, float x, float y){
+                googleLoginMessage = "";
+                gameMusic.pause();
+                gameMusic.dispose();
+                game.setScreen(new OptionMenu(game, speechGDX, gameMusic, dbInterface, game.getScreen(),  activeVocabList, prefs, gameAssets));
+            }
+        });
+
         backButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 googleLoginMessage = "";
@@ -199,6 +214,7 @@ public class SettingsScreen implements Screen {
         stage.addActor(googleLoginButton);
         stage.addActor(googleLogoutButton);
         stage.addActor(setLanguageButton);
+        stage.addActor(optionMenuButton);
     }
 
     @Override
