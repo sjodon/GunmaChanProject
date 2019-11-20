@@ -66,6 +66,10 @@ public class TitleScreen implements Screen {
 
     private SpriteBatch batch;
     private Animator onionWalkAnimation;
+    private Animator placeholderAnimation1;
+    private Animator placeholderAnimation2;
+    private Animator placeholderAnimation3;
+    private Animator placeholderAnimation4;
     private Animator gunmaWalkAnimation;
     private BackgroundDrawer backgroundDrawer;
 
@@ -112,6 +116,13 @@ public class TitleScreen implements Screen {
 
         background = new Texture("BG_temp.png");
         backgroundDrawer = new BackgroundDrawer(this.batch, this.SCREEN_BOTTOM_ADJUST);
+
+        // Update these to other frenemy sprite sheets once created
+        this.placeholderAnimation1 = new Animator("Gunma-chan-Japanese-character-enemy-walk-anim-sheet-02.png", 4, 2, 0.1f);
+        this.placeholderAnimation2 = new Animator("Gunma-chan-Japanese-character-enemy-walk-anim-sheet-03.png", 4, 2, 0.1f);
+        this.placeholderAnimation3 = new Animator("Gunma-chan-Japanese-character-enemy-walk-anim-sheet-04.png", 4, 2, 0.1f);
+        this.placeholderAnimation4 = new Animator("Gunma-chan-Japanese-character-enemy-walk-anim-sheet-05.png", 4, 2, 0.1f);
+
         this.onionWalkAnimation = new Animator("onion_sheet.png", 4, 2, 0.1f);
         this.gunmaWalkAnimation = new Animator("gunma_sheet.png", 8, 1, 0.1f);
 
@@ -150,7 +161,7 @@ public class TitleScreen implements Screen {
                 add it into one of these Listeners. Each of them correspond to
                 one of the buttons on the screen in top-down order.
              */
-        buttonTutorial.addListener(new ClickListener() {
+        stage.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("Going from TitleScreen to MainMenuScreen");
@@ -158,10 +169,10 @@ public class TitleScreen implements Screen {
             }
         });
 
-        table.add(heading).padBottom(30);
+        table.add(heading).padBottom(100);
         table.row();
-        table.add(buttonTutorial);
-        table.row();
+//        table.add(buttonTutorial);
+//        table.row();
 
         // Remove this later
         //table.debug();
@@ -177,8 +188,12 @@ public class TitleScreen implements Screen {
         // SpriteBatch is resource intensive, try to use it for only brief moments
         batch.begin();
         backgroundDrawer.render(false,false);
-        batch.draw(this.onionWalkAnimation.getCurrentFrame(delta), 60, 35 + this.SCREEN_BOTTOM_ADJUST);
-        batch.draw(this.gunmaWalkAnimation.getCurrentFrame(delta), 200, 35 + this.SCREEN_BOTTOM_ADJUST);
+        batch.draw(this.placeholderAnimation1.getCurrentFrame(delta), 40, 35 + this.SCREEN_BOTTOM_ADJUST);
+        batch.draw(this.placeholderAnimation2.getCurrentFrame(delta), 180, 35 + this.SCREEN_BOTTOM_ADJUST);
+        batch.draw(this.placeholderAnimation3.getCurrentFrame(delta), 320, 35 + this.SCREEN_BOTTOM_ADJUST);
+        batch.draw(this.placeholderAnimation4.getCurrentFrame(delta), 460, 35 + this.SCREEN_BOTTOM_ADJUST);
+        batch.draw(this.onionWalkAnimation.getCurrentFrame(delta), 600, 35 + this.SCREEN_BOTTOM_ADJUST);
+        batch.draw(this.gunmaWalkAnimation.getCurrentFrame(delta), 740, 35 + this.SCREEN_BOTTOM_ADJUST);
         batch.end();
 
         stage.act(delta); // optional to pass delta value
