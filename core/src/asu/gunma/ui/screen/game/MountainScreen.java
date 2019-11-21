@@ -182,6 +182,81 @@ public class MountainScreen implements Screen {
             }
         });
 
+        level1Button.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                speechGDX.stopRecognition();
+                isPaused = true;
+                gameMusic.dispose();
+                gameMusic = Gdx.audio.newMusic(Gdx.files.internal(gameAssets.introMusicPath));
+                gameMusic.setLooping(false);
+                gameMusic.setVolume(masterVolume);
+                gameMusic.play();
+                game.setScreen(new Level1GameScreen(game, speechGDX,  gameMusic, dbCallback, game.getScreen(), activeVList, prefs, gameAssets));
+                previousScreen.dispose();
+                dispose(); // dispose of current MountainScreen
+            }
+        });
+
+        level2Button.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                speechGDX.stopRecognition();
+                isPaused = true;
+                gameMusic.dispose();
+                gameMusic = Gdx.audio.newMusic(Gdx.files.internal(gameAssets.introMusicPath));
+                gameMusic.setLooping(false);
+                gameMusic.setVolume(masterVolume);
+                gameMusic.play();
+                game.setScreen(new Level2GameScreen(game, speechGDX,  gameMusic, dbCallback, game.getScreen(), activeVList, prefs, gameAssets));
+                previousScreen.dispose();
+                dispose(); // dispose of current MountainScreen
+            }
+        });
+
+        level3Button.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                speechGDX.stopRecognition();
+                isPaused = true;
+                gameMusic.dispose();
+                gameMusic = Gdx.audio.newMusic(Gdx.files.internal(gameAssets.introMusicPath));
+                gameMusic.setLooping(false);
+                gameMusic.setVolume(masterVolume);
+                gameMusic.play();
+                game.setScreen(new Level3GameScreen(game, speechGDX,  gameMusic, dbCallback, game.getScreen(), activeVList, prefs, gameAssets));
+                previousScreen.dispose();
+                dispose(); // dispose of current MountainScreen
+            }
+        });
+
+        level4Button.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                speechGDX.stopRecognition();
+                isPaused = true;
+                gameMusic.dispose();
+                gameMusic = Gdx.audio.newMusic(Gdx.files.internal(gameAssets.introMusicPath));
+                gameMusic.setLooping(false);
+                gameMusic.setVolume(masterVolume);
+                gameMusic.play();
+                game.setScreen(new Level4GameScreen(game, speechGDX,  gameMusic, dbCallback, game.getScreen(), activeVList, prefs, gameAssets));
+                previousScreen.dispose();
+                dispose(); // dispose of current MountainScreen
+            }
+        });
+
+        level5Button.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                speechGDX.stopRecognition();
+                isPaused = true;
+                gameMusic.dispose();
+                gameMusic = Gdx.audio.newMusic(Gdx.files.internal(gameAssets.introMusicPath));
+                gameMusic.setLooping(false);
+                gameMusic.setVolume(masterVolume);
+                gameMusic.play();
+                game.setScreen(new Level5GameScreen(game, speechGDX,  gameMusic, dbCallback, game.getScreen(), activeVList, prefs, gameAssets));
+                previousScreen.dispose();
+                dispose(); // dispose of current MountainScreen
+            }
+        });
+
         // Remove this later
         table.debug();
 
