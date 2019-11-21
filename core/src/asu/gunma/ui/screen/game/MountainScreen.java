@@ -47,6 +47,9 @@ public class MountainScreen implements Screen {
     public ActionResolver speechGDX;
     private Screen previousScreen;
 
+    Skin testSkin;
+    private TextButton level1Button, level2Button, level3Button, level4Button, level5Button;
+
     private Texture background;
 
     // Game logic variables
@@ -102,6 +105,40 @@ public class MountainScreen implements Screen {
         this.onionWalkAnimation = new Animator("onion_sheet.png", 4, 2, 0.1f);
         this.gunmaWalkAnimation = new Animator("gunma_sheet.png", 8, 1, 0.1f);
 
+        testSkin = new Skin(Gdx.files.internal("glassy-ui.json"));
+
+        testSkin.getFont("font-big").getData().setScale(0.1f,0.8f);
+
+        level1Button = new TextButton("", testSkin, "default");
+        level1Button.setTransform(true);
+        level1Button.setWidth(100);
+        level1Button.setScale(0.4f);
+        level1Button.setPosition(50, 400);
+
+        level2Button = new TextButton("", testSkin, "default");
+        level2Button.setTransform(true);
+        level2Button.setWidth(100);
+        level2Button.setScale(0.4f);
+        level2Button.setPosition(100, 400);
+
+        level3Button = new TextButton("", testSkin, "default");
+        level3Button.setTransform(true);
+        level3Button.setWidth(100);
+        level3Button.setScale(0.4f);
+        level3Button.setPosition(150, 400);
+
+        level4Button = new TextButton("", testSkin, "default");
+        level4Button.setTransform(true);
+        level4Button.setWidth(100);
+        level4Button.setScale(0.4f);
+        level4Button.setPosition(200, 400);
+
+        level5Button = new TextButton("", testSkin, "default");
+        level5Button.setTransform(true);
+        level5Button.setWidth(100);
+        level5Button.setScale(0.4f);
+        level5Button.setPosition(250, 400);
+
         Gdx.input.setInputProcessor(stage);
 
         // Defining the regions of sprite image we're going to create
@@ -149,6 +186,11 @@ public class MountainScreen implements Screen {
         table.debug();
 
         stage.addActor(backButton);
+        stage.addActor(level1Button);
+        stage.addActor(level2Button);
+        stage.addActor(level3Button);
+        stage.addActor(level4Button);
+        stage.addActor(level5Button);
 
 
     }
