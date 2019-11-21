@@ -188,12 +188,17 @@ public class TitleScreen implements Screen {
         // SpriteBatch is resource intensive, try to use it for only brief moments
         batch.begin();
         backgroundDrawer.render(false,false);
-        batch.draw(this.placeholderAnimation1.getCurrentFrame(delta), 40, 35 + this.SCREEN_BOTTOM_ADJUST);
-        batch.draw(this.placeholderAnimation2.getCurrentFrame(delta), 180, 35 + this.SCREEN_BOTTOM_ADJUST);
-        batch.draw(this.placeholderAnimation3.getCurrentFrame(delta), 320, 35 + this.SCREEN_BOTTOM_ADJUST);
-        batch.draw(this.placeholderAnimation4.getCurrentFrame(delta), 460, 35 + this.SCREEN_BOTTOM_ADJUST);
-        batch.draw(this.onionWalkAnimation.getCurrentFrame(delta), 600, 35 + this.SCREEN_BOTTOM_ADJUST);
-        batch.draw(this.gunmaWalkAnimation.getCurrentFrame(delta), 740, 35 + this.SCREEN_BOTTOM_ADJUST);
+
+        // ONCE WE HAVE ANIMATIONS FRO OTHER FRENEMIES - UNCOMMENT THIS
+//        batch.draw(this.placeholderAnimation1.getCurrentFrame(delta), 40, 35 + this.SCREEN_BOTTOM_ADJUST);
+//        batch.draw(this.placeholderAnimation2.getCurrentFrame(delta), 180, 35 + this.SCREEN_BOTTOM_ADJUST);
+//        batch.draw(this.placeholderAnimation3.getCurrentFrame(delta), 320, 35 + this.SCREEN_BOTTOM_ADJUST);
+//        batch.draw(this.placeholderAnimation4.getCurrentFrame(delta), 460, 35 + this.SCREEN_BOTTOM_ADJUST);
+//        batch.draw(this.onionWalkAnimation.getCurrentFrame(delta), 600, 35 + this.SCREEN_BOTTOM_ADJUST);
+//        batch.draw(this.gunmaWalkAnimation.getCurrentFrame(delta), 740, 35 + this.SCREEN_BOTTOM_ADJUST);
+
+        batch.draw(this.onionWalkAnimation.getCurrentFrame(delta), 40, 35 + this.SCREEN_BOTTOM_ADJUST);
+        batch.draw(this.gunmaWalkAnimation.getCurrentFrame(delta), 180, 35 + this.SCREEN_BOTTOM_ADJUST);
         batch.end();
 
         stage.act(delta); // optional to pass delta value
