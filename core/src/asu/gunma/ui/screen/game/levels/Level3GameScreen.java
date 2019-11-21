@@ -1,4 +1,4 @@
-package asu.gunma.ui.screen.game;
+package asu.gunma.ui.screen.game.levels;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;

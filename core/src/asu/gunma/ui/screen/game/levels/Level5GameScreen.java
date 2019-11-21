@@ -1,4 +1,4 @@
-package asu.gunma.ui.screen.game;
+package asu.gunma.ui.screen.game.levels;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -37,7 +37,7 @@ import asu.gunma.ui.util.BackgroundDrawer;
 import asu.gunma.ui.util.GradeSystem;
 import asu.gunma.ui.util.lives.LivesDrawer;
 
-public class Level2GameScreen implements Screen {
+public class Level5GameScreen implements Screen {
     //size of round word list
     private int GAME_LIST_SIZE;
     private int currentWordIndex;
@@ -128,7 +128,7 @@ public class Level2GameScreen implements Screen {
 
     Preferences prefs;
 
-    public Level2GameScreen(Game game, ActionResolver speechGDX, Music music, DbInterface dbCallback, Screen previous, ArrayList<VocabWord> activeList, Preferences prefs, GameAssets gameAssets) {
+    public Level5GameScreen(Game game, ActionResolver speechGDX, Music music, DbInterface dbCallback, Screen previous, ArrayList<VocabWord> activeList, Preferences prefs, GameAssets gameAssets) {
         this.game = game;
         this.prefs = prefs;
         this.speechGDX = speechGDX;

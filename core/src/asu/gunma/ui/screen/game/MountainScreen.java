@@ -1,8 +1,6 @@
 package asu.gunma.ui.screen.game;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -12,11 +10,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -25,17 +19,19 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.utils.Align;
+
 import asu.gunma.DatabaseInterface.*;
 import asu.gunma.DbContainers.VocabWord;
 import asu.gunma.speech.ActionResolver;
+import asu.gunma.ui.screen.game.levels.Level1GameScreen;
+import asu.gunma.ui.screen.game.levels.Level2GameScreen;
+import asu.gunma.ui.screen.game.levels.Level3GameScreen;
+import asu.gunma.ui.screen.game.levels.Level4GameScreen;
+import asu.gunma.ui.screen.game.levels.Level5GameScreen;
 import asu.gunma.ui.screen.menu.MainMenuScreen;
 import asu.gunma.ui.util.Animator;
 import asu.gunma.ui.util.AssetManagement.GameAssets;
-import asu.gunma.ui.util.BackgroundDrawer;
-import asu.gunma.ui.util.GradeSystem;
 import asu.gunma.ui.util.MountainBackgroundDrawer;
-import asu.gunma.ui.util.lives.LivesDrawer;
 
 public class MountainScreen implements Screen {
     private final int SCREEN_BOTTOM_ADJUST = 35;
@@ -61,7 +57,7 @@ public class MountainScreen implements Screen {
     private Table table;
     private SpriteBatch batch;
 
-    private Texture texture;
+    private Texture frenemy1, frenemy2, frenemy3, frenemy4, frenemy5;
     private Animator onionWalkAnimation;
     private Animator gunmaWalkAnimation;
     private MountainBackgroundDrawer backgroundDrawer;
@@ -98,7 +94,11 @@ public class MountainScreen implements Screen {
         stage = new Stage();
 
         batch = new SpriteBatch();
-        texture = new Texture(gameAssets.titleGunmaPath);
+        frenemy1 = new Texture("angryneg.png");
+        frenemy2 = new Texture("cabbage1.png");
+        frenemy3 = new Texture("konjackun.jpg");
+        frenemy4 = new Texture(gameAssets.titleGunmaPath);
+        frenemy5 = new Texture(gameAssets.titleGunmaPath);
 
         background = new Texture("BG_temp.png");
         backgroundDrawer = new MountainBackgroundDrawer(this.batch, this.SCREEN_BOTTOM_ADJUST);
@@ -279,7 +279,11 @@ public class MountainScreen implements Screen {
         backgroundDrawer.render(false,false);
 //        batch.draw(this.onionWalkAnimation.getCurrentFrame(delta), 60, 35 + this.SCREEN_BOTTOM_ADJUST);
 //        batch.draw(this.gunmaWalkAnimation.getCurrentFrame(delta), 200, 35 + this.SCREEN_BOTTOM_ADJUST);
-        batch.draw(texture, Gdx.graphics.getWidth()/2 - texture.getWidth()/4 + 400, Gdx.graphics.getHeight()/4 - texture.getHeight()/2 + 400, texture.getWidth()/2, texture.getHeight()/2);
+        batch.draw(frenemy1, Gdx.graphics.getWidth()/2 - frenemy1.getWidth()/4 + 400, Gdx.graphics.getHeight()/4 - frenemy1.getHeight()/2 + 400, frenemy1.getWidth()/2, frenemy1.getHeight()/2);
+        batch.draw(frenemy2, Gdx.graphics.getWidth()/2 - frenemy2.getWidth()/4 + 500, Gdx.graphics.getHeight()/4 - frenemy2.getHeight()/2 + 400, frenemy2.getWidth()/2, frenemy2.getHeight()/2);
+        batch.draw(frenemy3, Gdx.graphics.getWidth()/2 - frenemy3.getWidth()/4 + 600, Gdx.graphics.getHeight()/4 - frenemy3.getHeight()/2 + 400, frenemy3.getWidth()/2, frenemy3.getHeight()/2);
+        batch.draw(frenemy4, Gdx.graphics.getWidth()/2 - frenemy4.getWidth()/4 + 700, Gdx.graphics.getHeight()/4 - frenemy4.getHeight()/2 + 400, frenemy4.getWidth()/2, frenemy4.getHeight()/2);
+        batch.draw(frenemy5, Gdx.graphics.getWidth()/2 - frenemy5.getWidth()/4 + 800, Gdx.graphics.getHeight()/4 - frenemy5.getHeight()/2 + 400, frenemy5.getWidth()/2, frenemy5.getHeight()/2);
         batch.end();
 
         stage.act(delta); // optional to pass delta value
@@ -309,7 +313,11 @@ public class MountainScreen implements Screen {
     @Override
     public void dispose() {
         font.dispose();
-        texture.dispose();
+        frenemy1.dispose();
+        frenemy2.dispose();
+        frenemy3.dispose();
+        frenemy4.dispose();
+        frenemy5.dispose();
         batch.dispose();
         stage.dispose();
     }
