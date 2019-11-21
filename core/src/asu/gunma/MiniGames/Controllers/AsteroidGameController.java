@@ -108,8 +108,13 @@ public class AsteroidGameController
         return model.decreaseNumLives();
     }
 
-    public void destroyAsteroid(String vocabWord)
+    public boolean destroyAsteroid(String vocabWord)
     {
-        model.destroyAsteroid(vocabWord);
+        // successfully destroyed the asteroid
+        if (model.destroyAsteroid(vocabWord))
+            return true;
+
+        //failed to destroy the asteroid
+        return false;
     }
 }

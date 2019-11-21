@@ -161,7 +161,7 @@ public class AsteroidGameModel
         for (index = 0; index < asteroidList.size(); index++)
         {
             // found the asteroid to be destroyed
-            if (asteroidList.get(index).getWord().getEngSpelling() == vocabWord)
+            if (vocabWord.equals(asteroidList.get(index).getWord().getEngSpelling()))
                 break;
             // the asteroid doesn't exist in the current asteroid list
             else if (index == asteroidList.size() - 1)

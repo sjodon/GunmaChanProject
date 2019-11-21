@@ -169,8 +169,15 @@ public class AsteroidGameView implements Screen
 
         if (correct)
         {
+            // print statements are for debugging
             System.out.println("Correct!");
             System.out.println(controller.increaseScore());
+
+            if (controller.destroyAsteroid(spokenWord))
+                System.out.println("Successfully destroyed the asteroid and added a new one to " +
+                        "the screen.");
+            else
+                System.out.println("Failed to destroy asteroid.");
         }
     }
 
