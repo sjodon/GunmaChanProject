@@ -1250,7 +1250,7 @@ public class OptionMenu implements Screen {
                 /*if (verified){
                     game.setScreen(new SettingsScreen(game, speechGDX, gameMusic, dbInterface, game.getScreen()));
                 }*/
-              game.setScreen(new SettingsScreen(game, speechGDX, gameMusic, dbInterface, game.getScreen(), prefs, gameAssets));
+              game.setScreen(new SettingsScreen(game, speechGDX, gameMusic, dbInterface, game.getScreen(), activeVocabList, prefs, gameAssets));
             }
         });
         backButton.addListener(new ClickListener() {
@@ -1336,7 +1336,7 @@ public class OptionMenu implements Screen {
         stage.addActor(table6);
         stage.addActor(newButton);
         stage.addActor(deleteButton);
-        stage.addActor(settingsButton);
+//        stage.addActor(settingsButton);
         stage.addActor(backButton);
 
         if(prefs.contains("activeLimit")){
