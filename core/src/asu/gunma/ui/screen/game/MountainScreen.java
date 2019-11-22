@@ -94,11 +94,11 @@ public class MountainScreen implements Screen {
         stage = new Stage();
 
         batch = new SpriteBatch();
-        frenemy1 = new Texture("angryneg.png");
+        frenemy1 = new Texture("onion.png");
         frenemy2 = new Texture("cabbage1.png");
-        frenemy3 = new Texture("konjackun.jpg");
-        frenemy4 = new Texture(gameAssets.titleGunmaPath);
-        frenemy5 = new Texture(gameAssets.titleGunmaPath);
+        frenemy3 = new Texture("konjackun.png");
+        frenemy4 = new Texture("angryneg.png");
+        frenemy5 = new Texture("negisan.png");
 
         background = new Texture("BG_temp.png");
         backgroundDrawer = new MountainBackgroundDrawer(this.batch, this.SCREEN_BOTTOM_ADJUST);
@@ -279,11 +279,11 @@ public class MountainScreen implements Screen {
         backgroundDrawer.render(false,false);
 //        batch.draw(this.onionWalkAnimation.getCurrentFrame(delta), 60, 35 + this.SCREEN_BOTTOM_ADJUST);
 //        batch.draw(this.gunmaWalkAnimation.getCurrentFrame(delta), 200, 35 + this.SCREEN_BOTTOM_ADJUST);
-        batch.draw(frenemy1, 75, 150, frenemy1.getWidth()/2, frenemy1.getHeight()/2);
-        batch.draw(frenemy2, Gdx.graphics.getWidth()/2 - frenemy2.getWidth()/4 + 500, Gdx.graphics.getHeight()/4 - frenemy2.getHeight()/2 + 400, frenemy2.getWidth()/2, frenemy2.getHeight()/2);
-        batch.draw(frenemy3, Gdx.graphics.getWidth()/2 - frenemy3.getWidth()/4 + 600, Gdx.graphics.getHeight()/4 - frenemy3.getHeight()/2 + 400, frenemy3.getWidth()/2, frenemy3.getHeight()/2);
-        batch.draw(frenemy4, Gdx.graphics.getWidth()/2 - frenemy4.getWidth()/4 + 700, Gdx.graphics.getHeight()/4 - frenemy4.getHeight()/2 + 400, frenemy4.getWidth()/2, frenemy4.getHeight()/2);
-        batch.draw(frenemy5, Gdx.graphics.getWidth()/2 - frenemy5.getWidth()/4 + 800, Gdx.graphics.getHeight()/4 - frenemy5.getHeight()/2 + 400, frenemy5.getWidth()/2, frenemy5.getHeight()/2);
+        batch.draw(frenemy1, 115, 150, frenemy1.getWidth()/2, frenemy1.getHeight()/2);
+        batch.draw(frenemy2, 500, 175, frenemy2.getWidth()/2, frenemy2.getHeight()/2);
+        batch.draw(frenemy3, 850, 250, frenemy3.getWidth()/2, frenemy3.getHeight()/2);
+        batch.draw(frenemy4, 600, 350, frenemy4.getWidth()/2, frenemy4.getHeight()/2);
+        batch.draw(frenemy5, 350, 425, frenemy5.getWidth()/2, frenemy5.getHeight()/2);
         batch.end();
 
         stage.act(delta); // optional to pass delta value
