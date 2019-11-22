@@ -189,7 +189,7 @@ public class TitleScreen implements Screen {
         batch.begin();
         backgroundDrawer.render(false,false);
 
-        // ONCE WE HAVE ANIMATIONS FRO OTHER FRENEMIES - UNCOMMENT THIS
+        // ONCE WE HAVE ANIMATIONS FOR OTHER FRENEMIES - UNCOMMENT THIS
 //        batch.draw(this.placeholderAnimation1.getCurrentFrame(delta), 40, 35 + this.SCREEN_BOTTOM_ADJUST);
 //        batch.draw(this.placeholderAnimation2.getCurrentFrame(delta), 180, 35 + this.SCREEN_BOTTOM_ADJUST);
 //        batch.draw(this.placeholderAnimation3.getCurrentFrame(delta), 320, 35 + this.SCREEN_BOTTOM_ADJUST);
