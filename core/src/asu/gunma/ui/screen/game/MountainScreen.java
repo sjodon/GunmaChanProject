@@ -113,31 +113,31 @@ public class MountainScreen implements Screen {
         level1Button.setTransform(true);
         level1Button.setWidth(100);
         level1Button.setScale(0.4f);
-        level1Button.setPosition(50, 400);
+        level1Button.setPosition(75, 150);
 
         level2Button = new TextButton("", testSkin, "default");
         level2Button.setTransform(true);
         level2Button.setWidth(100);
         level2Button.setScale(0.4f);
-        level2Button.setPosition(100, 400);
+        level2Button.setPosition(450, 175);
 
         level3Button = new TextButton("", testSkin, "default");
         level3Button.setTransform(true);
         level3Button.setWidth(100);
         level3Button.setScale(0.4f);
-        level3Button.setPosition(150, 400);
+        level3Button.setPosition(800, 250);
 
         level4Button = new TextButton("", testSkin, "default");
         level4Button.setTransform(true);
         level4Button.setWidth(100);
         level4Button.setScale(0.4f);
-        level4Button.setPosition(200, 400);
+        level4Button.setPosition(575, 350);
 
         level5Button = new TextButton("", testSkin, "default");
         level5Button.setTransform(true);
         level5Button.setWidth(100);
         level5Button.setScale(0.4f);
-        level5Button.setPosition(250, 400);
+        level5Button.setPosition(325, 425);
 
         Gdx.input.setInputProcessor(stage);
 
@@ -279,7 +279,7 @@ public class MountainScreen implements Screen {
         backgroundDrawer.render(false,false);
 //        batch.draw(this.onionWalkAnimation.getCurrentFrame(delta), 60, 35 + this.SCREEN_BOTTOM_ADJUST);
 //        batch.draw(this.gunmaWalkAnimation.getCurrentFrame(delta), 200, 35 + this.SCREEN_BOTTOM_ADJUST);
-        batch.draw(frenemy1, Gdx.graphics.getWidth()/2 - frenemy1.getWidth()/4 + 400, Gdx.graphics.getHeight()/4 - frenemy1.getHeight()/2 + 400, frenemy1.getWidth()/2, frenemy1.getHeight()/2);
+        batch.draw(frenemy1, 75, 150, frenemy1.getWidth()/2, frenemy1.getHeight()/2);
         batch.draw(frenemy2, Gdx.graphics.getWidth()/2 - frenemy2.getWidth()/4 + 500, Gdx.graphics.getHeight()/4 - frenemy2.getHeight()/2 + 400, frenemy2.getWidth()/2, frenemy2.getHeight()/2);
         batch.draw(frenemy3, Gdx.graphics.getWidth()/2 - frenemy3.getWidth()/4 + 600, Gdx.graphics.getHeight()/4 - frenemy3.getHeight()/2 + 400, frenemy3.getWidth()/2, frenemy3.getHeight()/2);
         batch.draw(frenemy4, Gdx.graphics.getWidth()/2 - frenemy4.getWidth()/4 + 700, Gdx.graphics.getHeight()/4 - frenemy4.getHeight()/2 + 400, frenemy4.getWidth()/2, frenemy4.getHeight()/2);

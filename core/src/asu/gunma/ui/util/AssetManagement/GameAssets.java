@@ -42,7 +42,7 @@ public class GameAssets extends Month {
     public static String redXPath = "redX.png";
 
     // Game Screen Assets
-    public static String smallMountainImagePath = "background/mountainx3_small.png";
+    public static String smallMountainImagePath = "background/cropped_mountain2.png";
     public static String gunmaSpritePath = "sprite_gunma.png";
     public static String gunmaFaintedSpritePath = "gunma_fainted.png";
     public static String backgroundImagePath = "BG_temp.png";
