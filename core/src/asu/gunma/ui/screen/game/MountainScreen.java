@@ -94,16 +94,16 @@ public class MountainScreen implements Screen {
         stage = new Stage();
 
         batch = new SpriteBatch();
-        frenemy1 = new Texture("onion.png");
-        frenemy2 = new Texture("cabbage1.png");
-        frenemy3 = new Texture("konjackun.png");
-        frenemy4 = new Texture("angryneg.png");
-        frenemy5 = new Texture("negisan.png");
+        frenemy1 = new Texture(gameAssets.onionFrenemy);
+        frenemy2 = new Texture(gameAssets.cabbageFrenemy);
+        frenemy3 = new Texture(gameAssets.konjackunFrenemy);
+        frenemy4 = new Texture(gameAssets.angrynegFrenemy);
+        frenemy5 = new Texture(gameAssets.negisanFrenemy);
 
-        background = new Texture("BG_temp.png");
+        background = new Texture(gameAssets.backgroundImagePath);
         backgroundDrawer = new MountainBackgroundDrawer(this.batch, this.SCREEN_BOTTOM_ADJUST);
-        this.onionWalkAnimation = new Animator("onion_sheet.png", 4, 2, 0.1f);
-        this.gunmaWalkAnimation = new Animator("gunma_sheet.png", 8, 1, 0.1f);
+        this.onionWalkAnimation = new Animator(gameAssets.onionWalkAnimationPath, 4, 2, 0.1f);
+        this.gunmaWalkAnimation = new Animator(gameAssets.gunmaWalkAnimationPath, 8, 1, 0.1f);
 
         testSkin = new Skin(Gdx.files.internal("glassy-ui.json"));
 

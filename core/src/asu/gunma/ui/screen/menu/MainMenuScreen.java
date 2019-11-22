@@ -110,10 +110,10 @@ public class MainMenuScreen implements Screen {
 
         batch = new SpriteBatch();
 
-        background = new Texture("BG_temp.png");
+        background = new Texture(gameAssets.backgroundImagePath);
         backgroundDrawer = new BackgroundDrawer(this.batch, this.SCREEN_BOTTOM_ADJUST);
-        this.onionWalkAnimation = new Animator("onion_sheet.png", 4, 2, 0.1f);
-        this.gunmaWalkAnimation = new Animator("gunma_sheet.png", 8, 1, 0.1f);
+        this.onionWalkAnimation = new Animator(gameAssets.onionWalkAnimationPath, 4, 2, 0.1f);
+        this.gunmaWalkAnimation = new Animator(gameAssets.gunmaWalkAnimationPath, 8, 1, 0.1f);
 
         Gdx.input.setInputProcessor(stage);
 

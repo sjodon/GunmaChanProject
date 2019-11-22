@@ -163,7 +163,7 @@ public class Level5GameScreen implements Screen {
         this.livesDrawer = new LivesDrawer(this.batch);
 
         // Animation initializations
-        this.onionWalkAnimation = new Animator(gameAssets.onionWalkAnimationPath, 4, 2, 0.1f);
+        this.onionWalkAnimation = new Animator(gameAssets.placeholderFrenemyAnimation4Path, 4, 2, 0.1f);
         this.gunmaWalkAnimation = new Animator(gameAssets.gunmaWalkAnimationPath, 8, 1, 0.1f);
 
         // Game feedback

@@ -42,7 +42,6 @@ public class GameAssets extends Month {
     public static String redXPath = "redX.png";
 
     // Game Screen Assets
-    public static String smallMountainImagePath = "background/cropped_mountain2.png";
     public static String gunmaSpritePath = "sprite_gunma.png";
     public static String gunmaFaintedSpritePath = "gunma_fainted.png";
     public static String backgroundImagePath = "BG_temp.png";
@@ -50,6 +49,21 @@ public class GameAssets extends Month {
     public static String gunmaWalkAnimationPath = "gunma_sheet.png";
     public static String correctSpritePath = "background/correct.png";
     public static String incorrectSpritePath = "background/incorrect.png";
+
+    // Placeholder frenemy animations
+    public static String placeholderFrenemyAnimation1Path = "Gunma-chan-Japanese-character-enemy-walk-anim-sheet-02.png";
+    public static String placeholderFrenemyAnimation2Path = "Gunma-chan-Japanese-character-enemy-walk-anim-sheet-03.png";
+    public static String placeholderFrenemyAnimation3Path = "Gunma-chan-Japanese-character-enemy-walk-anim-sheet-04.png";
+    public static String placeholderFrenemyAnimation4Path = "Gunma-chan-Japanese-character-enemy-walk-anim-sheet-05.png";
+
+    // Mountain Screen Assets
+    public static String smallMountainImagePath = "background/cropped_mountain2.png";
+    public static String onionFrenemy = "onion.png";
+    public static String cabbageFrenemy = "cabbage1.png";
+    public static String konjackunFrenemy = "konjackun.png";
+    public static String angrynegFrenemy = "angryneg.png";
+    public static String negisanFrenemy = "negisan.png";
+
 
     // Background Drawer Assets
     public static String cloud1Path = "background/cloud1.png";
