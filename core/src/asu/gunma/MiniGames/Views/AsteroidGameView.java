@@ -98,7 +98,7 @@ public class AsteroidGameView implements Screen
             asteroidWordList.add(controller.getAsteroidList().get(i).getWord().getEngSpelling());
             FreeTypeFontGenerator.FreeTypeFontParameter tempParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
             tempParameter.characters = asteroidWordList.get(i);
-            tempParameter.size = 20;
+            tempParameter.size = 16;
             tempParameter.color = Color.BLACK;
             parameterList.add(tempParameter);
             BitmapFont tempFont = generator.generateFont(parameterList.get(i));
@@ -150,12 +150,12 @@ public class AsteroidGameView implements Screen
             batch.draw(rocketTexture, controller.getPlayer().getPosition().x,
                     controller.getPlayer().getPosition().y, DEFAULT_ASTEROID_SIZE,
                     DEFAULT_ASTEROID_SIZE);
-            batch.draw(asteroidTexture, controller.getAsteroidList().get(i).getPosition().x,
-                    controller.getAsteroidList().get(i).getPosition().y, DEFAULT_ASTEROID_SIZE,
+            batch.draw(asteroidTexture, controller.getAsteroidList().get(0).getPosition().x,
+                    controller.getAsteroidList().get(0).getPosition().y, DEFAULT_ASTEROID_SIZE,
                     DEFAULT_ASTEROID_SIZE);
-            fontList.get(i).draw(batch, wordLayoutList.get(i),
-                    controller.getAsteroidList().get(i).getPosition().x,
-                    controller.getAsteroidList().get(i).getPosition().y
+            fontList.get(0).draw(batch, wordLayoutList.get(0),
+                    controller.getAsteroidList().get(0).getPosition().x,
+                    controller.getAsteroidList().get(0).getPosition().y
                             + 2 * DEFAULT_ASTEROID_SIZE / 3);
         }
 
@@ -174,10 +174,28 @@ public class AsteroidGameView implements Screen
             System.out.println(controller.increaseScore());
 
             if (controller.destroyAsteroid(spokenWord))
+            {
                 System.out.println("Successfully destroyed the asteroid and added a new one to " +
                         "the screen.");
+
+                asteroidWordList.remove(0);
+                asteroidWordList.add(0, controller.getAsteroidList().get(0).getWord().getEngSpelling());
+                FreeTypeFontGenerator.FreeTypeFontParameter tempParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+                tempParameter.characters = asteroidWordList.get(0);
+                tempParameter.size = 16;
+                tempParameter.color = Color.BLACK;
+                parameterList.add(0, tempParameter);
+                BitmapFont tempFont = generator.generateFont(parameterList.get(0));
+                fontList.add(0, tempFont);
+                GlyphLayout tempLayout = new GlyphLayout();
+                tempLayout.setText(fontList.get(0), asteroidWordList.get(0), Color.BLACK,
+                        DEFAULT_ASTEROID_SIZE, Align.center, true);
+                wordLayoutList.add(0, tempLayout);
+            }
             else
                 System.out.println("Failed to destroy asteroid.");
+
+
         }
     }
 
