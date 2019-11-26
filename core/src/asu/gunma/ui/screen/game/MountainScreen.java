@@ -100,6 +100,7 @@ public class MountainScreen implements Screen {
         frenemy4 = new Texture(gameAssets.angrynegFrenemy);
         frenemy5 = new Texture(gameAssets.negisanFrenemy);
 
+
         background = new Texture(gameAssets.backgroundImagePath);
         backgroundDrawer = new MountainBackgroundDrawer(this.batch, this.SCREEN_BOTTOM_ADJUST);
         this.onionWalkAnimation = new Animator(gameAssets.onionWalkAnimationPath, 4, 2, 0.1f);
