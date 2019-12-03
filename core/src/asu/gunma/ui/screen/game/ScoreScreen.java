@@ -206,7 +206,7 @@ public class ScoreScreen implements Screen {
         //
 
         heading = new Label(gameAssets.getResourceBundle().getString("YourScore") + " " + score, headingStyle);
-        stars = new Texture("no_stars.png");
+        stars = new Texture(gameAssets.getStarPath(numStars));
         Skin skin = gameAssets.getColorSkin(gameAssets.color2, "color2");
         textButtonStyle.up = skin.newDrawable("color2", gameAssets.color2);
 

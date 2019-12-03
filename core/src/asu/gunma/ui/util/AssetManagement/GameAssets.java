@@ -50,6 +50,22 @@ public class GameAssets extends Month {
     public static String correctSpritePath = "background/correct.png";
     public static String incorrectSpritePath = "background/incorrect.png";
 
+    // Game Score Screen Assets
+    public static String noStarsPath = "no_stars.png";
+    public static String oneStarPath = "one_star.png";
+    public static String twoStarsPath = "two_stars.png";
+    public static String threeStarsPath = "three_stars.png";
+    public String getStarPath(int num) {
+        if(num == 0) {
+            return noStarsPath;
+        } else if(num == 1) {
+            return oneStarPath;
+        } else if(num == 2) {
+            return twoStarsPath;
+        }
+        return threeStarsPath;
+    }
+
     // Placeholder frenemy animations
     public static String placeholderFrenemyAnimation1Path = "Gunma-chan-Japanese-character-enemy-walk-anim-sheet-02.png";
     public static String placeholderFrenemyAnimation2Path = "Gunma-chan-Japanese-character-enemy-walk-anim-sheet-03.png";
