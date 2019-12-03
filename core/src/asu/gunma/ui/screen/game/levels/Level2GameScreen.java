@@ -30,6 +30,7 @@ import java.util.Random;
 import asu.gunma.DatabaseInterface.DbInterface;
 import asu.gunma.DbContainers.VocabWord;
 import asu.gunma.speech.ActionResolver;
+import asu.gunma.ui.screen.game.ScoreScreen;
 import asu.gunma.ui.screen.menu.MainMenuScreen;
 import asu.gunma.ui.util.Animator;
 import asu.gunma.ui.util.AssetManagement.GameAssets;
@@ -381,15 +382,23 @@ public class Level2GameScreen implements Screen {
             this.walkOntoScreenFromRight(delta);
         } else {
             speechGDX.stopRecognition();
-
-            if(win) {
-                font2.draw(batch, "You Win!", 450, 380);
-                // batch.draw(supergunma, 70, 10 + this.SCREEN_BOTTOM_ADJUST);
+            isPaused = true;
+            gameMusic.dispose();
+            gameMusic = Gdx.audio.newMusic(Gdx.files.internal(gameAssets.introMusicPath));
+            gameMusic.setLooping(false);
+            gameMusic.setVolume(masterVolume);
+            gameMusic.play();
+            int numStars = 0;
+            if(score >= 5) {
+                numStars = 3;
+            } else if(score >= 3) {
+                numStars = 2;
+            } else if(score >= 2) {
+                numStars = 1;
             }
-            else{
-                font2.draw(batch, "You Lose!", 450, 380);
-                batch.draw(this.gunmaFaintedSprite, 70, 10 + this.SCREEN_BOTTOM_ADJUST);
-            }
+            gameAssets.setLevelStars(1, numStars);
+            game.setScreen(new ScoreScreen(game, speechGDX,  gameMusic, dbCallback,previousScreen, activeVList, prefs, gameAssets, score, numStars));
+            dispose(); // dispose of current GameScreen
         }
 
         if(correctDisplayTimer > 0) { this.correctAnswerGraphic();}
