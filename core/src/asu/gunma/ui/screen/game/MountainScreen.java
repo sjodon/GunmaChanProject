@@ -42,6 +42,7 @@ public class MountainScreen implements Screen {
     public static float masterVolume = 5;
     public ActionResolver speechGDX;
     private Screen previousScreen;
+    private Texture level1, level2, level3, level4, level5;
 
     Skin testSkin;
     private TextButton level1Button, level2Button, level3Button, level4Button, level5Button;
@@ -280,6 +281,26 @@ public class MountainScreen implements Screen {
         backgroundDrawer.render(false,false);
 //        batch.draw(this.onionWalkAnimation.getCurrentFrame(delta), 60, 35 + this.SCREEN_BOTTOM_ADJUST);
 //        batch.draw(this.gunmaWalkAnimation.getCurrentFrame(delta), 200, 35 + this.SCREEN_BOTTOM_ADJUST);
+        if(gameAssets.level1Stars != -1) {
+            level1 = new Texture(gameAssets.getLevelStars(1));
+            batch.draw(level1, 115 - frenemy1.getWidth()/2, 155 + frenemy1.getHeight()/2, level1.getWidth()/5, level1.getHeight()/5);
+        }
+        if(gameAssets.level2Stars != -1) {
+            level2 = new Texture(gameAssets.getLevelStars(2));
+            batch.draw(level2, 520 - frenemy2.getWidth()/2, 180 + frenemy2.getHeight()/2, level2.getWidth()/5, level2.getHeight()/5);
+        }
+        if(gameAssets.level3Stars != -1) {
+            level3 = new Texture(gameAssets.getLevelStars(3));
+            batch.draw(level3, 870 - frenemy3.getWidth()/2, 255 + frenemy3.getHeight()/2, level3.getWidth()/5, level3.getHeight()/5);
+        }
+        if(gameAssets.level4Stars != -1) {
+            level4 = new Texture(gameAssets.getLevelStars(4));
+            batch.draw(level4, 630 - frenemy4.getWidth()/2, 355 + frenemy4.getHeight()/2, level4.getWidth()/5, level4.getHeight()/5);
+        }
+        if(gameAssets.level5Stars != -1) {
+            level5 = new Texture(gameAssets.getLevelStars(5));
+            batch.draw(level5, 400 - frenemy5.getWidth()/2, 420 + frenemy5.getHeight()/2, level5.getWidth()/5, level5.getHeight()/5);
+        }
         batch.draw(frenemy1, 115, 150, frenemy1.getWidth()/2, frenemy1.getHeight()/2);
         batch.draw(frenemy2, 500, 175, frenemy2.getWidth()/2, frenemy2.getHeight()/2);
         batch.draw(frenemy3, 850, 250, frenemy3.getWidth()/2, frenemy3.getHeight()/2);
