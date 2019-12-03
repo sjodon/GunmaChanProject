@@ -80,6 +80,42 @@ public class GameAssets extends Month {
     public static String angrynegFrenemy = "angryneg.png";
     public static String negisanFrenemy = "negisan.png";
 
+    // Game Level Assets
+    public int level1Stars = -1;
+    public int level2Stars = -1;
+    public int level3Stars = -1;
+    public int level4Stars = -1;
+    public int level5Stars = -1;
+
+    public void setLevelStars(int level, int numStars) {
+        if(level == 1) {
+            level1Stars = numStars;
+        } else if(level == 2) {
+            level2Stars = numStars;
+        } else if(level == 3) {
+            level3Stars = numStars;
+        } else if(level == 4) {
+            level4Stars = numStars;
+        } else if(level == 5) {
+            level5Stars = numStars;
+        }
+    }
+
+    public String getLevelStars(int level) {
+        if(level == 1) {
+            return getStarPath(level1Stars);
+        } else if(level == 2) {
+            return getStarPath(level2Stars);
+        } else if(level == 3) {
+            return getStarPath(level3Stars);
+        } else if(level == 4) {
+            return getStarPath(level4Stars);
+        } else if(level == 5) {
+            return getStarPath(level5Stars);
+        }
+        return "";
+    }
+
 
     // Background Drawer Assets
     public static String cloud1Path = "background/cloud1.png";
