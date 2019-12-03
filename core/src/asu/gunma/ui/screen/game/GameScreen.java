@@ -182,7 +182,7 @@ public class GameScreen implements Screen {
 
         // Animation initializations
         this.onionWalkAnimation = new Animator("onion_sheet.png", 4, 2, 0.1f);
-        this.gunmaWalkAnimation = new Animator("Gunma_with_bag.png", 8, 1, 0.1f);
+        this.gunmaWalkAnimation = new Animator("Gunma_with_bag_small.png", 8, 1, 0.1f);
         this.onionHungryWalkAnimation = new Animator("onion_sheetSweetRoll.png", 4, 2, 0.1f);
         this.onionStealAnimation = new Animator("onion_sheet.png", 4, 2, 0.1f);
         this.onionSatisfiedAnimation = new Animator("onion_sheetSmile.png", 4, 2, 0.1f);
