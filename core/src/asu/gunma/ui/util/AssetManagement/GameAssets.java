@@ -108,15 +108,15 @@ public class GameAssets extends Month {
     public int level5Stars = -1;
 
     public void setLevelStars(int level, int numStars) {
-        if(level == 1) {
+        if(level == 1 && numStars > level1Stars) {
             level1Stars = numStars;
-        } else if(level == 2) {
+        } else if(level == 2 && numStars > level2Stars) {
             level2Stars = numStars;
-        } else if(level == 3) {
+        } else if(level == 3 && numStars > level3Stars) {
             level3Stars = numStars;
-        } else if(level == 4) {
+        } else if(level == 4 && numStars > level4Stars) {
             level4Stars = numStars;
-        } else if(level == 5) {
+        } else if(level == 5 && numStars > level5Stars) {
             level5Stars = numStars;
         }
     }
