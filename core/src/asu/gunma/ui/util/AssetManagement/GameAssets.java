@@ -101,8 +101,8 @@ public class GameAssets extends Month {
     }
 
     // Game Level Assets
-    public int level1Stars = 1;
-    public int level2Stars = 2;
+    public int level1Stars = -1;
+    public int level2Stars = -1;
     public int level3Stars = -1;
     public int level4Stars = -1;
     public int level5Stars = -1;
