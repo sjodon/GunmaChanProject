@@ -15,6 +15,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
@@ -46,9 +48,12 @@ public class AsteroidGameView implements Screen
     private Stage stage;
 
     private SpriteBatch batch;
+
+    // textures
     private Texture asteroidTexture;
     private Texture rocketTexture;
-    private Texture heartTexture;
+    private Texture explosionTexture;
+
     private BitmapFont font;
     private ArrayList<BitmapFont> fontList;
 
@@ -58,14 +63,20 @@ public class AsteroidGameView implements Screen
     public Preferences prefs;
 
     private TextButton speakButton;
+    private Label youLose;
 
     private ArrayList<GlyphLayout> wordLayoutList;
     private ArrayList<String> asteroidWordList;
 
     private LivesDrawer livesDrawer;
 
+    private int explosionTimer;
+
+    private Table table;
+
     // constants
     private static final int DEFAULT_ASTEROID_SIZE = 128;
+    private static final int DEFAULT_EXPLOSION_SIZE = 160;
 
     public AsteroidGameView(Game game, ActionResolver speechGDX, Music music, Screen previous, Preferences prefs, AsteroidGameController controller)
     {
@@ -76,19 +87,26 @@ public class AsteroidGameView implements Screen
         this.prefs = prefs;
         this.controller = controller;
 
-        //font file
+        //fonts
         final String FONT_PATH = "irohamaru-mikami-Regular.ttf";
         generator = new FreeTypeFontGenerator(Gdx.files.internal(FONT_PATH));
         parameterList = new ArrayList<FreeTypeFontGenerator.FreeTypeFontParameter>();
         parameter2 = new FreeTypeFontGenerator.FreeTypeFontParameter();
         fontList = new ArrayList<BitmapFont>();
+
+        // pictures
         asteroidTexture = new Texture("circle-xxl.png");
         rocketTexture = new Texture("rocket2.png");
+        explosionTexture = new Texture("explosion.png");
+
+        // initialize lists
         asteroidWordList = new ArrayList<String>();
         wordLayoutList = new ArrayList<GlyphLayout>();
 
         // sounds
         incorrectSound = Gdx.audio.newMusic(Gdx.files.internal("incorrect_ohno.mp3"));
+
+        explosionTimer = 0;
     }
 
     // Override Screen class methods
@@ -101,6 +119,8 @@ public class AsteroidGameView implements Screen
         batch = new SpriteBatch();
         Gdx.input.setInputProcessor(stage);
         this.livesDrawer = new LivesDrawer(this.batch);
+        table = new Table();
+        table.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         // for displaying words on asteroids
         for (int i = 0; i < controller.getAsteroidList().size(); i++)
@@ -129,11 +149,6 @@ public class AsteroidGameView implements Screen
         textButtonStyle.font = font;
         textButtonStyle.fontColor = Color.WHITE;
 
-        //speakButton = new TextButton("Speak", textButtonStyle);
-        //speakButton.setPosition(100 , Gdx.graphics.getHeight() - 550);
-
-        //stage.addActor(speakButton);
-
         // initiate speech recognition
         try {
             speechGDX.startRecognition();
@@ -141,6 +156,15 @@ public class AsteroidGameView implements Screen
         } catch (Exception e) {
             System.out.println(e);
         }
+
+        Label.LabelStyle youLoseStyle = new Label.LabelStyle(font, Color.WHITE);
+        youLose = new Label("YOU LOSE", youLoseStyle);
+        youLose.setFontScale(2);
+
+        table.add(youLose).padBottom(100);
+        table.row();
+
+        //stage.addActor(table);
     }
 
     @Override
@@ -154,20 +178,40 @@ public class AsteroidGameView implements Screen
         transformAsteroids(delta);
 
         batch.begin();
-        this.livesDrawer.render();
 
-        for (int i = 0; i < controller.getAsteroidList().size(); i++)
+        // show the game only if the player still has lives
+        if (controller.getNumLives() > 0)
         {
-            batch.draw(rocketTexture, controller.getPlayer().getPosition().x,
-                    controller.getPlayer().getPosition().y, DEFAULT_ASTEROID_SIZE,
-                    DEFAULT_ASTEROID_SIZE);
-            batch.draw(asteroidTexture, controller.getAsteroidList().get(0).getPosition().x,
-                    controller.getAsteroidList().get(0).getPosition().y, DEFAULT_ASTEROID_SIZE,
-                    DEFAULT_ASTEROID_SIZE);
-            fontList.get(0).draw(batch, wordLayoutList.get(0),
-                    controller.getAsteroidList().get(0).getPosition().x,
-                    controller.getAsteroidList().get(0).getPosition().y
-                            + 2 * DEFAULT_ASTEROID_SIZE / 3);
+            this.livesDrawer.render();
+
+            for (int i = 0; i < controller.getAsteroidList().size(); i++)
+            {
+                batch.draw(rocketTexture, controller.getPlayer().getPosition().x,
+                        controller.getPlayer().getPosition().y, DEFAULT_ASTEROID_SIZE,
+                        DEFAULT_ASTEROID_SIZE);
+                batch.draw(asteroidTexture, controller.getAsteroidList().get(0).getPosition().x,
+                        controller.getAsteroidList().get(0).getPosition().y, DEFAULT_ASTEROID_SIZE,
+                        DEFAULT_ASTEROID_SIZE);
+                fontList.get(0).draw(batch, wordLayoutList.get(0),
+                        controller.getAsteroidList().get(0).getPosition().x,
+                        controller.getAsteroidList().get(0).getPosition().y
+                                + 2 * DEFAULT_ASTEROID_SIZE / 3);
+            }
+
+            // continue to show explosion
+            if (explosionTimer > 0)
+            {
+                batch.draw(explosionTexture, controller.getPlayer().getPosition().x,
+                        controller.getPlayer().getPosition().y, DEFAULT_EXPLOSION_SIZE,
+                        DEFAULT_EXPLOSION_SIZE);
+
+                explosionTimer++;
+            }
+        }
+        else
+        {
+            stage.addActor(table);
+            stage.draw();
         }
 
         batch.end();
@@ -208,7 +252,8 @@ public class AsteroidGameView implements Screen
 
 
         }
-        else if (controller.getAsteroidList().get(0).getPosition().y < 128)
+        // asteroid has reached rocket
+        else if (controller.getAsteroidList().get(0).getPosition().y < 140)
         {
             System.out.println("Incorrect!");
             incorrectSound.setLooping(false);
@@ -217,7 +262,17 @@ public class AsteroidGameView implements Screen
             livesDrawer.takeLife();
             controller.decreaseNumLives();
             controller.destroyAsteroid(controller.getAsteroidList().get(0).getWord().getEngSpelling());
+
+            // initiate rocket explosion
+            explosionTimer++;
         }
+
+        if (explosionTimer > 60)
+        {
+            explosionTimer = 0;
+        }
+        System.out.println(explosionTimer);
+
     }
 
     @Override
