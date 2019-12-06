@@ -14,7 +14,7 @@ public class AsteroidModel
     // constants
     public static final float MIN_VELOCITY = 0.01f;
     public static final float MAX_VELOCITY = 100f;
-    public static final float DEFAULT_VELOCITY = 24f;
+    public static final float DEFAULT_VELOCITY = 40f;
     public static final float MIN_DIRECTION = 0f;
     public static final float MAX_DIRECTION = 2f * (float)Math.PI;
     public static final float DEFAULT_DIRECTION = (float)Math.PI; // down the screen

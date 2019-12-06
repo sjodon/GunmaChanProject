@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -25,6 +26,7 @@ import asu.gunma.MiniGames.Controllers.WordScrambleGameController;
 import asu.gunma.MiniGames.Models.AsteroidGameModel;
 import asu.gunma.speech.ActionResolver;
 import asu.gunma.ui.util.GradeSystem;
+import asu.gunma.ui.util.lives.LivesDrawer;
 
 // Use this class for the front-end of the asteroid mini-game
 // You'll want to use the AsteroidGameController class
@@ -38,6 +40,7 @@ public class AsteroidGameView implements Screen
     public static float masterVolume = 5;
     public ActionResolver speechGDX;
     private Screen previousScreen;
+    private Music incorrectSound;
 
     // UI variables
     private Stage stage;
@@ -45,6 +48,7 @@ public class AsteroidGameView implements Screen
     private SpriteBatch batch;
     private Texture asteroidTexture;
     private Texture rocketTexture;
+    private Texture heartTexture;
     private BitmapFont font;
     private ArrayList<BitmapFont> fontList;
 
@@ -57,6 +61,8 @@ public class AsteroidGameView implements Screen
 
     private ArrayList<GlyphLayout> wordLayoutList;
     private ArrayList<String> asteroidWordList;
+
+    private LivesDrawer livesDrawer;
 
     // constants
     private static final int DEFAULT_ASTEROID_SIZE = 128;
@@ -80,6 +86,9 @@ public class AsteroidGameView implements Screen
         rocketTexture = new Texture("rocket2.png");
         asteroidWordList = new ArrayList<String>();
         wordLayoutList = new ArrayList<GlyphLayout>();
+
+        // sounds
+        incorrectSound = Gdx.audio.newMusic(Gdx.files.internal("incorrect_ohno.mp3"));
     }
 
     // Override Screen class methods
@@ -91,6 +100,7 @@ public class AsteroidGameView implements Screen
         stage = new Stage();
         batch = new SpriteBatch();
         Gdx.input.setInputProcessor(stage);
+        this.livesDrawer = new LivesDrawer(this.batch);
 
         // for displaying words on asteroids
         for (int i = 0; i < controller.getAsteroidList().size(); i++)
@@ -144,6 +154,7 @@ public class AsteroidGameView implements Screen
         transformAsteroids(delta);
 
         batch.begin();
+        this.livesDrawer.render();
 
         for (int i = 0; i < controller.getAsteroidList().size(); i++)
         {
@@ -196,6 +207,16 @@ public class AsteroidGameView implements Screen
                 System.out.println("Failed to destroy asteroid.");
 
 
+        }
+        else if (controller.getAsteroidList().get(0).getPosition().y < 128)
+        {
+            System.out.println("Incorrect!");
+            incorrectSound.setLooping(false);
+            incorrectSound.setVolume(masterVolume);
+            incorrectSound.play();
+            livesDrawer.takeLife();
+            controller.decreaseNumLives();
+            controller.destroyAsteroid(controller.getAsteroidList().get(0).getWord().getEngSpelling());
         }
     }
 
