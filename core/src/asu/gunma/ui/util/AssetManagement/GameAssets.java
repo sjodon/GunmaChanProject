@@ -4,6 +4,8 @@ import asu.gunma.ui.util.AssetManagement.monthlyAssets.Month;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -74,15 +76,33 @@ public class GameAssets extends Month {
 
     // Mountain Screen Assets
     public static String smallMountainImagePath = "background/cropped_mountain2.png";
+    public static String level2SmallMountainImagePath = "background/mountain_with_path_level2.png";
+    public static String level3SmallMountainImagePath = "background/mountain_with_path_level3.png";
+    public static String level4SmallMountainImagePath = "background/mountain_with_path_level4.png";
+    public static String level5SmallMountainImagePath = "background/mountain_with_path.png";
     public static String onionFrenemy = "onion.png";
     public static String cabbageFrenemy = "cabbage1.png";
     public static String konjackunFrenemy = "konjackun.png";
     public static String angrynegFrenemy = "angryneg.png";
     public static String negisanFrenemy = "negisan.png";
 
+    public String getMountainWithPath() {
+        if(level4Stars > 0) {
+            return level5SmallMountainImagePath;
+        } else if(level3Stars > 0) {
+            return level4SmallMountainImagePath;
+        } else if(level2Stars > 0) {
+            return level3SmallMountainImagePath;
+        } else if(level1Stars > 0) {
+            return level2SmallMountainImagePath;
+        } else {
+            return smallMountainImagePath;
+        }
+    }
+
     // Game Level Assets
-    public int level1Stars = -1;
-    public int level2Stars = -1;
+    public int level1Stars = 1;
+    public int level2Stars = 2;
     public int level3Stars = -1;
     public int level4Stars = -1;
     public int level5Stars = -1;
@@ -149,5 +169,19 @@ public class GameAssets extends Month {
         textureCN.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.Linear);
 
         return new BitmapFont(Gdx.files.internal("custom_font_hiero_2.fnt"), new TextureRegion(textureCN), false);
+    }
+
+
+    public void drawDottedLine(ShapeRenderer shapeRenderer, int dotDist, float x1, float y1, float x2, float y2) {
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Point);
+
+        Vector2 vec2 = new Vector2(x2, y2).sub(new Vector2(x1, y1));
+        float length = vec2.len();
+        for(int i = 0; i < length; i += dotDist) {
+            vec2.clamp(length - i, length - i);
+            shapeRenderer.point(x1 + vec2.x, y1 + vec2.y, 0);
+        }
+
+        shapeRenderer.end();
     }
 }

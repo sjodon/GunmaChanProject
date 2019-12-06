@@ -160,7 +160,7 @@ public class Level1GameScreen implements Screen {
         //onionIdleSprite = new Texture("")
 
         background = new Texture(gameAssets.backgroundImagePath);
-        backgroundDrawer = new BackgroundDrawer(this.batch, this.SCREEN_BOTTOM_ADJUST);
+        backgroundDrawer = new BackgroundDrawer(this.batch, this.SCREEN_BOTTOM_ADJUST, gameAssets);
         this.livesDrawer = new LivesDrawer(this.batch);
 
         // Animation initializations
@@ -173,7 +173,7 @@ public class Level1GameScreen implements Screen {
 
         // Spawning variables
         this.enemyPosition = Gdx.graphics.getWidth();
-        this.lives = 1;
+        this.lives = 5;
         this.isGameOver = false;
 
         Gdx.input.setInputProcessor(stage);

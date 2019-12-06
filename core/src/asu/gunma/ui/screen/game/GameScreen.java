@@ -158,7 +158,7 @@ public class GameScreen implements Screen {
         //onionIdleSprite = new Texture("")
 
         background = new Texture(gameAssets.backgroundImagePath);
-        backgroundDrawer = new BackgroundDrawer(this.batch, this.SCREEN_BOTTOM_ADJUST);
+        backgroundDrawer = new BackgroundDrawer(this.batch, this.SCREEN_BOTTOM_ADJUST, gameAssets);
         this.livesDrawer = new LivesDrawer(this.batch);
 
         // Animation initializations

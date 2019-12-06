@@ -138,7 +138,7 @@ public class ScoreScreen implements Screen {
         //onionIdleSprite = new Texture("")
 
         background = new Texture(gameAssets.backgroundImagePath);
-        backgroundDrawer = new BackgroundDrawer(this.batch, this.SCREEN_BOTTOM_ADJUST);
+        backgroundDrawer = new BackgroundDrawer(this.batch, this.SCREEN_BOTTOM_ADJUST, gameAssets);
 
         // Animation initializations
         this.onionWalkAnimation = new Animator(gameAssets.onionWalkAnimationPath, 4, 2, 0.1f);
@@ -231,8 +231,7 @@ public class ScoreScreen implements Screen {
                 gameMusic.setLooping(false);
                 gameMusic.setVolume(masterVolume);
                 gameMusic.play();
-                game.setScreen(new MainMenuScreen(game, speechGDX,  gameMusic, dbCallback,activeVList, prefs, gameAssets));
-                previousScreen.dispose();
+                game.setScreen(new MainMenuScreen(game, speechGDX,  gameMusic, dbCallback, activeVList, prefs, gameAssets));
                 dispose(); // dispose of current GameScreen
             }
         });

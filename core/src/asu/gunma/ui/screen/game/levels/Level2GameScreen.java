@@ -160,7 +160,7 @@ public class Level2GameScreen implements Screen {
         //onionIdleSprite = new Texture("")
 
         background = new Texture(gameAssets.backgroundImagePath);
-        backgroundDrawer = new BackgroundDrawer(this.batch, this.SCREEN_BOTTOM_ADJUST);
+        backgroundDrawer = new BackgroundDrawer(this.batch, this.SCREEN_BOTTOM_ADJUST, gameAssets);
         this.livesDrawer = new LivesDrawer(this.batch);
 
         // Animation initializations
@@ -389,11 +389,11 @@ public class Level2GameScreen implements Screen {
             gameMusic.setVolume(masterVolume);
             gameMusic.play();
             int numStars = 0;
-            if(score >= 5) {
+            if(score >= 7) {
                 numStars = 3;
-            } else if(score >= 3) {
+            } else if(score >= 5) {
                 numStars = 2;
-            } else if(score >= 2) {
+            } else if(score >= 4) {
                 numStars = 1;
             }
             gameAssets.setLevelStars(1, numStars);
@@ -454,7 +454,7 @@ public class Level2GameScreen implements Screen {
             tmp.flip(true, false);
             batch.draw(tmp, this.enemyPosition, 40 + this.SCREEN_BOTTOM_ADJUST);
             tmp.flip(true, false);
-            this.enemyPosition -= 1.15;
+            this.enemyPosition -= 1.3;
             if (this.enemyPosition < 100) {
                 this.takeDamage();
             }

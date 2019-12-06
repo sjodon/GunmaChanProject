@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -103,7 +104,7 @@ public class MountainScreen implements Screen {
 
 
         background = new Texture(gameAssets.backgroundImagePath);
-        backgroundDrawer = new MountainBackgroundDrawer(this.batch, this.SCREEN_BOTTOM_ADJUST);
+        backgroundDrawer = new MountainBackgroundDrawer(this.batch, this.SCREEN_BOTTOM_ADJUST, gameAssets);
         this.onionWalkAnimation = new Animator(gameAssets.onionWalkAnimationPath, 4, 2, 0.1f);
         this.gunmaWalkAnimation = new Animator(gameAssets.gunmaWalkAnimationPath, 8, 1, 0.1f);
 
@@ -264,10 +265,22 @@ public class MountainScreen implements Screen {
 
         stage.addActor(backButton);
         stage.addActor(level1Button);
-        stage.addActor(level2Button);
-        stage.addActor(level3Button);
-        stage.addActor(level4Button);
-        stage.addActor(level5Button);
+
+        if(gameAssets.level1Stars > 0) {
+            stage.addActor(level2Button);
+        }
+
+        if(gameAssets.level2Stars > 0) {
+            stage.addActor(level3Button);
+        }
+
+        if(gameAssets.level3Stars > 0) {
+            stage.addActor(level4Button);
+        }
+
+        if(gameAssets.level4Stars > 0) {
+            stage.addActor(level5Button);
+        }
 
 
     }

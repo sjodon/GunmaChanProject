@@ -115,7 +115,7 @@ public class TitleScreen implements Screen {
         batch = new SpriteBatch();
 
         background = new Texture(gameAssets.backgroundImagePath);
-        backgroundDrawer = new BackgroundDrawer(this.batch, this.SCREEN_BOTTOM_ADJUST);
+        backgroundDrawer = new BackgroundDrawer(this.batch, this.SCREEN_BOTTOM_ADJUST, gameAssets);
 
         // Update these to other frenemy sprite sheets once created
         this.placeholderAnimation1 = new Animator(gameAssets.placeholderFrenemyAnimation1Path, 4, 2, 0.1f);

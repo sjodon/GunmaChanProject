@@ -22,6 +22,7 @@ import com.badlogic.gdx.audio.Music;
 
 import java.util.ArrayList;
 
+import asu.gunma.ui.screen.game.ScoreScreen;
 import asu.gunma.ui.util.Animator;
 import asu.gunma.ui.util.BackgroundDrawer;
 import asu.gunma.DatabaseInterface.DbInterface;
@@ -111,7 +112,7 @@ public class MainMenuScreen implements Screen {
         batch = new SpriteBatch();
 
         background = new Texture(gameAssets.backgroundImagePath);
-        backgroundDrawer = new BackgroundDrawer(this.batch, this.SCREEN_BOTTOM_ADJUST);
+        backgroundDrawer = new BackgroundDrawer(this.batch, this.SCREEN_BOTTOM_ADJUST, gameAssets);
         this.onionWalkAnimation = new Animator(gameAssets.onionWalkAnimationPath, 4, 2, 0.1f);
         this.gunmaWalkAnimation = new Animator(gameAssets.gunmaWalkAnimationPath, 8, 1, 0.1f);
 
@@ -160,6 +161,8 @@ public class MainMenuScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 testInt++;
                 System.out.println(testInt);
+                game.setScreen(new ScoreScreen(game, speechGDX, gameMusic, dbCallback, game.getScreen(), activeVList, prefs, gameAssets, 10, 2));
+
             }
         });
         buttonFlashcard.addListener(new ClickListener() {
