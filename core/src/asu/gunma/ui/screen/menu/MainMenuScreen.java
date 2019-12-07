@@ -33,14 +33,15 @@ import asu.gunma.ui.util.AssetManagement.GameAssets;
 
 public class MainMenuScreen implements Screen {
 
+    // This is needed to change screens later on
     private Game game;
     public ActionResolver speechGDX;
     public DbInterface dbCallback;
     public Music gameMusic;
     public static float masterVolume = 5;
-    private final int SCREEN_BOTTOM_ADJUST = 35;
     public ArrayList<VocabWord> activeVList = new ArrayList<>();
     private GameAssets gameAssets;
+    private final int SCREEN_BOTTOM_ADJUST = 35;
 
     // Using these are unnecessary but will make our lives easier.
     private Stage stage;
@@ -61,21 +62,20 @@ public class MainMenuScreen implements Screen {
         This is based on the Project Proposal, I'd like to change this
         before the final release.
      */
-    private TextButton buttonTutorial, buttonFlashcard, buttonGameFirst, buttonOptionMenu;
+    private TextButton buttonTutorial, buttonFlashcard, buttonGameFirst, buttonGameSecond, buttonGameThird, buttonSettings;
 
     private SpriteBatch batch;
-    private Texture texture;
     private Animator onionWalkAnimation;
     private Animator gunmaWalkAnimation;
     private BackgroundDrawer backgroundDrawer;
 
-    private BitmapFont font;
+    private BitmapFont font = new BitmapFont();
     private Label heading;
 
     FreeTypeFontGenerator generator;
     FreeTypeFontGenerator.FreeTypeFontParameter parameter;
     FreeTypeFontGenerator.FreeTypeFontParameter parameter2;
-    Preferences prefs;
+    public Preferences prefs;
 
     public MainMenuScreen(Game game, ActionResolver speechGDX, Music music, DbInterface dbCallback, ArrayList<VocabWord> activeList, Preferences prefs, GameAssets gameAssets) {
         this.game = game;
@@ -90,7 +90,10 @@ public class MainMenuScreen implements Screen {
     @Override
     public void show() {
         //font file
-        generator = new FreeTypeFontGenerator(Gdx.files.internal(gameAssets.fontPath));
+//        generator = new FreeTypeFontGenerator(Gdx.files.internal(gameAssets.fontPath));
+        final String FONT_PATH = "irohamaru-mikami-Regular.ttf";
+
+        generator = new FreeTypeFontGenerator(Gdx.files.internal(FONT_PATH));
 
         //font for vocab word
         parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -98,16 +101,14 @@ public class MainMenuScreen implements Screen {
         //font for other words
         parameter2 = new FreeTypeFontGenerator.FreeTypeFontParameter();
 
-        parameter.size = 30;
-        parameter.color = Color.BLACK;
-        font = generator.generateFont(parameter);
+        font = generator.generateFont(parameter2);
+        //font = gameAssets.getFont();
 
         Color bgColor = gameAssets.backgroundColor;
         Gdx.gl.glClearColor(bgColor.r, bgColor.g, bgColor.b, bgColor.a);
         stage = new Stage();
 
         batch = new SpriteBatch();
-        texture = new Texture(gameAssets.titleGunmaPath);
 
         background = new Texture("BG_temp.png");
         backgroundDrawer = new BackgroundDrawer(this.batch, this.SCREEN_BOTTOM_ADJUST);
@@ -132,26 +133,21 @@ public class MainMenuScreen implements Screen {
         textButtonStyle.font = font;
         textButtonStyle.up = skin.newDrawable("color2", gameAssets.color2);
 
-        // IMPORTANT: needs localization support
-        buttonTutorial = new TextButton("Video Tutorials", textButtonStyle);
-        buttonFlashcard = new TextButton("Flashcards", textButtonStyle);
-        buttonGameFirst = new TextButton("Game #1", textButtonStyle);
-        buttonOptionMenu = new TextButton("Options Menu", textButtonStyle);
-
-
-        Label.LabelStyle headingStyle = new Label.LabelStyle(font, Color.BLACK);
-        //
-
-
-        heading = new Label("Select Type:", headingStyle);
-        heading.setFontScale(2);
-        //
+      //   IMPORTANT: needs localization support
+        buttonTutorial = new TextButton(gameAssets.getResourceBundle().getString("VideoTutorials"), textButtonStyle);
+        buttonFlashcard = new TextButton(gameAssets.getResourceBundle().getString("Flashcards"), textButtonStyle);
+        buttonGameFirst = new TextButton(gameAssets.getResourceBundle().getString("GameName"), textButtonStyle);
+        buttonGameSecond = new TextButton(gameAssets.getResourceBundle().getString("Asteroids"), textButtonStyle);
+        buttonGameThird = new TextButton(gameAssets.getResourceBundle().getString("WordScramble"), textButtonStyle);
+        buttonSettings = new TextButton(gameAssets.getResourceBundle().getString("Settings"), textButtonStyle);
 
         // Actually, should probably custom class this process
-        buttonTutorial.pad(20);
-        buttonFlashcard.pad(20);
-        buttonGameFirst.pad(20);
-        buttonOptionMenu.pad(20);
+        buttonTutorial.pad(15);
+        buttonFlashcard.pad(15);
+        buttonGameFirst.pad(15);
+        buttonGameSecond.pad(15);
+        buttonGameThird.pad(15);
+        buttonSettings.pad(15);
 
 
             /*
@@ -183,11 +179,33 @@ public class MainMenuScreen implements Screen {
                 gameMusic.dispose();
                 //play GameFirst music
                 // gameMusic = new Music
-                game.setScreen(new GameScreen(game, speechGDX, gameMusic, dbCallback, game.getScreen(), activeVList, prefs));
+                game.setScreen(new GameScreen(game, speechGDX, gameMusic, dbCallback, game.getScreen(), activeVList, prefs, gameAssets));
 
             }
         });
-        buttonOptionMenu.addListener(new ClickListener() {
+
+        buttonGameSecond.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                // TODO: link to asteroids game
+//                gameMusic.pause();
+//                gameMusic.dispose();
+//                game.setScreen(new GameScreen(game, speechGDX, gameMusic, dbCallback, game.getScreen(), activeVList, prefs, gameAssets));
+            }
+        });
+
+        buttonGameThird.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                // TODO: link to word scramble game
+//                gameMusic.pause();
+//                gameMusic.dispose();
+//                game.setScreen(new GameScreen(game, speechGDX, gameMusic, dbCallback, game.getScreen(), activeVList, prefs, gameAssets));
+
+            }
+        });
+
+        buttonSettings.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 //testing sign in method when option menu is selected
@@ -195,20 +213,22 @@ public class MainMenuScreen implements Screen {
                 gameMusic.dispose();
                 //play OptionMenu music
                 //gameMusic = new Music
-                game.setScreen(new OptionMenu(game, speechGDX, gameMusic, dbCallback, game.getScreen(),  activeVList, prefs, gameAssets));
+                game.setScreen(new SettingsScreen(game, speechGDX, gameMusic, dbCallback, game.getScreen(), activeVList, prefs, gameAssets));
             }
         });
 
 
-        table.add(heading).padBottom(15);
-        table.row();
         table.add(buttonTutorial).padBottom(15);
         table.row();
         table.add(buttonFlashcard).padBottom(15);
         table.row();
         table.add(buttonGameFirst).padBottom(15);
         table.row();
-        table.add(buttonOptionMenu);
+        table.add(buttonGameSecond).padBottom(15);
+        table.row();
+        table.add(buttonGameThird).padBottom(15);
+        table.row();
+        table.add(buttonSettings);
         table.row();
 
         stage.addActor(table);
@@ -222,9 +242,8 @@ public class MainMenuScreen implements Screen {
         // SpriteBatch is resource intensive, try to use it for only brief moments
         batch.begin();
         backgroundDrawer.render(false,false);
-        batch.draw(this.onionWalkAnimation.getCurrentFrame(delta), 60, 35 + this.SCREEN_BOTTOM_ADJUST);
-        batch.draw(this.gunmaWalkAnimation.getCurrentFrame(delta), 200, 35 + this.SCREEN_BOTTOM_ADJUST);
-        batch.draw(texture, Gdx.graphics.getWidth()/2 - texture.getWidth()/4 + 400, Gdx.graphics.getHeight()/4 - texture.getHeight()/2 + 400, texture.getWidth()/2, texture.getHeight()/2);
+        batch.draw(this.gunmaWalkAnimation.getCurrentFrame(delta), 60, 35 + this.SCREEN_BOTTOM_ADJUST);
+//        batch.draw(this.gunmaWalkAnimation.getCurrentFrame(delta), 200, 35 + this.SCREEN_BOTTOM_ADJUST);
         batch.end();
 
         stage.act(delta); // optional to pass delta value
@@ -255,7 +274,6 @@ public class MainMenuScreen implements Screen {
     @Override
     public void dispose() {
         font.dispose();
-        texture.dispose();
         batch.dispose();
         stage.dispose();
     }
