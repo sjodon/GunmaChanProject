@@ -141,27 +141,27 @@ public class LeaderboardScreen implements Screen {
         Label place9 = new Label("9", itemStyle);
         Label place10 = new Label("10", itemStyle);
 
-        Label name1 = new Label("ABCDEFGHIJKLMNO", itemStyle);
-        Label name2 = new Label("ABCDEFGHIJKLMNO", itemStyle);
-        Label name3 = new Label("ABCDEFGHIJKLMNO", itemStyle);
-        Label name4 = new Label("ABCDEFGHIJKLMNO", itemStyle);
-        Label name5 = new Label("ABCDEFGHIJKLMNO", itemStyle);
-        Label name6 = new Label("ABCDEFGHIJKLMNO", itemStyle);
-        Label name7 = new Label("ABCDEFGHIJKLMNO", itemStyle);
-        Label name8 = new Label("ABCDEFGHIJKLMNO", itemStyle);
-        Label name9 = new Label("ABCDEFGHIJKLMNO", itemStyle);
-        Label name10 = new Label("ABCDEFGHIJKLMNO", itemStyle);
+        Label name1 = new Label(gameAssets.score1.nickname, itemStyle);
+        Label name2 = new Label(gameAssets.score2.nickname, itemStyle);
+        Label name3 = new Label(gameAssets.score3.nickname, itemStyle);
+        Label name4 = new Label(gameAssets.score4.nickname, itemStyle);
+        Label name5 = new Label(gameAssets.score5.nickname, itemStyle);
+        Label name6 = new Label(gameAssets.score6.nickname, itemStyle);
+        Label name7 = new Label(gameAssets.score7.nickname, itemStyle);
+        Label name8 = new Label(gameAssets.score8.nickname, itemStyle);
+        Label name9 = new Label(gameAssets.score9.nickname, itemStyle);
+        Label name10 = new Label(gameAssets.score10.nickname, itemStyle);
 
-        Label score1 = new Label("100", itemStyle);
-        Label score2 = new Label("200", itemStyle);
-        Label score3 = new Label("300", itemStyle);
-        Label score4 = new Label("400", itemStyle);
-        Label score5 = new Label("500", itemStyle);
-        Label score6 = new Label("600", itemStyle);
-        Label score7 = new Label("700", itemStyle);
-        Label score8 = new Label("800", itemStyle);
-        Label score9 = new Label("900", itemStyle);
-        Label score10 = new Label("1000", itemStyle);
+        Label score1 = new Label(gameAssets.score1.value + "", itemStyle);
+        Label score2 = new Label(gameAssets.score2.value + "", itemStyle);
+        Label score3 = new Label(gameAssets.score3.value + "", itemStyle);
+        Label score4 = new Label(gameAssets.score4.value + "", itemStyle);
+        Label score5 = new Label(gameAssets.score5.value + "", itemStyle);
+        Label score6 = new Label(gameAssets.score6.value + "", itemStyle);
+        Label score7 = new Label(gameAssets.score7.value + "", itemStyle);
+        Label score8 = new Label(gameAssets.score8.value + "", itemStyle);
+        Label score9 = new Label(gameAssets.score9.value + "", itemStyle);
+        Label score10 = new Label(gameAssets.score10.value + "", itemStyle);
 
 
         table.add(place1).padBottom(15).expandX();

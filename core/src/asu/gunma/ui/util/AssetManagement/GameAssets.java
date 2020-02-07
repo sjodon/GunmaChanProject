@@ -55,6 +55,43 @@ public class GameAssets extends Month {
     public static String cloud2Path = "background/cloud2.png";
     public static String skyImagePath = "background/skyx2.png";
 
+    // High scores
+    public Score score1 = new Score(0, "");
+    public Score score2 = new Score(0, "");
+    public Score score3 = new Score(0, "");
+    public Score score4 = new Score(0, "");
+    public Score score5 = new Score(0, "");
+    public Score score6 = new Score(0, "");
+    public Score score7 = new Score(0, "");
+    public Score score8 = new Score(0, "");
+    public Score score9 = new Score(0, "");
+    public Score score10 = new Score(0, "");
+
+    public void saveUserScore(int score, String nickname) {
+        // TODO: save user score to cloud
+        if(score > score1.value) {
+            score1 = new Score(score, nickname);
+        } else if(score > score2.value) {
+            score2 = new Score(score, nickname);
+        } else if(score > score3.value) {
+            score3 = new Score(score, nickname);
+        } else if(score > score4.value) {
+            score4 = new Score(score, nickname);
+        } else if(score > score5.value) {
+            score5 = new Score(score, nickname);
+        } else if(score > score6.value) {
+            score6 = new Score(score, nickname);
+        } else if(score > score7.value) {
+            score7 = new Score(score, nickname);
+        } else if(score > score8.value) {
+            score8 = new Score(score, nickname);
+        } else if(score > score9.value) {
+            score9 = new Score(score, nickname);
+        } else if(score > score10.value) {
+            score10 = new Score(score, nickname);
+        }
+    }
+
     public static Skin getColorSkin(Color color, String name) {
         Skin skin = new Skin();
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
