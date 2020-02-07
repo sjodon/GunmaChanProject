@@ -62,7 +62,7 @@ public class MainMenuScreen implements Screen {
         This is based on the Project Proposal, I'd like to change this
         before the final release.
      */
-    private TextButton buttonTutorial, buttonFlashcard, buttonGameFirst, buttonGameSecond, buttonGameThird, buttonSettings;
+    private TextButton buttonTutorial, buttonFlashcard, buttonGameFirst, buttonGameSecond, buttonGameThird, buttonLeaderboard, buttonSettings;
 
     private SpriteBatch batch;
     private Animator onionWalkAnimation;
@@ -138,6 +138,7 @@ public class MainMenuScreen implements Screen {
         buttonGameFirst = new TextButton(gameAssets.getResourceBundle().getString("GameName"), textButtonStyle);
         buttonGameSecond = new TextButton(gameAssets.getResourceBundle().getString("Asteroids"), textButtonStyle);
         buttonGameThird = new TextButton(gameAssets.getResourceBundle().getString("WordScramble"), textButtonStyle);
+        buttonLeaderboard = new TextButton(gameAssets.getResourceBundle().getString("Leaderboard"), textButtonStyle);
         buttonSettings = new TextButton(gameAssets.getResourceBundle().getString("Settings"), textButtonStyle);
 
         // Actually, should probably custom class this process
@@ -146,6 +147,7 @@ public class MainMenuScreen implements Screen {
         buttonGameFirst.pad(15);
         buttonGameSecond.pad(15);
         buttonGameThird.pad(15);
+        buttonLeaderboard.pad(15);
         buttonSettings.pad(15);
 
 
@@ -204,6 +206,18 @@ public class MainMenuScreen implements Screen {
             }
         });
 
+        buttonLeaderboard.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                gameMusic.pause();
+                gameMusic.dispose();
+                //play GameFirst music
+                // gameMusic = new Music
+                game.setScreen(new LeaderboardScreen(game, speechGDX, gameMusic, dbCallback, activeVList, prefs, gameAssets));
+
+            }
+        });
+
         buttonSettings.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -226,6 +240,8 @@ public class MainMenuScreen implements Screen {
         table.add(buttonGameSecond).padBottom(15);
         table.row();
         table.add(buttonGameThird).padBottom(15);
+        table.row();
+        table.add(buttonLeaderboard).padBottom(15);
         table.row();
         table.add(buttonSettings);
         table.row();
