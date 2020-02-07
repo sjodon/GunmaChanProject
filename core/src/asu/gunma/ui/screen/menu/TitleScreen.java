@@ -114,17 +114,17 @@ public class TitleScreen implements Screen {
 
         batch = new SpriteBatch();
 
-        background = new Texture("BG_temp.png");
-        backgroundDrawer = new BackgroundDrawer(this.batch, this.SCREEN_BOTTOM_ADJUST);
+        background = new Texture(gameAssets.backgroundImagePath);
+        backgroundDrawer = new BackgroundDrawer(this.batch, this.SCREEN_BOTTOM_ADJUST, gameAssets);
 
         // Update these to other frenemy sprite sheets once created
-        this.placeholderAnimation1 = new Animator("Gunma-chan-Japanese-character-enemy-walk-anim-sheet-02.png", 4, 2, 0.1f);
-        this.placeholderAnimation2 = new Animator("Gunma-chan-Japanese-character-enemy-walk-anim-sheet-03.png", 4, 2, 0.1f);
-        this.placeholderAnimation3 = new Animator("Gunma-chan-Japanese-character-enemy-walk-anim-sheet-04.png", 4, 2, 0.1f);
-        this.placeholderAnimation4 = new Animator("Gunma-chan-Japanese-character-enemy-walk-anim-sheet-05.png", 4, 2, 0.1f);
+        this.placeholderAnimation1 = new Animator(gameAssets.placeholderFrenemyAnimation1Path, 4, 2, 0.1f);
+        this.placeholderAnimation2 = new Animator(gameAssets.placeholderFrenemyAnimation2Path, 4, 2, 0.1f);
+        this.placeholderAnimation3 = new Animator(gameAssets.placeholderFrenemyAnimation3Path, 4, 2, 0.1f);
+        this.placeholderAnimation4 = new Animator(gameAssets.placeholderFrenemyAnimation4Path, 4, 2, 0.1f);
 
-        this.onionWalkAnimation = new Animator("onion_sheet.png", 4, 2, 0.1f);
-        this.gunmaWalkAnimation = new Animator("gunma_sheet.png", 8, 1, 0.1f);
+        this.onionWalkAnimation = new Animator(gameAssets.onionWalkAnimationPath, 4, 2, 0.1f);
+        this.gunmaWalkAnimation = new Animator(gameAssets.gunmaWalkAnimationPath, 8, 1, 0.1f);
 
         Gdx.input.setInputProcessor(stage);
 

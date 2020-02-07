@@ -63,6 +63,8 @@ public class MyResources_jp extends MyResources{
             {"SoundEffect", "効果音"},
             {"Support", "サポート"},
             {"About", "このアプリについて"},
+            {"YourScore", "Your Score:"},
+            {"Continue", "Continue"},
 
             {"Language", "言語設定"},
             {"English", "英語"},

@@ -1,13 +1,10 @@
 package asu.gunma.ui.screen.game;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -24,9 +21,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.utils.Align;
-import asu.gunma.DatabaseInterface.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+import asu.gunma.DatabaseInterface.DbInterface;
 import asu.gunma.DbContainers.VocabWord;
 import asu.gunma.speech.ActionResolver;
 import asu.gunma.ui.screen.menu.MainMenuScreen;
@@ -34,9 +35,8 @@ import asu.gunma.ui.util.Animator;
 import asu.gunma.ui.util.AssetManagement.GameAssets;
 import asu.gunma.ui.util.BackgroundDrawer;
 import asu.gunma.ui.util.GradeSystem;
-import asu.gunma.ui.util.lives.LivesDrawer;
 
-public class GameScreen implements Screen {
+public class ScoreScreen implements Screen {
     //size of round word list
     private int GAME_LIST_SIZE;
     private int currentWordIndex;
@@ -71,23 +71,7 @@ public class GameScreen implements Screen {
     private Table table;
     private SpriteBatch batch;
 
-    private int lives;
-    private float enemyPosition;
-
     private boolean isGameOver;
-
-    /*
-        We will need 5 different buttons for this menu:
-          1. Video Tutorials
-          2. Flashcards
-          3. Game #1
-          4. Game #2
-          5. Game #3
-        This is based on the Project Proposal, I'd like to change this
-        before the final release.
-     */
-    private TextButton pauseButton;
-    private TextButton backButton;
 
     private BitmapFont font;
     private BitmapFont font2;
@@ -98,10 +82,7 @@ public class GameScreen implements Screen {
 
     private Texture gunmaSprite;
     private Texture gunmaFaintedSprite;
-    private Texture onionIdleSprite;
     private Texture background;
-    private Texture correctSprite;
-    private Texture incorrectSprite;
 
     private GlyphLayout displayWordLayout;
     private int targetWidth = 400;
@@ -111,23 +92,20 @@ public class GameScreen implements Screen {
     private Animator gunmaWalkAnimation;
 
     private BackgroundDrawer backgroundDrawer;
-    private LivesDrawer livesDrawer;
+    public Texture stars;
 
     boolean isPaused = false;
-
-    private GradeSystem gradeSystem;
-    String incomingWord = null;
-    boolean correct = false;
-    boolean win = false;
     String cWords;
     String[] correctWordList;
+    Label heading;
+    TextButton continueButton;
 
     ArrayList<VocabWord> gameWords = new ArrayList<>();
-    Random rand = new Random();
 
     Preferences prefs;
+    int numStars = 0;
 
-    public GameScreen(Game game, ActionResolver speechGDX, Music music, DbInterface dbCallback, Screen previous, ArrayList<VocabWord> activeList, Preferences prefs, GameAssets gameAssets) {
+    public ScoreScreen(Game game, ActionResolver speechGDX, Music music, DbInterface dbCallback, Screen previous, ArrayList<VocabWord> activeList, Preferences prefs, GameAssets gameAssets, int score, int numStars) {
         this.game = game;
         this.prefs = prefs;
         this.speechGDX = speechGDX;
@@ -136,6 +114,8 @@ public class GameScreen implements Screen {
         this.gameMusic = music;
         this.activeVList = activeList;
         this.gameAssets = gameAssets;
+        this.score = score;
+        this.numStars = numStars;
         gameMusic = Gdx.audio.newMusic(Gdx.files.internal(gameAssets.introMusicPath));
         gameMusic.setLooping(false);
         gameMusic.setVolume(masterVolume);
@@ -159,20 +139,11 @@ public class GameScreen implements Screen {
 
         background = new Texture(gameAssets.backgroundImagePath);
         backgroundDrawer = new BackgroundDrawer(this.batch, this.SCREEN_BOTTOM_ADJUST, gameAssets);
-        this.livesDrawer = new LivesDrawer(this.batch);
 
         // Animation initializations
         this.onionWalkAnimation = new Animator(gameAssets.onionWalkAnimationPath, 4, 2, 0.1f);
         this.gunmaWalkAnimation = new Animator(gameAssets.gunmaWalkAnimationPath, 8, 1, 0.1f);
 
-        // Game feedback
-        this.correctSprite = new Texture(gameAssets.correctSpritePath);
-        this.incorrectSprite = new Texture(gameAssets.incorrectSpritePath);
-
-        // Spawning variables
-        this.enemyPosition = Gdx.graphics.getWidth();
-        this.lives = 5;
-        this.isGameOver = false;
 
         Gdx.input.setInputProcessor(stage);
 
@@ -231,13 +202,17 @@ public class GameScreen implements Screen {
         textButtonStyle.font = font2;
         textButtonStyle.fontColor = Color.BLACK;
 
-        backButton = new TextButton(gameAssets.getResourceBundle().getString("Back"), textButtonStyle);
-        backButton.setPosition(Gdx.graphics.getWidth() - 100, 0);
+        Label.LabelStyle headingStyle = new Label.LabelStyle(font2, Color.BLACK);
+        //
 
-        Label.LabelStyle headingStyle = new Label.LabelStyle(font, Color.BLACK);
+        heading = new Label(gameAssets.getResourceBundle().getString("YourScore") + " " + score, headingStyle);
+        stars = new Texture(gameAssets.getStarPath(numStars));
+        Skin skin = gameAssets.getColorSkin(gameAssets.color2, "color2");
+        textButtonStyle.up = skin.newDrawable("color2", gameAssets.color2);
 
-        pauseButton = new TextButton(gameAssets.getResourceBundle().getString("Pause"), textButtonStyle);
-        pauseButton.setPosition(Gdx.graphics.getWidth() - 200, 0);
+        continueButton = new TextButton(gameAssets.getResourceBundle().getString("Continue"), textButtonStyle);
+
+        heading.setFontScale(2);
 
             /*
                 If you want to test functions with UI instead of with console,
@@ -246,36 +221,8 @@ public class GameScreen implements Screen {
              */
 
 
-        pauseButton.addListener(new ClickListener() {
 
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                if(isPaused) {
-                    try{
-                        speechGDX.startRecognition();
-                    } catch(Exception e) {
-                        System.out.println(e);
-                    }
-
-                    if(gameMusic != null) {
-                        gameMusic.setVolume(masterVolume);
-                        gameMusic.play();
-                    }
-                    isPaused = false;
-                }
-
-                else {
-
-                    speechGDX.stopRecognition();
-                    if(gameMusic != null)
-                        gameMusic.pause();
-                    isPaused = true;
-
-                }
-            }
-        });
-
-        backButton.addListener(new ClickListener() {
+        continueButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 speechGDX.stopRecognition();
                 isPaused = true;
@@ -284,17 +231,23 @@ public class GameScreen implements Screen {
                 gameMusic.setLooping(false);
                 gameMusic.setVolume(masterVolume);
                 gameMusic.play();
-                game.setScreen(new MainMenuScreen(game, speechGDX,  gameMusic, dbCallback,activeVList, prefs, gameAssets));
-                previousScreen.dispose();
+                game.setScreen(new MainMenuScreen(game, speechGDX,  gameMusic, dbCallback, activeVList, prefs, gameAssets));
                 dispose(); // dispose of current GameScreen
             }
         });
 
+        continueButton.pad(15);
         // Remove this later
-        table.debug();
+        table.add(heading).padBottom(20);
+        table.row();
+        table.add(continueButton);
+//        table.add(buttonTutorial);
+//        table.row();
 
-        stage.addActor(pauseButton);
-        stage.addActor(backButton);
+        // Remove this later
+        //table.debug();
+
+        stage.addActor(table);
 
 
         //Start Speech Recognition
@@ -312,88 +265,15 @@ public class GameScreen implements Screen {
 
         // SpriteBatch is resource intensive, try to use it for only brief moments
         batch.begin();
-        backgroundDrawer.render(this.isPaused, this.isGameOver);
-        this.livesDrawer.render();
+        backgroundDrawer.render(true, this.isGameOver);
 
         //batch.draw(background, 0, 0);
 
-        font2.draw(batch, gameAssets.getResourceBundle().getString("Correct") + score + "/" + GAME_LIST_SIZE, 10, 35);
 
-        if (!isGameOver) {
+        batch.draw(stars, Gdx.graphics.getWidth()/2 - stars.getWidth()/4, Gdx.graphics.getHeight()/2 + stars.getHeight()/2, stars.getWidth()/2, stars.getHeight()/2);
 
-            font.draw(batch, displayWordLayout, 325, 425);
+        batch.draw(this.gunmaFaintedSprite, 70, 10 + this.SCREEN_BOTTOM_ADJUST);
 
-          /*  if (score >= 0){
-                font2.draw(batch, "Correct " + score + "/" + gameWords.size(), 10, 35);
-            }*/
-
-            //font2.draw(batch, "Lives: " + lives, 25, 30);
-
-            //need to parse out correct words separating by comma and check
-            //with all correct words then use grading functionality
-
-            //Returns false if word is null(no word has been said), or if word is incorrect
-            incomingWord = speechGDX.getWord();
-            correct = gradeSystem.grade(correctWordList, incomingWord);
-
-            if(correct){
-                // Start correct icon display
-                this.correctDisplayTimer = this.CORRECT_DISPLAY_DURATION;
-                score = score + 1;
-                this.defeatEnemy();
-
-                gameWords.remove(currentWordIndex);
-
-                if(gameWords.size() > 0) {
-                    currentWordIndex = randomIndex(gameWords.size());
-                    displayWord = gameWords.get(currentWordIndex).getEngSpelling();
-                    parameter.characters = displayWord;
-                    parameter.size = 70;
-                    parameter.color = Color.BLACK;
-                    font = generator.generateFont(parameter);
-                    displayWordLayout.setText(font, displayWord, Color.BLACK, targetWidth, Align.center, true);
-                    cWords = gameWords.get(currentWordIndex).getCorrectWords();
-                    correctWordList = cWords.split("\\s*,\\s*");
-                } else {
-                    isGameOver = true;
-                    win = true;
-                }
-            } else if(!correct && incomingWord != null){
-                //change word if incorrect
-                currentWordIndex = randomIndex(gameWords.size());
-                displayWord = gameWords.get(currentWordIndex).getEngSpelling();
-                parameter.characters = displayWord;
-                parameter.size = 70;
-                parameter.color = Color.BLACK;
-                font = generator.generateFont(parameter);
-                displayWordLayout.setText(font, displayWord, Color.BLACK, targetWidth, Align.center, true);
-                cWords = gameWords.get(currentWordIndex).getCorrectWords();
-                correctWordList = cWords.split("\\s*,\\s*");
-                // Start incorrect icon display
-                this.incorrectDisplayTimer = this.INCORRECT_DISPLAY_DURATION;
-            }
-
-            if (!this.isPaused) {
-                batch.draw(this.gunmaWalkAnimation.getCurrentFrame(delta), 90, 35 + this.SCREEN_BOTTOM_ADJUST);
-            } else {
-                batch.draw(this.gunmaWalkAnimation.getCurrentFrame(0), 90, 35 + this.SCREEN_BOTTOM_ADJUST);
-            }
-            this.walkOntoScreenFromRight(delta);
-        } else {
-            speechGDX.stopRecognition();
-
-            if(win) {
-                font2.draw(batch, "You Win!", 450, 380);
-                // batch.draw(supergunma, 70, 10 + this.SCREEN_BOTTOM_ADJUST);
-            }
-            else{
-                font2.draw(batch, "You Lose!", 450, 380);
-                batch.draw(this.gunmaFaintedSprite, 70, 10 + this.SCREEN_BOTTOM_ADJUST);
-            }
-        }
-
-        if(correctDisplayTimer > 0) { this.correctAnswerGraphic();}
-        if(incorrectDisplayTimer > 0) {this.incorrectAnswerGraphic();}
         batch.end();
 
         stage.act(delta); // optional to pass delta value
@@ -426,11 +306,9 @@ public class GameScreen implements Screen {
         font.dispose();
         font2.dispose();
         background.dispose();
-        this.correctSprite.dispose();
-        this.incorrectSprite.dispose();
+        stars.dispose();
 
         this.backgroundDrawer.dispose();
-        this.livesDrawer.dispose();
         this.onionWalkAnimation.dispose();
         this.gunmaWalkAnimation.dispose();
         batch.dispose();
@@ -438,55 +316,6 @@ public class GameScreen implements Screen {
 
     }
 
-    private void walkOntoScreenFromRight(float delta) {
-        if (!isPaused) {
-            // This is a temporary fix. There's a more elegant solution that's less intensive I believe.
-            TextureRegion tmp = onionWalkAnimation.getCurrentFrame(delta);
-            tmp.flip(true, false);
-            batch.draw(tmp, this.enemyPosition, 40 + this.SCREEN_BOTTOM_ADJUST);
-            tmp.flip(true, false);
-            this.enemyPosition -= 1.15;
-            if (this.enemyPosition < 100) {
-                this.takeDamage();
-            }
-        } else {
-            TextureRegion tmp = onionWalkAnimation.getCurrentFrame(0);
-            tmp.flip(true, false);
-            batch.draw(tmp, this.enemyPosition, 40 + this.SCREEN_BOTTOM_ADJUST);
-            tmp.flip(true, false);
-        }
-    }
-
-    private void takeDamage() {
-        this.enemyPosition = Gdx.graphics.getWidth() + 50;
-        this.lives--;
-        this.livesDrawer.takeLife();
-
-        if (this.lives == 0) {
-            this.isGameOver = true;
-        }
-    }
-
-    private void defeatEnemy() {
-        this.enemyPosition = Gdx.graphics.getWidth();
-        // However you want to change the current vocab would go here
-    }
-
-    private void correctAnswerGraphic() {
-        if (this.correctDisplayTimer == this.CORRECT_DISPLAY_DURATION) {
-            // Play sound effect here
-        }
-        batch.draw(this.correctSprite, Gdx.graphics.getWidth()/2-80, Gdx.graphics.getHeight()/4*3-140);
-        this.correctDisplayTimer--;
-    }
-
-    private void incorrectAnswerGraphic() {
-        if (this.incorrectDisplayTimer == this.INCORRECT_DISPLAY_DURATION) {
-            // Play sound effect here
-        }
-        batch.draw(this.incorrectSprite, Gdx.graphics.getWidth()/2-80, Gdx.graphics.getHeight()/4*3-140);
-        this.incorrectDisplayTimer--;
-    }
     private int randomIndex(int size) {
 
         if(size == 1) {

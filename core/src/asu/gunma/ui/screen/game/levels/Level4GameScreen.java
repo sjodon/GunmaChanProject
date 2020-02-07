@@ -1,13 +1,10 @@
-package asu.gunma.ui.screen.game;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+package asu.gunma.ui.screen.game.levels;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -24,11 +21,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.utils.Align;
-import asu.gunma.DatabaseInterface.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+import asu.gunma.DatabaseInterface.DbInterface;
 import asu.gunma.DbContainers.VocabWord;
 import asu.gunma.speech.ActionResolver;
+import asu.gunma.ui.screen.game.ScoreScreen;
 import asu.gunma.ui.screen.menu.MainMenuScreen;
 import asu.gunma.ui.util.Animator;
 import asu.gunma.ui.util.AssetManagement.GameAssets;
@@ -36,7 +38,7 @@ import asu.gunma.ui.util.BackgroundDrawer;
 import asu.gunma.ui.util.GradeSystem;
 import asu.gunma.ui.util.lives.LivesDrawer;
 
-public class GameScreen implements Screen {
+public class Level4GameScreen implements Screen {
     //size of round word list
     private int GAME_LIST_SIZE;
     private int currentWordIndex;
@@ -127,7 +129,7 @@ public class GameScreen implements Screen {
 
     Preferences prefs;
 
-    public GameScreen(Game game, ActionResolver speechGDX, Music music, DbInterface dbCallback, Screen previous, ArrayList<VocabWord> activeList, Preferences prefs, GameAssets gameAssets) {
+    public Level4GameScreen(Game game, ActionResolver speechGDX, Music music, DbInterface dbCallback, Screen previous, ArrayList<VocabWord> activeList, Preferences prefs, GameAssets gameAssets) {
         this.game = game;
         this.prefs = prefs;
         this.speechGDX = speechGDX;
@@ -162,7 +164,7 @@ public class GameScreen implements Screen {
         this.livesDrawer = new LivesDrawer(this.batch);
 
         // Animation initializations
-        this.onionWalkAnimation = new Animator(gameAssets.onionWalkAnimationPath, 4, 2, 0.1f);
+        this.onionWalkAnimation = new Animator(gameAssets.placeholderFrenemyAnimation3Path, 4, 2, 0.1f);
         this.gunmaWalkAnimation = new Animator(gameAssets.gunmaWalkAnimationPath, 8, 1, 0.1f);
 
         // Game feedback
@@ -285,7 +287,6 @@ public class GameScreen implements Screen {
                 gameMusic.setVolume(masterVolume);
                 gameMusic.play();
                 game.setScreen(new MainMenuScreen(game, speechGDX,  gameMusic, dbCallback,activeVList, prefs, gameAssets));
-                previousScreen.dispose();
                 dispose(); // dispose of current GameScreen
             }
         });
@@ -381,15 +382,23 @@ public class GameScreen implements Screen {
             this.walkOntoScreenFromRight(delta);
         } else {
             speechGDX.stopRecognition();
-
-            if(win) {
-                font2.draw(batch, "You Win!", 450, 380);
-                // batch.draw(supergunma, 70, 10 + this.SCREEN_BOTTOM_ADJUST);
+            isPaused = true;
+            gameMusic.dispose();
+            gameMusic = Gdx.audio.newMusic(Gdx.files.internal(gameAssets.introMusicPath));
+            gameMusic.setLooping(false);
+            gameMusic.setVolume(masterVolume);
+            gameMusic.play();
+            int numStars = 0;
+            if(score >= 11) {
+                numStars = 3;
+            } else if(score >= 9) {
+                numStars = 2;
+            } else if(score >= 7) {
+                numStars = 1;
             }
-            else{
-                font2.draw(batch, "You Lose!", 450, 380);
-                batch.draw(this.gunmaFaintedSprite, 70, 10 + this.SCREEN_BOTTOM_ADJUST);
-            }
+            gameAssets.setLevelStars(1, numStars);
+            game.setScreen(new ScoreScreen(game, speechGDX,  gameMusic, dbCallback,previousScreen, activeVList, prefs, gameAssets, score, numStars));
+            dispose(); // dispose of current GameScreen
         }
 
         if(correctDisplayTimer > 0) { this.correctAnswerGraphic();}
@@ -445,7 +454,7 @@ public class GameScreen implements Screen {
             tmp.flip(true, false);
             batch.draw(tmp, this.enemyPosition, 40 + this.SCREEN_BOTTOM_ADJUST);
             tmp.flip(true, false);
-            this.enemyPosition -= 1.15;
+            this.enemyPosition -= 1.75;
             if (this.enemyPosition < 100) {
                 this.takeDamage();
             }
