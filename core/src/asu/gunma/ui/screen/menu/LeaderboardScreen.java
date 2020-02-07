@@ -112,7 +112,7 @@ public class LeaderboardScreen implements Screen {
         batch = new SpriteBatch();
 
         background = new Texture("BG_temp.png");
-        backgroundDrawer = new BackgroundDrawer(this.batch, this.SCREEN_BOTTOM_ADJUST);
+        backgroundDrawer = new BackgroundDrawer(this.batch, this.SCREEN_BOTTOM_ADJUST, gameAssets);
         this.onionWalkAnimation = new Animator("onion_sheet.png", 4, 2, 0.1f);
         this.gunmaWalkAnimation = new Animator("gunma_sheet.png", 8, 1, 0.1f);
 
