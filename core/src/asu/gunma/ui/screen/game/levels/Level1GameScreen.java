@@ -397,6 +397,9 @@ public class Level1GameScreen implements Screen {
                 numStars = 1;
             }
             gameAssets.setLevelStars(1, numStars);
+
+            // TODO: update nickname to user selected nickname
+            gameAssets.saveUserScore(score, "Sydney");
             game.setScreen(new ScoreScreen(game, speechGDX,  gameMusic, dbCallback,previousScreen, activeVList, prefs, gameAssets, score, numStars));
             dispose(); // dispose of current GameScreen
         }
@@ -454,6 +457,8 @@ public class Level1GameScreen implements Screen {
             tmp.flip(true, false);
             batch.draw(tmp, this.enemyPosition, 40 + this.SCREEN_BOTTOM_ADJUST);
             tmp.flip(true, false);
+
+            // set frenemy speed here:
             this.enemyPosition -= 1.15;
             if (this.enemyPosition < 100) {
                 this.takeDamage();

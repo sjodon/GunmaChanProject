@@ -143,16 +143,16 @@ public class GameAssets extends Month {
     public static String skyImagePath = "background/skyx2.png";
 
     // High scores
-    public Score score1 = new Score(0, "");
-    public Score score2 = new Score(0, "");
-    public Score score3 = new Score(0, "");
-    public Score score4 = new Score(0, "");
-    public Score score5 = new Score(0, "");
-    public Score score6 = new Score(0, "");
-    public Score score7 = new Score(0, "");
-    public Score score8 = new Score(0, "");
-    public Score score9 = new Score(0, "");
-    public Score score10 = new Score(0, "");
+    public Score score1 = new Score(-1, "---");
+    public Score score2 = new Score(-1, "---");
+    public Score score3 = new Score(-1, "---");
+    public Score score4 = new Score(-1, "---");
+    public Score score5 = new Score(-1, "---");
+    public Score score6 = new Score(-1, "---");
+    public Score score7 = new Score(-1, "---");
+    public Score score8 = new Score(-1, "---");
+    public Score score9 = new Score(-1, "---");
+    public Score score10 = new Score(-1, "---");
 
     public void saveUserScore(int score, String nickname) {
         // TODO: save user score to cloud

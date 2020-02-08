@@ -397,6 +397,7 @@ public class Level5GameScreen implements Screen {
                 numStars = 1;
             }
             gameAssets.setLevelStars(1, numStars);
+            gameAssets.saveUserScore(score, "Sydney");
             game.setScreen(new ScoreScreen(game, speechGDX,  gameMusic, dbCallback,previousScreen, activeVList, prefs, gameAssets, score, numStars));
             dispose(); // dispose of current GameScreen
         }
