@@ -173,7 +173,8 @@ public class Level1GameScreen implements Screen {
 
         // Spawning variables
         this.enemyPosition = Gdx.graphics.getWidth();
-        this.lives = 5;
+        // TODO: change this back to 5
+        this.lives = 1;
         this.isGameOver = false;
 
         Gdx.input.setInputProcessor(stage);
@@ -399,8 +400,8 @@ public class Level1GameScreen implements Screen {
             gameAssets.setLevelStars(1, numStars);
 
             // TODO: update nickname to user selected nickname
-            gameAssets.saveUserScore(score, "Sydney");
-            game.setScreen(new ScoreScreen(game, speechGDX,  gameMusic, dbCallback,previousScreen, activeVList, prefs, gameAssets, score, numStars));
+            gameAssets.saveUserScore(score, "Sydney", 1);
+            game.setScreen(new ScoreScreen(game, speechGDX,  gameMusic, dbCallback,previousScreen, activeVList, prefs, gameAssets, score, numStars, 1));
             dispose(); // dispose of current GameScreen
         }
 
@@ -459,7 +460,8 @@ public class Level1GameScreen implements Screen {
             tmp.flip(true, false);
 
             // set frenemy speed here:
-            this.enemyPosition -= 1.15;
+            // TODO: change this back to 1.15
+            this.enemyPosition -= 10;
             if (this.enemyPosition < 100) {
                 this.takeDamage();
             }

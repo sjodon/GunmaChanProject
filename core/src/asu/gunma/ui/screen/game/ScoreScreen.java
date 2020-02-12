@@ -30,6 +30,7 @@ import java.util.Random;
 import asu.gunma.DatabaseInterface.DbInterface;
 import asu.gunma.DbContainers.VocabWord;
 import asu.gunma.speech.ActionResolver;
+import asu.gunma.ui.screen.menu.LeaderboardScreen;
 import asu.gunma.ui.screen.menu.MainMenuScreen;
 import asu.gunma.ui.util.Animator;
 import asu.gunma.ui.util.AssetManagement.GameAssets;
@@ -104,8 +105,9 @@ public class ScoreScreen implements Screen {
 
     Preferences prefs;
     int numStars = 0;
+    int levelNumber = 1;
 
-    public ScoreScreen(Game game, ActionResolver speechGDX, Music music, DbInterface dbCallback, Screen previous, ArrayList<VocabWord> activeList, Preferences prefs, GameAssets gameAssets, int score, int numStars) {
+    public ScoreScreen(Game game, ActionResolver speechGDX, Music music, DbInterface dbCallback, Screen previous, ArrayList<VocabWord> activeList, Preferences prefs, GameAssets gameAssets, int score, int numStars, int levelNumber) {
         this.game = game;
         this.prefs = prefs;
         this.speechGDX = speechGDX;
@@ -116,6 +118,7 @@ public class ScoreScreen implements Screen {
         this.gameAssets = gameAssets;
         this.score = score;
         this.numStars = numStars;
+        this.levelNumber = levelNumber;
         gameMusic = Gdx.audio.newMusic(Gdx.files.internal(gameAssets.introMusicPath));
         gameMusic.setLooping(false);
         gameMusic.setVolume(masterVolume);
@@ -231,7 +234,7 @@ public class ScoreScreen implements Screen {
                 gameMusic.setLooping(false);
                 gameMusic.setVolume(masterVolume);
                 gameMusic.play();
-                game.setScreen(new MainMenuScreen(game, speechGDX,  gameMusic, dbCallback, activeVList, prefs, gameAssets));
+                game.setScreen(new LeaderboardScreen(game, speechGDX, gameMusic, dbCallback, activeVList, prefs, gameAssets, levelNumber));
                 dispose(); // dispose of current GameScreen
             }
         });

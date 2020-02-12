@@ -10,7 +10,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.utils.Array;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -143,39 +145,32 @@ public class GameAssets extends Month {
     public static String skyImagePath = "background/skyx2.png";
 
     // High scores
-    public Score score1 = new Score(-1, "---");
-    public Score score2 = new Score(-1, "---");
-    public Score score3 = new Score(-1, "---");
-    public Score score4 = new Score(-1, "---");
-    public Score score5 = new Score(-1, "---");
-    public Score score6 = new Score(-1, "---");
-    public Score score7 = new Score(-1, "---");
-    public Score score8 = new Score(-1, "---");
-    public Score score9 = new Score(-1, "---");
-    public Score score10 = new Score(-1, "---");
+    public Score[][] scores = new Score[10][5];
 
-    public void saveUserScore(int score, String nickname) {
+    public int getLeaderboardScore(int place, int levelNumber) {
+        Score score = scores[place - 1][levelNumber - 1];
+        if(score == null) {
+            return 0;
+        }
+        return score.value;
+    }
+
+    public String getLeaderboardNickname(int place, int levelNumber) {
+        Score score = scores[place - 1][levelNumber - 1];
+        if(score == null) {
+            return "---";
+        }
+        return score.nickname;
+    }
+
+    public void saveUserScore(int score, String nickname, int levelNumber) {
         // TODO: save user score to cloud
-        if(score > score1.value) {
-            score1 = new Score(score, nickname);
-        } else if(score > score2.value) {
-            score2 = new Score(score, nickname);
-        } else if(score > score3.value) {
-            score3 = new Score(score, nickname);
-        } else if(score > score4.value) {
-            score4 = new Score(score, nickname);
-        } else if(score > score5.value) {
-            score5 = new Score(score, nickname);
-        } else if(score > score6.value) {
-            score6 = new Score(score, nickname);
-        } else if(score > score7.value) {
-            score7 = new Score(score, nickname);
-        } else if(score > score8.value) {
-            score8 = new Score(score, nickname);
-        } else if(score > score9.value) {
-            score9 = new Score(score, nickname);
-        } else if(score > score10.value) {
-            score10 = new Score(score, nickname);
+
+        for(int i = 0; i < 10; i ++) {
+            if(scores[i][levelNumber - 1] == null || score > scores[i][levelNumber - 1].value) {
+                scores[i][levelNumber - 1] = new Score(score, nickname);
+                break;
+            }
         }
     }
 

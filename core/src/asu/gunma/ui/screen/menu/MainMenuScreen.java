@@ -163,8 +163,7 @@ public class MainMenuScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 testInt++;
                 System.out.println(testInt);
-                game.setScreen(new ScoreScreen(game, speechGDX, gameMusic, dbCallback, game.getScreen(), activeVList, prefs, gameAssets, 10, 2));
-
+                // TODO: add tutorial screen
             }
         });
         buttonFlashcard.addListener(new ClickListener() {
@@ -217,7 +216,7 @@ public class MainMenuScreen implements Screen {
                 gameMusic.dispose();
                 //play GameFirst music
                 // gameMusic = new Music
-                game.setScreen(new LeaderboardScreen(game, speechGDX, gameMusic, dbCallback, activeVList, prefs, gameAssets));
+                game.setScreen(new LeaderboardScreen(game, speechGDX, gameMusic, dbCallback, activeVList, prefs, gameAssets, 1));
 
             }
         });

@@ -73,13 +73,14 @@ public class LeaderboardScreen implements Screen {
 
     private BitmapFont font;
     private Label heading;
+    private int levelNumber;
 
     FreeTypeFontGenerator generator;
     FreeTypeFontGenerator.FreeTypeFontParameter parameter;
     FreeTypeFontGenerator.FreeTypeFontParameter parameter2;
     public Preferences prefs;
 
-    public LeaderboardScreen(Game game, ActionResolver speechGDX, Music music, DbInterface dbCallback, ArrayList<VocabWord> activeList, Preferences prefs, GameAssets gameAssets) {
+    public LeaderboardScreen(Game game, ActionResolver speechGDX, Music music, DbInterface dbCallback, ArrayList<VocabWord> activeList, Preferences prefs, GameAssets gameAssets, int levelNumber) {
         this.game = game;
         this.prefs = prefs;
         this.speechGDX = speechGDX;
@@ -87,6 +88,7 @@ public class LeaderboardScreen implements Screen {
         this.dbCallback = dbCallback;
         this.activeVList = activeList;
         this.gameAssets = gameAssets;
+        this.levelNumber = levelNumber;
     }
 
     @Override
@@ -129,81 +131,14 @@ public class LeaderboardScreen implements Screen {
         itemStyle.fontColor = Color.BLACK;
 //        itemStyle.background = skin.newDrawable("color4", gameAssets.color4);
 
-        // IMPORTANT: needs localization support
-        Label place1 = new Label("1", itemStyle);
-        Label place2 = new Label("2", itemStyle);
-        Label place3 = new Label("3", itemStyle);
-        Label place4 = new Label("4", itemStyle);
-        Label place5 = new Label("5", itemStyle);
-        Label place6 = new Label("6", itemStyle);
-        Label place7 = new Label("7", itemStyle);
-        Label place8 = new Label("8", itemStyle);
-        Label place9 = new Label("9", itemStyle);
-        Label place10 = new Label("10", itemStyle);
+//        Label title = new Label(gameAssets.getResourceBundle().getString("Leaderboard"), itemStyle);
 
-        Label name1 = new Label(gameAssets.score1.nickname, itemStyle);
-        Label name2 = new Label(gameAssets.score2.nickname, itemStyle);
-        Label name3 = new Label(gameAssets.score3.nickname, itemStyle);
-        Label name4 = new Label(gameAssets.score4.nickname, itemStyle);
-        Label name5 = new Label(gameAssets.score5.nickname, itemStyle);
-        Label name6 = new Label(gameAssets.score6.nickname, itemStyle);
-        Label name7 = new Label(gameAssets.score7.nickname, itemStyle);
-        Label name8 = new Label(gameAssets.score8.nickname, itemStyle);
-        Label name9 = new Label(gameAssets.score9.nickname, itemStyle);
-        Label name10 = new Label(gameAssets.score10.nickname, itemStyle);
-
-        Label score1 = new Label(gameAssets.score1.value + "", itemStyle);
-        Label score2 = new Label(gameAssets.score2.value + "", itemStyle);
-        Label score3 = new Label(gameAssets.score3.value + "", itemStyle);
-        Label score4 = new Label(gameAssets.score4.value + "", itemStyle);
-        Label score5 = new Label(gameAssets.score5.value + "", itemStyle);
-        Label score6 = new Label(gameAssets.score6.value + "", itemStyle);
-        Label score7 = new Label(gameAssets.score7.value + "", itemStyle);
-        Label score8 = new Label(gameAssets.score8.value + "", itemStyle);
-        Label score9 = new Label(gameAssets.score9.value + "", itemStyle);
-        Label score10 = new Label(gameAssets.score10.value + "", itemStyle);
-
-
-        table.add(place1).padBottom(15).expandX();
-        table.add(name1).padBottom(15).expandX();
-        table.add(score1).padBottom(15).expandX();
-        table.row();
-        table.add(place2).padBottom(15).expandX();
-        table.add(name2).padBottom(15).expandX();
-        table.add(score2).padBottom(15).expandX();
-        table.row();
-        table.add(place3).padBottom(15).expandX();
-        table.add(name3).padBottom(15).expandX();
-        table.add(score3).padBottom(15).expandX();
-        table.row();
-        table.add(place4).padBottom(15).expandX();
-        table.add(name4).padBottom(15).expandX();
-        table.add(score4).padBottom(15).expandX();
-        table.row();
-        table.add(place5).padBottom(15).expandX();
-        table.add(name5).padBottom(15).expandX();
-        table.add(score5).padBottom(15).expandX();
-        table.row();
-        table.add(place6).padBottom(15).expandX();
-        table.add(name6).padBottom(15).expandX();
-        table.add(score6).padBottom(15).expandX();
-        table.row();
-        table.add(place7).padBottom(15).expandX();
-        table.add(name7).padBottom(15).expandX();
-        table.add(score7).padBottom(15).expandX();
-        table.row();
-        table.add(place8).padBottom(15).expandX();
-        table.add(name8).padBottom(15).expandX();
-        table.add(score8).padBottom(15).expandX();
-        table.row();
-        table.add(place9).padBottom(15).expandX();
-        table.add(name9).padBottom(15).expandX();
-        table.add(score9).padBottom(15).expandX();
-        table.row();
-        table.add(place10).padBottom(15).expandX();
-        table.add(name10).padBottom(15).expandX();
-        table.add(score10).padBottom(15).expandX();
-        table.row();
+        for (int i = 0; i < 10; i++) {
+            table.add(new Label((i + 1) + "", itemStyle)).padBottom(15).expandX();
+            table.add(new Label(gameAssets.getLeaderboardNickname(i + 1, levelNumber), itemStyle)).padBottom(15).expandX();
+            table.add(new Label(gameAssets.getLeaderboardScore(i + 1, levelNumber) + "", itemStyle)).padBottom(15).expandX();
+            table.row();
+        }
 
         stage.addActor(table);
 
