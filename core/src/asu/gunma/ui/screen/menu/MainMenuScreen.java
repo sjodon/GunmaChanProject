@@ -195,7 +195,9 @@ public class MainMenuScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 AsteroidGameModel asteroidGameModel = new AsteroidGameModel(1, 0, 5, activeVList);
                 AsteroidGameController asteroidController = new AsteroidGameController(asteroidGameModel);
-                AsteroidGameView asteroidView = new AsteroidGameView(game, speechGDX, gameMusic, game.getScreen(), prefs, asteroidController);
+                AsteroidGameView asteroidView = new AsteroidGameView(game, speechGDX, gameMusic,
+                        dbCallback, game.getScreen(), activeVList, prefs, gameAssets,
+                        asteroidController);
                 game.setScreen(asteroidView);
 //                gameMusic.pause();
 //                gameMusic.dispose();

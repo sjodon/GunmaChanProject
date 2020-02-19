@@ -23,10 +23,14 @@ import com.badlogic.gdx.utils.Align;
 
 import java.util.ArrayList;
 
+import asu.gunma.DatabaseInterface.DbInterface;
+import asu.gunma.DbContainers.VocabWord;
 import asu.gunma.MiniGames.Controllers.AsteroidGameController;
 import asu.gunma.MiniGames.Controllers.WordScrambleGameController;
 import asu.gunma.MiniGames.Models.AsteroidGameModel;
 import asu.gunma.speech.ActionResolver;
+import asu.gunma.ui.screen.menu.MainMenuScreen;
+import asu.gunma.ui.util.AssetManagement.GameAssets;
 import asu.gunma.ui.util.GradeSystem;
 import asu.gunma.ui.util.lives.LivesDrawer;
 
@@ -41,7 +45,9 @@ public class AsteroidGameView implements Screen
     private Music gameMusic;
     public static float masterVolume = 5;
     public ActionResolver speechGDX;
+    DbInterface dbCallback;
     private Screen previousScreen;
+    ArrayList<VocabWord> activeList;
     private Music incorrectSound;
 
     // UI variables
@@ -63,6 +69,7 @@ public class AsteroidGameView implements Screen
     public Preferences prefs;
 
     private TextButton speakButton;
+    private TextButton backButton;
     private Label youLose;
 
     private ArrayList<GlyphLayout> wordLayoutList;
@@ -74,17 +81,24 @@ public class AsteroidGameView implements Screen
 
     private Table table;
 
+    private GameAssets gameAssets;
+
     // constants
     private static final int DEFAULT_ASTEROID_SIZE = 128;
     private static final int DEFAULT_EXPLOSION_SIZE = 160;
 
-    public AsteroidGameView(Game game, ActionResolver speechGDX, Music music, Screen previous, Preferences prefs, AsteroidGameController controller)
+    public AsteroidGameView(Game game, ActionResolver speechGDX, Music music, DbInterface dbCallback,
+                            Screen previous, ArrayList<VocabWord> activeList, Preferences prefs,
+                            GameAssets gameAssets, AsteroidGameController controller)
     {
         this.game = game;
         this.speechGDX = speechGDX;
         this.gameMusic = music;
+        this.dbCallback = dbCallback;
         this.previousScreen = previous;
+        this.activeList = activeList;
         this.prefs = prefs;
+        this.gameAssets = gameAssets;
         this.controller = controller;
 
         //fonts
@@ -149,6 +163,10 @@ public class AsteroidGameView implements Screen
         textButtonStyle.font = font;
         textButtonStyle.fontColor = Color.WHITE;
 
+        // buttons
+        backButton = new TextButton(gameAssets.getResourceBundle().getString("Back"), textButtonStyle);
+        backButton.setPosition(Gdx.graphics.getWidth() - 100, 0);
+
         // initiate speech recognition
         try {
             speechGDX.startRecognition();
@@ -157,10 +175,28 @@ public class AsteroidGameView implements Screen
             System.out.println(e);
         }
 
+        // return to main menu screen
+        backButton.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                speechGDX.stopRecognition();
+                // isPaused = true;
+                gameMusic.dispose();
+                gameMusic = Gdx.audio.newMusic(Gdx.files.internal(gameAssets.introMusicPath));
+                gameMusic.setLooping(false);
+                gameMusic.setVolume(masterVolume);
+                gameMusic.play();
+                game.setScreen(new MainMenuScreen(game, speechGDX, gameMusic, dbCallback,
+                        activeList, prefs, gameAssets));
+                previousScreen.dispose();
+                dispose();
+            }
+        });
+
         Label.LabelStyle youLoseStyle = new Label.LabelStyle(font, Color.WHITE);
         youLose = new Label("YOU LOSE", youLoseStyle);
         youLose.setFontScale(2);
 
+        stage.addActor(backButton);
         table.add(youLose).padBottom(100);
         table.row();
 
@@ -207,9 +243,12 @@ public class AsteroidGameView implements Screen
 
                 explosionTimer++;
             }
+
+            stage.draw();
         }
         else
         {
+            stage.dispose();
             stage.addActor(table);
             stage.draw();
         }
