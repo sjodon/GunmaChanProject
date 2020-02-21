@@ -10,9 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.utils.Array;
 
-import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -146,6 +144,7 @@ public class GameAssets extends Month {
 
     // High scores
     public Score[][] scores = new Score[10][5];
+    public String userNickname = "anonymous";
 
     public int getLeaderboardScore(int place, int levelNumber) {
         Score score = scores[place - 1][levelNumber - 1];

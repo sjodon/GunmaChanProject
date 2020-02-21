@@ -244,8 +244,8 @@ public class MainMenuScreen implements Screen {
         table.row();
         table.add(buttonGameThird).padBottom(15);
         table.row();
-        table.add(buttonLeaderboard).padBottom(15);
-        table.row();
+//        table.add(buttonLeaderboard).padBottom(15);
+//        table.row();
         table.add(buttonSettings);
         table.row();
 

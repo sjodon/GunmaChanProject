@@ -13,15 +13,21 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 
 import java.util.ArrayList;
+
+import javax.xml.soap.Text;
 
 import asu.gunma.DatabaseInterface.DbInterface;
 import asu.gunma.DbContainers.VocabWord;
@@ -131,6 +137,33 @@ public class SettingsScreen implements Screen {
         optionMenuButton.setPosition(50, 150);
         optionMenuButton.getLabel().setAlignment(Align.center);
 
+        Skin skin = gameAssets.getColorSkin(gameAssets.color2, "color2");
+        Label.LabelStyle itemStyle = new Label.LabelStyle();
+        //itemStyle.up = skin.getDrawable("button.up");
+        //itemStyle.down = skin.getDrawable("button.down");
+        itemStyle.font = font;
+        itemStyle.fontColor = Color.BLACK;
+        TextField.TextFieldStyle styleDefault = new TextField.TextFieldStyle();
+        styleDefault.font = font;
+        styleDefault.fontColor = Color.BLACK;
+        styleDefault.background = skin.newDrawable("color2", gameAssets.color2);
+        Label nameLabel = new Label("Enter Nickname:", itemStyle);
+        TextField nameText = new TextField("", styleDefault);
+        Table table = new Table();
+        TextButton submit = new TextButton("Submit", testSkin, "default");
+        table.add(nameLabel);
+        table.add(nameText).width(300);
+        table.add(submit);
+        table.setPosition(700, 500);
+
+        submit.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                String text = nameText.getText();
+                gameAssets.userNickname = text;
+                System.out.println(gameAssets.userNickname);
+            }
+        });
+
         //font file
 //        final String FONT_PATH = "irohamaru-mikami-Regular.ttf";
 //        generator = new FreeTypeFontGenerator(Gdx.files.internal(FONT_PATH));
@@ -215,6 +248,8 @@ public class SettingsScreen implements Screen {
         stage.addActor(googleLogoutButton);
         stage.addActor(setLanguageButton);
         stage.addActor(optionMenuButton);
+        stage.addActor(table);
+
     }
 
     @Override

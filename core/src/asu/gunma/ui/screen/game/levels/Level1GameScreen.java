@@ -400,7 +400,7 @@ public class Level1GameScreen implements Screen {
             gameAssets.setLevelStars(1, numStars);
 
             // TODO: update nickname to user selected nickname
-            gameAssets.saveUserScore(score, "Sydney", 1);
+            gameAssets.saveUserScore(score, gameAssets.userNickname, 1);
             game.setScreen(new ScoreScreen(game, speechGDX,  gameMusic, dbCallback,previousScreen, activeVList, prefs, gameAssets, score, numStars, 1));
             dispose(); // dispose of current GameScreen
         }

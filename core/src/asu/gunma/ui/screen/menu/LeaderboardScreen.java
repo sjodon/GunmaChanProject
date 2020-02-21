@@ -123,13 +123,13 @@ public class LeaderboardScreen implements Screen {
         table = new Table();
         table.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-        Skin skin = gameAssets.getColorSkin(gameAssets.color4, "color4");
+        Skin skin = gameAssets.getColorSkin(gameAssets.color2, "color2");
         Label.LabelStyle itemStyle = new Label.LabelStyle();
         //itemStyle.up = skin.getDrawable("button.up");
         //itemStyle.down = skin.getDrawable("button.down");
         itemStyle.font = font;
         itemStyle.fontColor = Color.BLACK;
-//        itemStyle.background = skin.newDrawable("color4", gameAssets.color4);
+//        itemStyle.background = skin.newDrawable("color2", gameAssets.color2);
 
 //        Label title = new Label(gameAssets.getResourceBundle().getString("Leaderboard"), itemStyle);
 
