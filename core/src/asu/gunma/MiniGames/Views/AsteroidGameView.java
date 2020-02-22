@@ -60,7 +60,9 @@ public class AsteroidGameView implements Screen
     private Texture rocketTexture;
     private Texture explosionTexture;
 
-    private BitmapFont font;
+    // fonts
+    private BitmapFont buttonFont;
+    private BitmapFont asteroidFont;
     private ArrayList<BitmapFont> fontList;
 
     FreeTypeFontGenerator generator;
@@ -68,8 +70,11 @@ public class AsteroidGameView implements Screen
     FreeTypeFontGenerator.FreeTypeFontParameter parameter2;
     public Preferences prefs;
 
-    private TextButton speakButton;
+    // buttons
     private TextButton backButton;
+    private TextButton pauseButton;
+
+    // labels
     private Label youLose;
 
     private ArrayList<GlyphLayout> wordLayoutList;
@@ -82,6 +87,8 @@ public class AsteroidGameView implements Screen
     private Table table;
 
     private GameAssets gameAssets;
+
+    boolean isPaused;
 
     // constants
     private static final int DEFAULT_ASTEROID_SIZE = 128;
@@ -102,11 +109,11 @@ public class AsteroidGameView implements Screen
         this.controller = controller;
 
         //fonts
-        final String FONT_PATH = "irohamaru-mikami-Regular.ttf";
-        generator = new FreeTypeFontGenerator(Gdx.files.internal(FONT_PATH));
+        generator = new FreeTypeFontGenerator(Gdx.files.internal(gameAssets.fontPath));
         parameterList = new ArrayList<FreeTypeFontGenerator.FreeTypeFontParameter>();
         parameter2 = new FreeTypeFontGenerator.FreeTypeFontParameter();
         fontList = new ArrayList<BitmapFont>();
+        buttonFont = gameAssets.getFont();
 
         // pictures
         asteroidTexture = new Texture("circle-xxl.png");
@@ -121,6 +128,7 @@ public class AsteroidGameView implements Screen
         incorrectSound = Gdx.audio.newMusic(Gdx.files.internal("incorrect_ohno.mp3"));
 
         explosionTimer = 0;
+        isPaused = false;
     }
 
     // Override Screen class methods
@@ -140,7 +148,8 @@ public class AsteroidGameView implements Screen
         for (int i = 0; i < controller.getAsteroidList().size(); i++)
         {
             asteroidWordList.add(controller.getAsteroidList().get(i).getWord().getEngSpelling());
-            FreeTypeFontGenerator.FreeTypeFontParameter tempParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+            FreeTypeFontGenerator.FreeTypeFontParameter tempParameter =
+                    new FreeTypeFontGenerator.FreeTypeFontParameter();
             tempParameter.characters = asteroidWordList.get(i);
             tempParameter.size = 16;
             tempParameter.color = Color.BLACK;
@@ -155,29 +164,25 @@ public class AsteroidGameView implements Screen
 
         parameter2.size = 30;
         parameter2.color = Color.WHITE;
-        font = generator.generateFont(parameter2);
+        //buttonFont = generator.generateFont(parameter2);
 
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
         textButtonStyle.pressedOffsetX = 1;
         textButtonStyle.pressedOffsetY = -1;
-        textButtonStyle.font = font;
+        textButtonStyle.font = buttonFont;
         textButtonStyle.fontColor = Color.WHITE;
 
         // buttons
         backButton = new TextButton(gameAssets.getResourceBundle().getString("Back"), textButtonStyle);
         backButton.setPosition(Gdx.graphics.getWidth() - 100, 0);
+        pauseButton = new TextButton(gameAssets.getResourceBundle().getString("Pause"), textButtonStyle);
+        pauseButton.setPosition(Gdx.graphics.getWidth() - 200, 0);
 
-        // initiate speech recognition
-        try {
-            speechGDX.startRecognition();
-
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-
-        // return to main menu screen
-        backButton.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
+        // return to main menu
+        backButton.addListener(new ClickListener()
+        {
+            public void clicked(InputEvent event, float x, float y)
+            {
                 speechGDX.stopRecognition();
                 // isPaused = true;
                 gameMusic.dispose();
@@ -192,15 +197,47 @@ public class AsteroidGameView implements Screen
             }
         });
 
-        Label.LabelStyle youLoseStyle = new Label.LabelStyle(font, Color.WHITE);
+        // pause mini-game
+        pauseButton.addListener(new ClickListener() {
+           public void clicked(InputEvent event, float x, float y)
+           {
+                if (isPaused)
+                {
+                    try
+                    {
+                        speechGDX.startRecognition();
+                    }
+                    catch(Exception e)
+                    {
+                        System.out.println(e);
+                    }
+
+                    isPaused = false;
+                }
+                else
+                {
+                    speechGDX.stopRecognition();
+                    isPaused = true;
+                }
+           }
+        });
+
+        Label.LabelStyle youLoseStyle = new Label.LabelStyle(buttonFont, Color.WHITE);
         youLose = new Label("YOU LOSE", youLoseStyle);
         youLose.setFontScale(2);
 
         stage.addActor(backButton);
+        stage.addActor(pauseButton);
         table.add(youLose).padBottom(100);
         table.row();
 
-        //stage.addActor(table);
+        // initiate speech recognition
+        try {
+            speechGDX.startRecognition();
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 
     @Override
@@ -211,8 +248,11 @@ public class AsteroidGameView implements Screen
         stage.act(delta);
         stage.draw();
 
-        transformAsteroids(delta);
+        // asteroids do not move when the game is paused
+        if (!isPaused)
+            transformAsteroids(delta);
 
+        // ************************************* BEGIN BATCH ***************************************
         batch.begin();
 
         // show the game only if the player still has lives
@@ -243,8 +283,6 @@ public class AsteroidGameView implements Screen
 
                 explosionTimer++;
             }
-
-            stage.draw();
         }
         else
         {
@@ -253,7 +291,12 @@ public class AsteroidGameView implements Screen
             stage.draw();
         }
 
+        // display score on screen
+        //buttonFont.draw(batch, gameAssets.getResourceBundle().getString("Score: " +
+        //        controller.getScore()), 10, Gdx.graphics.getWidth() - 200);
+
         batch.end();
+        // ************************************** END BATCH ****************************************
 
         String spokenWord = speechGDX.getWord();
         String cWords = controller.getAsteroidList().get(0).getWord().getCorrectWords();
@@ -265,16 +308,19 @@ public class AsteroidGameView implements Screen
         {
             // print statements are for debugging
             System.out.println("Correct!");
-            System.out.println(controller.increaseScore());
+            //System.out.println(controller.increaseScore());
 
             if (controller.destroyAsteroid(spokenWord))
             {
                 System.out.println("Successfully destroyed the asteroid and added a new one to " +
                         "the screen.");
 
+                //controller.increaseScore();
+
                 asteroidWordList.remove(0);
                 asteroidWordList.add(0, controller.getAsteroidList().get(0).getWord().getEngSpelling());
-                FreeTypeFontGenerator.FreeTypeFontParameter tempParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+                FreeTypeFontGenerator.FreeTypeFontParameter tempParameter =
+                        new FreeTypeFontGenerator.FreeTypeFontParameter();
                 tempParameter.characters = asteroidWordList.get(0);
                 tempParameter.size = 16;
                 tempParameter.color = Color.BLACK;
@@ -341,7 +387,7 @@ public class AsteroidGameView implements Screen
     @Override
     public void dispose()
     {
-        font.dispose();
+        buttonFont.dispose();
         batch.dispose();
         stage.dispose();
     }
