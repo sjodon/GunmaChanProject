@@ -87,7 +87,6 @@ public class GameAssets extends Month {
     }
 
     public BitmapFont getFont() {
-
         Texture textureCN = new Texture(Gdx.files.internal("custom_font_hiero_2.png"), true);
         textureCN.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.Linear);
 

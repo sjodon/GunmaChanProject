@@ -154,6 +154,7 @@ public class GameScreen implements Screen {
         this.previousScreen = previous;
         this.gameMusic = music;
         this.activeVList = activeList;
+        this.gameAssets = gameAssets;
         gameMusic = Gdx.audio.newMusic(Gdx.files.internal(gameAssets.introMusicPath));
         gameMusic.setLooping(false);
         gameMusic.setVolume(masterVolume);
@@ -246,8 +247,9 @@ public class GameScreen implements Screen {
         font = generator.generateFont(parameter);
         parameter2.size = 30;
         parameter2.color = Color.BLACK;
-        font2 = generator.generateFont(parameter2);
-        //font2 = gameAssets.getFont();
+//        font2 = generator.generateFont(parameter2);
+        font2 = gameAssets.getFont();
+
         //Alignment and Text Wrapping for Vocab Word
         displayWordLayout = new GlyphLayout();
         displayWordLayout.setText(font, displayWord, Color.BLACK, targetWidth, Align.center, true);
@@ -260,12 +262,12 @@ public class GameScreen implements Screen {
         textButtonStyle.font = font2;
         textButtonStyle.fontColor = Color.BLACK;
 
-        backButton = new TextButton("Back", textButtonStyle);
+        backButton = new TextButton(gameAssets.getResourceBundle().getString("Back"), textButtonStyle);
         backButton.setPosition(Gdx.graphics.getWidth() - 100, 0);
 
         Label.LabelStyle headingStyle = new Label.LabelStyle(font, Color.BLACK);
 
-        pauseButton = new TextButton("Pause", textButtonStyle);
+        pauseButton = new TextButton(gameAssets.getResourceBundle().getString("Pause"), textButtonStyle);
         pauseButton.setPosition(Gdx.graphics.getWidth() - 200, 0);
 
             /*
@@ -346,7 +348,7 @@ public class GameScreen implements Screen {
 
         //batch.draw(background, 0, 0);
 
-        font2.draw(batch, "Correct " + score + "/" + GAME_LIST_SIZE, 10, 35);
+        font2.draw(batch, gameAssets.getResourceBundle().getString("Correct") + score + "/" + GAME_LIST_SIZE, 10, 35);
 
         if (!isGameOver) {
 

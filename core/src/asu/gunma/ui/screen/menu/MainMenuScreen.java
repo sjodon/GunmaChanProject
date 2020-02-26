@@ -101,8 +101,7 @@ public class MainMenuScreen implements Screen {
         //font for other words
         parameter2 = new FreeTypeFontGenerator.FreeTypeFontParameter();
 
-        font = generator.generateFont(parameter2);
-        //font = gameAssets.getFont();
+        font = gameAssets.getFont();
 
         Color bgColor = gameAssets.backgroundColor;
         Gdx.gl.glClearColor(bgColor.r, bgColor.g, bgColor.b, bgColor.a);
@@ -133,6 +132,13 @@ public class MainMenuScreen implements Screen {
         textButtonStyle.font = font;
         textButtonStyle.up = skin.newDrawable("color2", gameAssets.color2);
 
+        // IMPORTANT: needs localization support
+        buttonTutorial = new TextButton(gameAssets.getResourceBundle().getString("VideoTutorials"), textButtonStyle);
+        buttonFlashcard = new TextButton(gameAssets.getResourceBundle().getString("Flashcards"), textButtonStyle);
+        buttonGameFirst = new TextButton(gameAssets.getResourceBundle().getString("GameName"), textButtonStyle);
+        buttonGameSecond = new TextButton(gameAssets.getResourceBundle().getString("Asteroids"), textButtonStyle);
+        buttonGameThird = new TextButton(gameAssets.getResourceBundle().getString("WordScramble"), textButtonStyle);
+        buttonSettings = new TextButton(gameAssets.getResourceBundle().getString("Settings"), textButtonStyle);
       //   IMPORTANT: needs localization support
         buttonTutorial = new TextButton(gameAssets.getResourceBundle().getString("VideoTutorials"), textButtonStyle);
         buttonFlashcard = new TextButton(gameAssets.getResourceBundle().getString("Flashcards"), textButtonStyle);

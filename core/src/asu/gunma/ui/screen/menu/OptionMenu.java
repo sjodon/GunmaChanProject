@@ -33,6 +33,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import asu.gunma.ui.util.AssetManagement.GameAssets;
+import asu.gunma.DatabaseInterface.DbInterface;
+import asu.gunma.speech.ActionResolver;
 
 public class OptionMenu implements Screen {
 
@@ -43,6 +45,7 @@ public class OptionMenu implements Screen {
     private DbInterface dbInterface;
     private AssetManager assetManager;
     private Screen previousScreen;
+    private GameAssets gameAssets;
 
     // Using these are unnecessary but will make our lives easier.
     private Stage stage;
@@ -61,7 +64,6 @@ public class OptionMenu implements Screen {
     private boolean login = false;
     private boolean deleteButtonsVisible = false;
     private int activeLimit = 10;
-    private GameAssets gameAssets;
 
     private TextButton buttonCustom1, buttonCustom2, buttonCustom3, buttonCustom4, buttonCustom5, buttonCustom6,
             buttonCustom7, buttonCustom8, buttonCustom9, buttonCustom10, buttonCustom11, buttonCustom12,
@@ -148,41 +150,42 @@ public class OptionMenu implements Screen {
         table5.setPosition(550, 260);
         table6.setPosition(805, 230);
 
-        font = new BitmapFont(Gdx.files.internal("font-export.fnt")); // needs a font file still
-        font.setColor(Color.BLACK); // Does nothing at the moment
-        font.getData().setScale(2);
-        font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+//        font = new BitmapFont(Gdx.files.internal("font-export.fnt")); // needs a font file still
+//        font.setColor(Color.BLACK); // Does nothing at the moment
+//        font.getData().setScale(2);
+//        font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
         //font file
-        generator = new FreeTypeFontGenerator(Gdx.files.internal(gameAssets.fontPath));
+//        final String FONT_PATH = "irohamaru-mikami-Regular.ttf";
+//        generator = new FreeTypeFontGenerator(Gdx.files.internal(FONT_PATH));
 
         //font for vocab word
-        parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+//        parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
 
-        parameter.size = 15;
-        parameter.color = Color.BLACK;
-        font = generator.generateFont(parameter);
+//        parameter.size = 15;
+//        parameter.color = Color.BLACK;
+        font = gameAssets.getFont();
 
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
         textButtonStyle.pressedOffsetX = 1;
         textButtonStyle.pressedOffsetY = -1;
         textButtonStyle.font = font;
 
-        testSkin.getFont("font-big").getData().setScale(0.8f, 0.8f);
+//        testSkin.getFont("font-big").getData().setScale(0.8f, 0.8f);
 
         // IMPORTANT: needs localization support
         // Make image buttons
         //use drawable to set image
-        buttonCustom1 = new TextButton("Colors-Shapes", testSkin, "small");
-        buttonCustom2 = new TextButton("Countries", testSkin, "small");
-        buttonCustom3 = new TextButton("Days-Months", testSkin, "small");
-        buttonCustom4 = new TextButton("Feelings", testSkin, "small");
-        buttonCustom5 = new TextButton("Fruits-Foods", testSkin, "small");
-        buttonCustom6 = new TextButton("Numbers", testSkin, "small");
-        buttonCustom7 = new TextButton("Places", testSkin, "small");
-        buttonCustom8 = new TextButton("Professions", testSkin, "small");
-        buttonCustom9 = new TextButton("Subjects", testSkin, "small");
-        buttonCustom10 = new TextButton("Time", testSkin, "small");
+        buttonCustom1 = new TextButton(gameAssets.getResourceBundle().getString("ColorsShapes"), testSkin, "small");
+        buttonCustom2 = new TextButton(gameAssets.getResourceBundle().getString("Countries"), testSkin, "small");
+        buttonCustom3 = new TextButton(gameAssets.getResourceBundle().getString("DaysMonths"), testSkin, "small");
+        buttonCustom4 = new TextButton(gameAssets.getResourceBundle().getString("Feelings"), testSkin, "small");
+        buttonCustom5 = new TextButton(gameAssets.getResourceBundle().getString("FruitsFoods"), testSkin, "small");
+        buttonCustom6 = new TextButton(gameAssets.getResourceBundle().getString("Numbers"), testSkin, "small");
+        buttonCustom7 = new TextButton(gameAssets.getResourceBundle().getString("Places"), testSkin, "small");
+        buttonCustom8 = new TextButton(gameAssets.getResourceBundle().getString("Professions"), testSkin, "small");
+        buttonCustom9 = new TextButton(gameAssets.getResourceBundle().getString("Subjects"), testSkin, "small");
+        buttonCustom10 = new TextButton(gameAssets.getResourceBundle().getString("Time"), testSkin, "small");
         buttonCustom11 = new TextButton("x", testSkin, "small");
         buttonCustom12 = new TextButton("x", testSkin, "small");
         buttonCustom13 = new TextButton("x", testSkin, "small");
@@ -231,7 +234,7 @@ public class OptionMenu implements Screen {
             t.setDisabled(true);
         }
 
-        backButton = new TextButton("Back", textButtonStyle);
+        backButton = new TextButton(gameAssets.getResourceBundle().getString("Back"), textButtonStyle);
         backButton.setPosition(20, 530, Align.left);
 
         Label.LabelStyle headingStyle = new Label.LabelStyle(font, Color.BLACK);
@@ -1081,10 +1084,10 @@ public class OptionMenu implements Screen {
             }
         });
 
-        newButton = new TextButton("Add", testSkin, "default");
-        deleteButton = new TextButton("Delete", testSkin, "default");
-        settingsButton = new TextButton("Settings", testSkin, "default");
-        backButton = new TextButton("Back", testSkin, "default");
+        newButton = new TextButton(gameAssets.getResourceBundle().getString("AddVocabularySet"), testSkin, "default");
+        deleteButton = new TextButton(gameAssets.getResourceBundle().getString("Delete"), testSkin, "default");
+        settingsButton = new TextButton(gameAssets.getResourceBundle().getString("Settings"), testSkin, "default");
+        backButton = new TextButton(gameAssets.getResourceBundle().getString("Back"), testSkin, "default");
         newButton.setTransform(true);
         newButton.setScale(0.5f);
         deleteButton.setTransform(true);
@@ -1119,11 +1122,11 @@ public class OptionMenu implements Screen {
                 if(verified) {
                     fileList = speechGDX.googleDriveAccess();
                     fileTable = new Table(testSkin);
-                    Dialog fileDialog = new Dialog("Select File To Upload", testSkin);
+                    Dialog fileDialog = new Dialog(gameAssets.getResourceBundle().getString("SelectFile"), testSkin);
                     fileDialog.setPosition(400, 300, Align.center);
                     fileDialog.setMovable(false);
                     fileDialog.getTitleLabel().setAlignment(Align.center);
-                    TextButton cancelButton = new TextButton("Cancel", testSkin, "small");
+                    TextButton cancelButton = new TextButton(gameAssets.getResourceBundle().getString("Cancel"), testSkin, "small");
                     for (int i = 0; i < fileList.size(); i++) {
                         currentFile = fileList.get(i);
                         if (currentFile.exists()) {
@@ -1247,7 +1250,7 @@ public class OptionMenu implements Screen {
                 /*if (verified){
                     game.setScreen(new SettingsScreen(game, speechGDX, gameMusic, dbInterface, game.getScreen()));
                 }*/
-              game.setScreen(new SettingsScreen(game, speechGDX, gameMusic, dbInterface, game.getScreen(), prefs, gameAssets));
+              game.setScreen(new SettingsScreen(game, speechGDX, gameMusic, dbInterface, game.getScreen(), activeVocabList, prefs, gameAssets));
             }
         });
         backButton.addListener(new ClickListener() {
@@ -1333,7 +1336,7 @@ public class OptionMenu implements Screen {
         stage.addActor(table6);
         stage.addActor(newButton);
         stage.addActor(deleteButton);
-        stage.addActor(settingsButton);
+//        stage.addActor(settingsButton);
         stage.addActor(backButton);
 
         if(prefs.contains("activeLimit")){
