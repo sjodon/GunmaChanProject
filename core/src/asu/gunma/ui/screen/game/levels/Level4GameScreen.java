@@ -383,6 +383,7 @@ public class Level4GameScreen implements Screen {
         } else {
             speechGDX.stopRecognition();
             isPaused = true;
+            gameMusic.pause();
             gameMusic.dispose();
             gameMusic = Gdx.audio.newMusic(Gdx.files.internal(gameAssets.introMusicPath));
             gameMusic.setLooping(false);
@@ -396,7 +397,7 @@ public class Level4GameScreen implements Screen {
             } else if(score >= 7) {
                 numStars = 1;
             }
-            gameAssets.setLevelStars(1, numStars);
+            gameAssets.setLevelStars(4, numStars);
             game.setScreen(new ScoreScreen(game, speechGDX,  gameMusic, dbCallback,previousScreen, activeVList, prefs, gameAssets, score, numStars));
             dispose(); // dispose of current GameScreen
         }

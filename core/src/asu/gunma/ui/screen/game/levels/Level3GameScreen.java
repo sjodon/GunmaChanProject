@@ -396,7 +396,7 @@ public class Level3GameScreen implements Screen {
             } else if(score >= 4) {
                 numStars = 1;
             }
-            gameAssets.setLevelStars(1, numStars);
+            gameAssets.setLevelStars(3, numStars);
             game.setScreen(new ScoreScreen(game, speechGDX,  gameMusic, dbCallback,previousScreen, activeVList, prefs, gameAssets, score, numStars));
             dispose(); // dispose of current GameScreen
         }
