@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -24,11 +23,6 @@ import com.badlogic.gdx.audio.Music;
 import asu.gunma.DatabaseInterface.*;
 import asu.gunma.DbContainers.VocabWord;
 import asu.gunma.speech.ActionResolver;
-import asu.gunma.ui.screen.game.levels.Level1GameScreen;
-import asu.gunma.ui.screen.game.levels.Level2GameScreen;
-import asu.gunma.ui.screen.game.levels.Level3GameScreen;
-import asu.gunma.ui.screen.game.levels.Level4GameScreen;
-import asu.gunma.ui.screen.game.levels.Level5GameScreen;
 import asu.gunma.ui.screen.menu.MainMenuScreen;
 import asu.gunma.ui.util.Animator;
 import asu.gunma.ui.util.AssetManagement.GameAssets;
@@ -194,7 +188,7 @@ public class MountainScreen implements Screen {
                 gameMusic.setLooping(false);
                 gameMusic.setVolume(masterVolume);
                 gameMusic.play();
-                game.setScreen(new Level1GameScreen(game, speechGDX,  gameMusic, dbCallback, game.getScreen(), activeVList, prefs, gameAssets));
+                game.setScreen(new GameScreen(game, speechGDX,  gameMusic, dbCallback, game.getScreen(), activeVList, prefs, gameAssets, 1));
                 previousScreen.dispose();
                 dispose(); // dispose of current MountainScreen
             }
@@ -209,7 +203,7 @@ public class MountainScreen implements Screen {
                 gameMusic.setLooping(false);
                 gameMusic.setVolume(masterVolume);
                 gameMusic.play();
-                game.setScreen(new Level2GameScreen(game, speechGDX,  gameMusic, dbCallback, game.getScreen(), activeVList, prefs, gameAssets));
+                game.setScreen(new GameScreen(game, speechGDX,  gameMusic, dbCallback, game.getScreen(), activeVList, prefs, gameAssets, 2));
                 previousScreen.dispose();
                 dispose(); // dispose of current MountainScreen
             }
@@ -224,7 +218,7 @@ public class MountainScreen implements Screen {
                 gameMusic.setLooping(false);
                 gameMusic.setVolume(masterVolume);
                 gameMusic.play();
-                game.setScreen(new Level3GameScreen(game, speechGDX,  gameMusic, dbCallback, game.getScreen(), activeVList, prefs, gameAssets));
+                game.setScreen(new GameScreen(game, speechGDX,  gameMusic, dbCallback, game.getScreen(), activeVList, prefs, gameAssets, 3));
                 previousScreen.dispose();
                 dispose(); // dispose of current MountainScreen
             }
@@ -239,7 +233,7 @@ public class MountainScreen implements Screen {
                 gameMusic.setLooping(false);
                 gameMusic.setVolume(masterVolume);
                 gameMusic.play();
-                game.setScreen(new Level4GameScreen(game, speechGDX,  gameMusic, dbCallback, game.getScreen(), activeVList, prefs, gameAssets));
+                game.setScreen(new GameScreen(game, speechGDX,  gameMusic, dbCallback, game.getScreen(), activeVList, prefs, gameAssets, 4));
                 previousScreen.dispose();
                 dispose(); // dispose of current MountainScreen
             }
@@ -254,7 +248,7 @@ public class MountainScreen implements Screen {
                 gameMusic.setLooping(false);
                 gameMusic.setVolume(masterVolume);
                 gameMusic.play();
-                game.setScreen(new Level5GameScreen(game, speechGDX,  gameMusic, dbCallback, game.getScreen(), activeVList, prefs, gameAssets));
+                game.setScreen(new GameScreen(game, speechGDX,  gameMusic, dbCallback, game.getScreen(), activeVList, prefs, gameAssets, 5));
                 previousScreen.dispose();
                 dispose(); // dispose of current MountainScreen
             }

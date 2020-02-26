@@ -22,14 +22,12 @@ import com.badlogic.gdx.audio.Music;
 
 import java.util.ArrayList;
 
-import asu.gunma.ui.screen.game.ScoreScreen;
 import asu.gunma.ui.util.Animator;
 import asu.gunma.ui.util.BackgroundDrawer;
 import asu.gunma.DatabaseInterface.DbInterface;
 import asu.gunma.DbContainers.VocabWord;
 import asu.gunma.speech.ActionResolver;
 import asu.gunma.ui.screen.game.FlashcardScreen;
-import asu.gunma.ui.screen.game.GameScreen;
 import asu.gunma.ui.screen.game.MountainScreen;
 import asu.gunma.ui.util.AssetManagement.GameAssets;
 
@@ -161,8 +159,6 @@ public class MainMenuScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 testInt++;
                 System.out.println(testInt);
-                game.setScreen(new ScoreScreen(game, speechGDX, gameMusic, dbCallback, game.getScreen(), activeVList, prefs, gameAssets, 10, 2));
-
             }
         });
         buttonFlashcard.addListener(new ClickListener() {

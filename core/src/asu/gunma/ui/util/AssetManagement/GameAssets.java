@@ -43,6 +43,12 @@ public class GameAssets extends Month {
     public static String greenCirclePath = "greenCircle.png";
     public static String redXPath = "redX.png";
 
+    // Placeholder frenemy animations
+    public static String placeholderFrenemyAnimation1Path = "Gunma-chan-Japanese-character-enemy-walk-anim-sheet-02.png";
+    public static String placeholderFrenemyAnimation2Path = "Gunma-chan-Japanese-character-enemy-walk-anim-sheet-03.png";
+    public static String placeholderFrenemyAnimation3Path = "Gunma-chan-Japanese-character-enemy-walk-anim-sheet-04.png";
+    public static String placeholderFrenemyAnimation4Path = "Gunma-chan-Japanese-character-enemy-walk-anim-sheet-05.png";
+
     // Game Screen Assets
     public static String gunmaSpritePath = "sprite_gunma.png";
     public static String gunmaFaintedSpritePath = "gunma_fainted.png";
@@ -51,6 +57,7 @@ public class GameAssets extends Month {
     public static String gunmaWalkAnimationPath = "gunma_sheet.png";
     public static String correctSpritePath = "background/correct.png";
     public static String incorrectSpritePath = "background/incorrect.png";
+    public static String[] frenemyWalkAnimationPathPerLevel = {onionWalkAnimationPath, placeholderFrenemyAnimation1Path, placeholderFrenemyAnimation2Path, placeholderFrenemyAnimation3Path, placeholderFrenemyAnimation4Path};
 
     // Game Score Screen Assets
     public static String noStarsPath = "no_stars.png";
@@ -67,12 +74,6 @@ public class GameAssets extends Month {
         }
         return threeStarsPath;
     }
-
-    // Placeholder frenemy animations
-    public static String placeholderFrenemyAnimation1Path = "Gunma-chan-Japanese-character-enemy-walk-anim-sheet-02.png";
-    public static String placeholderFrenemyAnimation2Path = "Gunma-chan-Japanese-character-enemy-walk-anim-sheet-03.png";
-    public static String placeholderFrenemyAnimation3Path = "Gunma-chan-Japanese-character-enemy-walk-anim-sheet-04.png";
-    public static String placeholderFrenemyAnimation4Path = "Gunma-chan-Japanese-character-enemy-walk-anim-sheet-05.png";
 
     // Mountain Screen Assets
     public static String smallMountainImagePath = "background/cropped_mountain2.png";
@@ -106,6 +107,12 @@ public class GameAssets extends Month {
     public int level3Stars = -1;
     public int level4Stars = -1;
     public int level5Stars = -1;
+
+    // Score requirements to earn a star per level
+    public int[] oneStarRequirement = {2, 4, 4, 7, 10};
+    public int[] twoStarRequirement = {3, 5, 6, 9, 15};
+    public int[] threeStarRequirement = {5, 7, 9, 11, 20};
+    public double[] frenemySpeed = {1.15, 1.3, 1.5, 1.75, 2};
 
     public void setLevelStars(int level, int numStars) {
         if(level == 1 && numStars > level1Stars) {
