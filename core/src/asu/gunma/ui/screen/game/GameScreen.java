@@ -468,6 +468,7 @@ public class GameScreen implements Screen {
                 numStars = 1;
             }
             gameAssets.setLevelStars(levelNumber, numStars);
+            gameAssets.saveUserScore(score, gameAssets.userNickname, levelNumber);
             addScore(numStars);
 
             gameMusic.dispose();
