@@ -176,8 +176,8 @@ public class GameScreen implements Screen {
 
         batch = new SpriteBatch();
         // this.onionWithBag = new Texture("FrenemyWithBag.png");
-       gunmaSprite = new Texture("sprite_gunma.png");
-        this.gunmaFaintedSprite = new Texture("gunma_fainted.png");
+       gunmaSprite = new Texture(gameAssets.gunmaSpritePath);
+        this.gunmaFaintedSprite = new Texture(gameAssets.gunmaFaintedSpritePath);
       //  this.happyOnion = new Texture("happyVeggie.png");
         this.sweetRoll = new Texture(gameAssets.sweetRoll);
      //   onionIdleSprite = new Texture("");
