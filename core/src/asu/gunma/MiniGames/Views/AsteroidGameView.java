@@ -260,6 +260,11 @@ public class AsteroidGameView implements Screen
         {
             this.livesDrawer.render();
 
+            buttonFont.setColor(Color.WHITE);
+            buttonFont.draw(batch,"Score: ", Gdx.graphics.getWidth() - 200, Gdx.graphics.getHeight() - 16);
+
+            //buttonFont.draw(batch, gameAssets.getResourceBundle().getString("Score: "), 10, Gdx.graphics.getWidth() - 200);
+
             for (int i = 0; i < controller.getAsteroidList().size(); i++)
             {
                 batch.draw(rocketTexture, controller.getPlayer().getPosition().x,
@@ -315,7 +320,7 @@ public class AsteroidGameView implements Screen
                 System.out.println("Successfully destroyed the asteroid and added a new one to " +
                         "the screen.");
 
-                //controller.increaseScore();
+                controller.increaseScore();
 
                 asteroidWordList.remove(0);
                 asteroidWordList.add(0, controller.getAsteroidList().get(0).getWord().getEngSpelling());
