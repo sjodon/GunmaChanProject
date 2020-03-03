@@ -347,7 +347,6 @@ public class MountainScreen implements Screen {
         frenemy3.dispose();
         frenemy4.dispose();
         frenemy5.dispose();
-        batch.dispose();
         stage.dispose();
     }
 
