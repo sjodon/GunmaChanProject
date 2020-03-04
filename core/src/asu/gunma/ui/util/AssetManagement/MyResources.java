@@ -65,8 +65,6 @@ public class MyResources extends ListResourceBundle {
             {"SoundEffect", "Sound Effect"},
             {"Support", "Support"},
             {"About", "About"},
-            {"YourScore", "Your Score:"},
-            {"Continue", "Continue"},
 
             {"Language", "Language"},
             {"English", "English"},
