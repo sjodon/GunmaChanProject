@@ -1,13 +1,10 @@
 package asu.gunma.ui.screen.game;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -24,9 +21,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.utils.Align;
-import asu.gunma.DatabaseInterface.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+import asu.gunma.DatabaseInterface.DbInterface;
 import asu.gunma.DbContainers.VocabWord;
 import asu.gunma.speech.ActionResolver;
 import asu.gunma.ui.util.AssetManagement.GameAssets;
@@ -145,8 +146,9 @@ public class GameScreen implements Screen {
     Random rand = new Random();
 
     Preferences prefs;
+    int levelNumber;
 
-    public GameScreen(Game game, ActionResolver speechGDX, Music music, DbInterface dbCallback, Screen previous, ArrayList<VocabWord> activeList, Preferences prefs, GameAssets gameAssets) {
+    public GameScreen(Game game, ActionResolver speechGDX, Music music, DbInterface dbCallback, Screen previous, ArrayList<VocabWord> activeList, Preferences prefs, GameAssets gameAssets, int levelNumber) {
         this.game = game;
         this.prefs = prefs;
         this.speechGDX = speechGDX;
@@ -155,6 +157,7 @@ public class GameScreen implements Screen {
         this.gameMusic = music;
         this.activeVList = activeList;
         this.gameAssets = gameAssets;
+        this.levelNumber = levelNumber;
         gameMusic = Gdx.audio.newMusic(Gdx.files.internal(gameAssets.introMusicPath));
         gameMusic.setLooping(false);
         gameMusic.setVolume(masterVolume);
@@ -173,22 +176,23 @@ public class GameScreen implements Screen {
 
         batch = new SpriteBatch();
         // this.onionWithBag = new Texture("FrenemyWithBag.png");
-       gunmaSprite = new Texture("sprite_gunma.png");
-        this.gunmaFaintedSprite = new Texture("gunma_fainted.png");
+       gunmaSprite = new Texture(gameAssets.gunmaSpritePath);
+        this.gunmaFaintedSprite = new Texture(gameAssets.gunmaFaintedSpritePath);
       //  this.happyOnion = new Texture("happyVeggie.png");
         this.sweetRoll = new Texture(gameAssets.sweetRoll);
      //   onionIdleSprite = new Texture("");
 
         background = new Texture(gameAssets.backgroundImagePath);
-        backgroundDrawer = new BackgroundDrawer(this.batch, this.SCREEN_BOTTOM_ADJUST);
+        backgroundDrawer = new BackgroundDrawer(this.batch, this.SCREEN_BOTTOM_ADJUST, gameAssets);
         this.livesDrawer = new LivesDrawer(this.batch);
 
         // Animation initializations
-        this.onionWalkAnimation = new Animator(gameAssets.onionWalkAnimationPath, 4, 2, 0.1f);
+        this.onionWalkAnimation = new Animator(gameAssets.frenemyWalkAnimationPathPerLevel[levelNumber - 1], 4, 2, 0.1f);
         this.gunmaWalkAnimation = new Animator(gameAssets.gunmaWalkAnimation, 8, 1, 0.1f);
         this.onionHungryWalkAnimation = new Animator(gameAssets.onionHungryWalkAnimation, 4, 2, 0.1f);
         this.onionStealAnimation = new Animator(gameAssets.onionStealAnimation, 4, 2, 0.1f);
         this.onionSatisfiedAnimation = new Animator(gameAssets.onionSatisfiedAnimation, 4, 2, 0.1f);
+
         // Game feedback
         this.correctSprite = new Texture(gameAssets.correctSpritePath);
         this.incorrectSprite = new Texture(gameAssets.incorrectSpritePath);
@@ -249,6 +253,7 @@ public class GameScreen implements Screen {
         parameter2.color = Color.BLACK;
 //        font2 = generator.generateFont(parameter2);
         font2 = gameAssets.getFont();
+        font2.setColor(0, 0, 0, 1);
 
         //Alignment and Text Wrapping for Vocab Word
         displayWordLayout = new GlyphLayout();
@@ -316,7 +321,6 @@ public class GameScreen implements Screen {
                 gameMusic.setVolume(masterVolume);
                 gameMusic.play();
                 game.setScreen(new MainMenuScreen(game, speechGDX,  gameMusic, dbCallback,activeVList, prefs, gameAssets));
-                previousScreen.dispose();
                 dispose(); // dispose of current GameScreen
             }
         });
@@ -454,26 +458,24 @@ public class GameScreen implements Screen {
                 this.gameOverWalk(delta);
             }
 
-            if (win) {
-                font2.draw(batch, "You Win!", 450, 380);
-                // batch.draw(supergunma, 70, 10 + this.SCREEN_BOTTOM_ADJUST);
-            } else {
-                font2.draw(batch, "You Lose!", 450, 380);
-                batch.draw(this.gunmaFaintedSprite, 70, 10 + this.SCREEN_BOTTOM_ADJUST);
-                //batch.draw(this.onionWithBag, 100, 10 + this.SCREEN_BOTTOM_ADJUST);
-                gameMusic.dispose();
-                // correctSound.dispose();
-                // incorrectSound.dispose();
-                gameOverSound = Gdx.audio.newMusic(Gdx.files.internal(gameAssets.gameEnd));
-                gameOverSound.setLooping(false);
-                gameOverSound.setVolume(masterVolume);
-                gameOverSound.play();
-                //  evilLaugh = Gdx.audio.newMusic(Gdx.files.internal("enemytakessatchel.mp3"));
-                // evilLaugh.setLooping(false);
-                //  evilLaugh.setVolume(masterVolume);
-                //evilLaugh.play();
-
+            int numStars = 0;
+            if(score >= gameAssets.threeStarRequirement[levelNumber - 1]) {
+                numStars = 3;
+            } else if(score >= gameAssets.twoStarRequirement[levelNumber - 1]) {
+                numStars = 2;
+            } else if(score >= gameAssets.oneStarRequirement[levelNumber - 1]) {
+                numStars = 1;
             }
+            gameAssets.setLevelStars(levelNumber, numStars);
+            addScore(numStars);
+
+            gameMusic.dispose();
+            // correctSound.dispose();
+            // incorrectSound.dispose();
+            gameOverSound = Gdx.audio.newMusic(Gdx.files.internal(gameAssets.gameEnd));
+            gameOverSound.setLooping(false);
+            gameOverSound.setVolume(masterVolume);
+            gameOverSound.play();
 
         }
 
@@ -530,7 +532,7 @@ public class GameScreen implements Screen {
             tmp.flip(true, false);
             batch.draw(tmp, this.enemyPosition, 40 + this.SCREEN_BOTTOM_ADJUST);
             tmp.flip(true, false);
-            this.enemyPosition -= 1.15;
+            this.enemyPosition -= gameAssets.frenemySpeed[levelNumber - 1];
             if (this.enemyPosition < 200) {
                 this.takeDamage();
             }
@@ -652,5 +654,51 @@ public class GameScreen implements Screen {
         Random rand = new Random();
         int randomInt = rand.nextInt(size - 1);
         return randomInt;
+    }
+
+    private void addScore(int numStars) {
+        Table table = new Table();
+        table.setPosition(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
+        Texture stars = new Texture(gameAssets.getStarPath(numStars));
+
+        batch.draw(this.gunmaFaintedSprite, 70, 10 + this.SCREEN_BOTTOM_ADJUST);
+        batch.draw(stars, Gdx.graphics.getWidth()/2 - stars.getWidth()/4, Gdx.graphics.getHeight()/2 + stars.getHeight()/2, stars.getWidth()/2, stars.getHeight()/2);
+        TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
+        textButtonStyle.pressedOffsetX = 1;
+        textButtonStyle.pressedOffsetY = -1;
+        textButtonStyle.font = font2;
+        textButtonStyle.fontColor = Color.BLACK;
+
+        Label.LabelStyle headingStyle = new Label.LabelStyle(font2, Color.BLACK);
+
+        Label heading = new Label(gameAssets.getResourceBundle().getString("YourScore") + " " + score, headingStyle);
+        Skin skin = gameAssets.getColorSkin(gameAssets.color2, "color2");
+        textButtonStyle.up = skin.newDrawable("color2", gameAssets.color2);
+
+        TextButton continueButton = new TextButton(gameAssets.getResourceBundle().getString("Continue"), textButtonStyle);
+
+        heading.setFontScale(2);
+
+
+        continueButton.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                speechGDX.stopRecognition();
+                isPaused = true;
+                gameMusic.dispose();
+                gameMusic = Gdx.audio.newMusic(Gdx.files.internal(gameAssets.introMusicPath));
+                gameMusic.setLooping(false);
+                gameMusic.setVolume(masterVolume);
+                gameMusic.play();
+                game.setScreen(new MainMenuScreen(game, speechGDX,  gameMusic, dbCallback, activeVList, prefs, gameAssets));
+                dispose(); // dispose of current GameScreen
+            }
+        });
+
+        continueButton.pad(15);
+        table.add(heading).padBottom(20);
+        table.row();
+        table.add(continueButton);
+
+        stage.addActor(table);
     }
 }
