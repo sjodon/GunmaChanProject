@@ -28,27 +28,25 @@ public class BackgroundDrawer {
     private double cloudB2Position;
     private double cloudB3Position;
 
-    private GameAssets gameAssets;
-
     private final double CLOUD_X_MAX = 1024;
     private final double CLOUD_Y_MAX = 600;
 
     // This is a final defined in GameScreen
     private int screen_bottom_adjust;
 
-    public BackgroundDrawer(SpriteBatch batch, int screen_bottom_adjust, GameAssets gameAssets) {
+    public BackgroundDrawer(SpriteBatch batch, int screen_bottom_adjust) {
         this.batch = batch;
         this.screen_bottom_adjust = screen_bottom_adjust;
 
-        this.grass = new Texture(gameAssets.grassImagePath);
-        this.mountain = new Texture(gameAssets.mountainImagePath);
-        this.sky = new Texture(gameAssets.skyImagePath);
+        this.grass = new Texture(GameAssets.grassImagePath);
+        this.mountain = new Texture(GameAssets.mountainImagePath);
+        this.sky = new Texture(GameAssets.skyImagePath);
 
-        this.cloudA1 = new Texture(gameAssets.cloud1Path);
-        this.cloudA2 = new Texture(gameAssets.cloud1Path);
-        this.cloudB1 = new Texture(gameAssets.cloud2Path);
-        this.cloudB2 = new Texture(gameAssets.cloud2Path);
-        this.cloudB3 = new Texture(gameAssets.cloud2Path);
+        this.cloudA1 = new Texture(GameAssets.cloud1Path);
+        this.cloudA2 = new Texture(GameAssets.cloud1Path);
+        this.cloudB1 = new Texture(GameAssets.cloud2Path);
+        this.cloudB2 = new Texture(GameAssets.cloud2Path);
+        this.cloudB3 = new Texture(GameAssets.cloud2Path);
 
         this.random = new Random();
         this.grassPosition = 0.0;
