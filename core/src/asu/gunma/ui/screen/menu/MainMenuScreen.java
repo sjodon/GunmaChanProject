@@ -28,7 +28,7 @@ import asu.gunma.DatabaseInterface.DbInterface;
 import asu.gunma.DbContainers.VocabWord;
 import asu.gunma.speech.ActionResolver;
 import asu.gunma.ui.screen.game.FlashcardScreen;
-import asu.gunma.ui.screen.game.GameScreen;
+import asu.gunma.ui.screen.game.MountainScreen;
 import asu.gunma.ui.util.AssetManagement.GameAssets;
 
 public class MainMenuScreen implements Screen {
@@ -109,10 +109,10 @@ public class MainMenuScreen implements Screen {
 
         batch = new SpriteBatch();
 
-        background = new Texture("BG_temp.png");
-        backgroundDrawer = new BackgroundDrawer(this.batch, this.SCREEN_BOTTOM_ADJUST);
-        this.onionWalkAnimation = new Animator("onion_sheet.png", 4, 2, 0.1f);
-        this.gunmaWalkAnimation = new Animator("gunma_sheet.png", 8, 1, 0.1f);
+        background = new Texture(gameAssets.backgroundImagePath);
+        backgroundDrawer = new BackgroundDrawer(this.batch, this.SCREEN_BOTTOM_ADJUST, gameAssets);
+        this.onionWalkAnimation = new Animator(gameAssets.onionWalkAnimationPath, 4, 2, 0.1f);
+        this.gunmaWalkAnimation = new Animator(gameAssets.gunmaWalkAnimationPath, 8, 1, 0.1f);
 
         Gdx.input.setInputProcessor(stage);
 
@@ -185,7 +185,7 @@ public class MainMenuScreen implements Screen {
                 gameMusic.dispose();
                 //play GameFirst music
                 // gameMusic = new Music
-                game.setScreen(new GameScreen(game, speechGDX, gameMusic, dbCallback, game.getScreen(), activeVList, prefs, gameAssets));
+                game.setScreen(new MountainScreen(game, speechGDX, gameMusic, dbCallback, game.getScreen(), activeVList, prefs, gameAssets));
 
             }
         });
