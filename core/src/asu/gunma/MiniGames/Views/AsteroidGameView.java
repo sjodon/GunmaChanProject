@@ -63,7 +63,6 @@ public class AsteroidGameView implements Screen
     // fonts
     private BitmapFont buttonFont;
     private BitmapFont asteroidFont;
-    private ArrayList<BitmapFont> fontList;
 
     FreeTypeFontGenerator generator;
     ArrayList<FreeTypeFontGenerator.FreeTypeFontParameter> parameterList;
@@ -110,10 +109,11 @@ public class AsteroidGameView implements Screen
 
         //fonts
         generator = new FreeTypeFontGenerator(Gdx.files.internal(gameAssets.fontPath));
-        parameterList = new ArrayList<FreeTypeFontGenerator.FreeTypeFontParameter>();
-        parameter2 = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        fontList = new ArrayList<BitmapFont>();
         buttonFont = gameAssets.getFont();
+        buttonFont.setColor(Color.WHITE);
+        asteroidFont = gameAssets.getFont();
+        asteroidFont.setColor(Color.BLACK);
+        asteroidFont.getData().setScale(0.5f);
 
         // pictures
         asteroidTexture = new Texture("circle-xxl.png");
@@ -148,23 +148,7 @@ public class AsteroidGameView implements Screen
         for (int i = 0; i < controller.getAsteroidList().size(); i++)
         {
             asteroidWordList.add(controller.getAsteroidList().get(i).getWord().getEngSpelling());
-            FreeTypeFontGenerator.FreeTypeFontParameter tempParameter =
-                    new FreeTypeFontGenerator.FreeTypeFontParameter();
-            tempParameter.characters = asteroidWordList.get(i);
-            tempParameter.size = 16;
-            tempParameter.color = Color.BLACK;
-            parameterList.add(tempParameter);
-            BitmapFont tempFont = generator.generateFont(parameterList.get(i));
-            fontList.add(tempFont);
-            GlyphLayout tempLayout = new GlyphLayout();
-            tempLayout.setText(fontList.get(i), asteroidWordList.get(i), Color.BLACK,
-                    DEFAULT_ASTEROID_SIZE, Align.center, true);
-            wordLayoutList.add(tempLayout);
         }
-
-        parameter2.size = 30;
-        parameter2.color = Color.WHITE;
-        //buttonFont = generator.generateFont(parameter2);
 
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
         textButtonStyle.pressedOffsetX = 1;
@@ -258,12 +242,10 @@ public class AsteroidGameView implements Screen
         // show the game only if the player still has lives
         if (controller.getNumLives() > 0)
         {
+            // display lives and score
             this.livesDrawer.render();
-
-            buttonFont.setColor(Color.WHITE);
-            buttonFont.draw(batch,"Score: ", Gdx.graphics.getWidth() - 200, Gdx.graphics.getHeight() - 16);
-
-            //buttonFont.draw(batch, gameAssets.getResourceBundle().getString("Score: "), 10, Gdx.graphics.getWidth() - 200);
+            buttonFont.draw(batch,"Score: " + controller.getScore(),
+                    Gdx.graphics.getWidth() - 160, Gdx.graphics.getHeight() - 16);
 
             for (int i = 0; i < controller.getAsteroidList().size(); i++)
             {
@@ -273,10 +255,12 @@ public class AsteroidGameView implements Screen
                 batch.draw(asteroidTexture, controller.getAsteroidList().get(0).getPosition().x,
                         controller.getAsteroidList().get(0).getPosition().y, DEFAULT_ASTEROID_SIZE,
                         DEFAULT_ASTEROID_SIZE);
-                fontList.get(0).draw(batch, wordLayoutList.get(0),
-                        controller.getAsteroidList().get(0).getPosition().x,
+                asteroidFont.draw(batch,
+                        controller.getAsteroidList().get(0).getWord().getEngSpelling(),
+                        controller.getAsteroidList().get(0).getPosition().x + 8,
                         controller.getAsteroidList().get(0).getPosition().y
-                                + 2 * DEFAULT_ASTEROID_SIZE / 3);
+                                + 2 * DEFAULT_ASTEROID_SIZE / 3,
+                        DEFAULT_ASTEROID_SIZE - 16, 1, true);
             }
 
             // continue to show explosion
@@ -296,10 +280,6 @@ public class AsteroidGameView implements Screen
             stage.draw();
         }
 
-        // display score on screen
-        //buttonFont.draw(batch, gameAssets.getResourceBundle().getString("Score: " +
-        //        controller.getScore()), 10, Gdx.graphics.getWidth() - 200);
-
         batch.end();
         // ************************************** END BATCH ****************************************
 
@@ -313,7 +293,6 @@ public class AsteroidGameView implements Screen
         {
             // print statements are for debugging
             System.out.println("Correct!");
-            //System.out.println(controller.increaseScore());
 
             if (controller.destroyAsteroid(spokenWord))
             {
@@ -324,18 +303,6 @@ public class AsteroidGameView implements Screen
 
                 asteroidWordList.remove(0);
                 asteroidWordList.add(0, controller.getAsteroidList().get(0).getWord().getEngSpelling());
-                FreeTypeFontGenerator.FreeTypeFontParameter tempParameter =
-                        new FreeTypeFontGenerator.FreeTypeFontParameter();
-                tempParameter.characters = asteroidWordList.get(0);
-                tempParameter.size = 16;
-                tempParameter.color = Color.BLACK;
-                parameterList.add(0, tempParameter);
-                BitmapFont tempFont = generator.generateFont(parameterList.get(0));
-                fontList.add(0, tempFont);
-                GlyphLayout tempLayout = new GlyphLayout();
-                tempLayout.setText(fontList.get(0), asteroidWordList.get(0), Color.BLACK,
-                        DEFAULT_ASTEROID_SIZE, Align.center, true);
-                wordLayoutList.add(0, tempLayout);
             }
             else
                 System.out.println("Failed to destroy asteroid.");
