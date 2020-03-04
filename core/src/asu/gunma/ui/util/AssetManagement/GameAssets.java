@@ -28,6 +28,10 @@ public class GameAssets extends Month {
     public static String fontPath = "irohamaru-mikami-Regular.ttf";
     public static String introMusicPath = "IntroMusic.mp3";
     public static String titleGunmaPath = "title_gunma.png";
+    public static String threeCorrect = "correct_threeinarow.mp3";
+    public static String sweetDog = "correct_sweetdog.mp3";
+    public static String youCanDoIt = "incorrect_youcandoit.mp3";
+    public static String gameEnd = "enemytakessatchel.mp3";
 
     // Main Menu Screen Assets
 
@@ -49,7 +53,12 @@ public class GameAssets extends Month {
     public static String gunmaWalkAnimationPath = "gunma_sheet.png";
     public static String correctSpritePath = "background/correct.png";
     public static String incorrectSpritePath = "background/incorrect.png";
-
+    //public static String onionWalkAnimation = "onion_sheet.png";
+    public static String gunmaWalkAnimation = "Gunma_with_bag_small.png";
+    public static String onionHungryWalkAnimation = "onion_sheetSweetRoll.png";
+    public static String onionStealAnimation = "onion_sheet.png";
+    public static String onionSatisfiedAnimation = "onion_sheetSmile.png";
+    public static String sweetRoll = "sweetRoll.png";
     // Background Drawer Assets
     public static String cloud1Path = "background/cloud1.png";
     public static String cloud2Path = "background/cloud2.png";
