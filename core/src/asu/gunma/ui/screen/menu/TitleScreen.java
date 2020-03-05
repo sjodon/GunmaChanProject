@@ -124,7 +124,7 @@ public class TitleScreen implements Screen {
         this.placeholderAnimation4 = new Animator(gameAssets.placeholderFrenemyAnimation4Path, 4, 2, 0.1f);
 
         this.onionWalkAnimation = new Animator(gameAssets.onionWalkAnimationPath, 4, 2, 0.1f);
-        this.gunmaWalkAnimation = new Animator(gameAssets.gunmaWalkAnimationPath, 8, 1, 0.1f);
+        this.gunmaWalkAnimation = new Animator(gameAssets.gunmaWalkAnimation, 8, 1, 0.1f);
 
         Gdx.input.setInputProcessor(stage);
 
