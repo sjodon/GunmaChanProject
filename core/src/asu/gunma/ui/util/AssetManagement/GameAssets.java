@@ -61,6 +61,7 @@ public class GameAssets extends Month {
     public static String gunmaWalkAnimationPath = "gunma_sheet.png";
     public static String correctSpritePath = "background/correct.png";
     public static String incorrectSpritePath = "background/incorrect.png";
+    //public static String onionWalkAnimation = "onion_sheet.png";
     public static String gunmaWalkAnimation = "Gunma_with_bag_small.png";
     public static String onionHungryWalkAnimation = "onion_sheetSweetRoll.png";
     public static String onionStealAnimation = "onion_sheet.png";
