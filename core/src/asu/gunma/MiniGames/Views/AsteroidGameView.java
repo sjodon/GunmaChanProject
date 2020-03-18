@@ -81,7 +81,13 @@ public class AsteroidGameView implements Screen
 
     private LivesDrawer livesDrawer;
 
-    private int explosionTimer;
+    // timers
+    private int playerExplosionTimer;
+    private int asteroidExplosionTimer;
+
+    // final asteroid positions
+    private float finalAsteroidPositionX;
+    private float finalAsteroidPositionY;
 
     private Table table;
 
@@ -127,7 +133,8 @@ public class AsteroidGameView implements Screen
         // sounds
         incorrectSound = Gdx.audio.newMusic(Gdx.files.internal("incorrect_ohno.mp3"));
 
-        explosionTimer = 0;
+        playerExplosionTimer = 0;
+        asteroidExplosionTimer = 0;
         isPaused = false;
     }
 
@@ -183,8 +190,8 @@ public class AsteroidGameView implements Screen
 
         // pause mini-game
         pauseButton.addListener(new ClickListener() {
-           public void clicked(InputEvent event, float x, float y)
-           {
+            public void clicked(InputEvent event, float x, float y)
+            {
                 if (isPaused)
                 {
                     try
@@ -203,7 +210,7 @@ public class AsteroidGameView implements Screen
                     speechGDX.stopRecognition();
                     isPaused = true;
                 }
-           }
+            }
         });
 
         Label.LabelStyle youLoseStyle = new Label.LabelStyle(buttonFont, Color.WHITE);
@@ -263,14 +270,23 @@ public class AsteroidGameView implements Screen
                         DEFAULT_ASTEROID_SIZE - 16, 1, true);
             }
 
-            // continue to show explosion
-            if (explosionTimer > 0)
+            // continue to show rocket explosion
+            if (playerExplosionTimer > 0)
             {
                 batch.draw(explosionTexture, controller.getPlayer().getPosition().x,
                         controller.getPlayer().getPosition().y, DEFAULT_EXPLOSION_SIZE,
                         DEFAULT_EXPLOSION_SIZE);
 
-                explosionTimer++;
+                playerExplosionTimer++;
+            }
+
+            // continue to show asteroid explosion
+            if (asteroidExplosionTimer > 0)
+            {
+                batch.draw(explosionTexture, finalAsteroidPositionX, finalAsteroidPositionY,
+                        DEFAULT_EXPLOSION_SIZE, DEFAULT_EXPLOSION_SIZE);
+
+                asteroidExplosionTimer++;
             }
         }
         else
@@ -294,6 +310,9 @@ public class AsteroidGameView implements Screen
             // print statements are for debugging
             System.out.println("Correct!");
 
+            finalAsteroidPositionX = controller.getAsteroidList().get(0).getPosition().x;
+            finalAsteroidPositionY = controller.getAsteroidList().get(0).getPosition().y;
+
             if (controller.destroyAsteroid(spokenWord))
             {
                 System.out.println("Successfully destroyed the asteroid and added a new one to " +
@@ -307,7 +326,7 @@ public class AsteroidGameView implements Screen
             else
                 System.out.println("Failed to destroy asteroid.");
 
-
+            asteroidExplosionTimer++;
         }
         // asteroid has reached rocket
         else if (controller.getAsteroidList().get(0).getPosition().y < 140)
@@ -321,15 +340,19 @@ public class AsteroidGameView implements Screen
             controller.destroyAsteroid(controller.getAsteroidList().get(0).getWord().getEngSpelling());
 
             // initiate rocket explosion
-            explosionTimer++;
+            playerExplosionTimer++;
         }
 
-        if (explosionTimer > 60)
+        if (playerExplosionTimer > 60)
         {
-            explosionTimer = 0;
+            playerExplosionTimer = 0;
         }
-        System.out.println(explosionTimer);
+        System.out.println(playerExplosionTimer);
 
+        if (asteroidExplosionTimer > 60)
+        {
+            asteroidExplosionTimer = 0;
+        }
     }
 
     @Override
