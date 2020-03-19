@@ -27,10 +27,6 @@ public class AsteroidGameModel
     public static final int MIN_LIVES = 1;
     public static final int DEFAULT_NUM_LIVES = 5;
     public static final int MIN_NUM_ASTEROIDS = 0;
-    public static final float DEFAULT_VELOCITY = 1f;
-    public static final float DEFAULT_ASTEROID_DIRECTION = 0f;
-    public static final float DEFAULT_ASTEROID_X_POS = 0f;
-    public static final float DEFAULT_ASTEROID_Y_POS = 0f;
     public static final float DEFAULT_PLAYER_X_POS = MAX_X_POS / 2 - 64;
     public static final float DEFAULT_PLAYER_Y_POS = 8f;
     public static final float DEFAULT_PLAYER_DIRECTION = 0f;
