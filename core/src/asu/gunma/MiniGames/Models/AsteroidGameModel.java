@@ -11,6 +11,8 @@ public class AsteroidGameModel
     private int level; // current level that the player is on (levels 1 - 5)
     private int score;
     private int numLives;
+    private int numAddWordsPerLevel;
+    private int maxLevel;
     private ArrayList<VocabWord> activeVocabList; // list of words that may be included in the mini-game
     private ArrayList<AsteroidModel> asteroidList;
     private AsteroidPlayerModel player;
@@ -26,7 +28,6 @@ public class AsteroidGameModel
     public static final int MAX_LIVES = 3;
     public static final int MIN_LIVES = 1;
     public static final int DEFAULT_NUM_LIVES = 5;
-    public static final int MIN_NUM_ASTEROIDS = 0;
     public static final float DEFAULT_PLAYER_X_POS = MAX_X_POS / 2 - 64;
     public static final float DEFAULT_PLAYER_Y_POS = 8f;
     public static final float DEFAULT_PLAYER_DIRECTION = 0f;
@@ -36,12 +37,15 @@ public class AsteroidGameModel
     public AsteroidGameModel(int level, int score, int numLives,
                              ArrayList<VocabWord> activeVocabList)
     {
-        setLevel(level);
+        // order is very important
         setScore(score);
         setNumLives(numLives);
         setActiveVocabList(activeVocabList);
-        setAsteroidList();
         setPlayer(null);
+        setMaxLevel();
+        setNumAddWordsPerLevel();
+        setLevel(level);
+        setAsteroidList();
     }
 
     // get methods
@@ -59,6 +63,10 @@ public class AsteroidGameModel
     {
         return level;
     }
+
+    public int getNumAddWordsPerLevel() { return numAddWordsPerLevel; }
+
+    public int getMaxLevel() { return maxLevel; }
 
     public ArrayList<VocabWord> getActiveVocabList()
     {
@@ -94,10 +102,57 @@ public class AsteroidGameModel
 
     public void setLevel(int level)
     {
-        if (level >= MIN_LEVEL && level <= MAX_LEVEL)
+        if (level >= MIN_LEVEL && level <= maxLevel)
             this.level = level;
         else
             this.level = DEFAULT_LEVEL;
+    }
+
+    private void setNumAddWordsPerLevel()
+    {
+        if (maxLevel < MAX_LEVEL)
+        {
+            numAddWordsPerLevel = 0;
+        }
+        else
+        {
+            int vocabListSize = activeVocabList.size();
+
+            for (int i = 0; i < maxLevel; i++)
+            {
+                vocabListSize -= (i + 1);
+            }
+
+            numAddWordsPerLevel = vocabListSize / maxLevel;
+        }
+    }
+
+    private void setMaxLevel()
+    {
+        int minNumVocabWords = 0;
+
+        for (int i = 0; i < MAX_LEVEL; i++)
+        {
+            minNumVocabWords += i;
+        }
+
+        if (activeVocabList.size() >= minNumVocabWords)
+        {
+            maxLevel = MAX_LEVEL;
+        }
+        else
+        {
+            int countWordsPerLevel = 0;
+            int countLevels = 0;
+
+            while (countWordsPerLevel <= activeVocabList.size())
+            {
+                countWordsPerLevel += countLevels;
+                countLevels++;
+            }
+
+            maxLevel = countLevels;
+        }
     }
 
     public void setActiveVocabList(ArrayList<VocabWord> activeVocabList)
@@ -186,5 +241,12 @@ public class AsteroidGameModel
 
         // asteroid list is full
         return false;
+    }
+
+    // proceed to next level
+    public boolean nextLevel()
+    {
+        setLevel(level++);
+        return true;
     }
 }
