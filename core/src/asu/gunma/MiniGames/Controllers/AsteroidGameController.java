@@ -41,6 +41,10 @@ public class AsteroidGameController
         return model.getNumLives();
     }
 
+    public int getNumAddWordsPerLevel() { return model.getNumAddWordsPerLevel(); }
+
+    public int getMaxLevel() { return model.getMaxLevel(); }
+
     public ArrayList<VocabWord> getActiveVocabList()
     {
         return model.getActiveVocabList();
