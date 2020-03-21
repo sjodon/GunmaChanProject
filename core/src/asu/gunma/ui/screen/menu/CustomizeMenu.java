@@ -32,6 +32,7 @@ import com.badlogic.gdx.utils.Align;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import asu.gunma.DatabaseInterface.DbInterface;
@@ -227,6 +228,7 @@ public class CustomizeMenu implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         Texture border = new Texture(gameAssets.inactiveBorder);
+        Texture questionMark = new Texture(gameAssets.questionBorder);
 
         int padding = 10;
 
@@ -292,24 +294,31 @@ public class CustomizeMenu implements Screen {
     }
 
     private ImageButton createButton(String path) {
-        Texture border = new Texture(isActive(path) ? gameAssets.activeBorder : gameAssets.inactiveBorder);
-        Drawable drawable = new TextureRegionDrawable(new TextureRegion(border));
-        ImageButton imageButton = new ImageButton(drawable);
-        imageButton.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                System.out.println(path);
-                gameAssets.gunmaWalkAnimationActive = path;
+        ImageButton imageButton;
+        if(Arrays.asList(gameAssets.availableGunmaAnimations).contains(path)) {
+            Texture border = new Texture(isActive(path) ? gameAssets.activeBorder : gameAssets.inactiveBorder);
+            Drawable drawable = new TextureRegionDrawable(new TextureRegion(border));
+            imageButton = new ImageButton(drawable);
+            imageButton.addListener(new ClickListener() {
+                public void clicked(InputEvent event, float x, float y) {
+                    System.out.println(path);
+                    gameAssets.gunmaWalkAnimationActive = path;
 
-                speechGDX.stopRecognition();
-                gameMusic.dispose();
-                gameMusic = Gdx.audio.newMusic(Gdx.files.internal(gameAssets.introMusicPath));
-                gameMusic.setLooping(false);
-                gameMusic.setVolume(masterVolume);
-                gameMusic.play();
-                game.setScreen(new CustomizeMenu(game, speechGDX,  gameMusic, dbInterface, previousScreen, activeVocabList, prefs, gameAssets));
-                dispose();
-            }
-        });
+                    speechGDX.stopRecognition();
+                    gameMusic.dispose();
+                    gameMusic = Gdx.audio.newMusic(Gdx.files.internal(gameAssets.introMusicPath));
+                    gameMusic.setLooping(false);
+                    gameMusic.setVolume(masterVolume);
+                    gameMusic.play();
+                    game.setScreen(new CustomizeMenu(game, speechGDX, gameMusic, dbInterface, previousScreen, activeVocabList, prefs, gameAssets));
+                    dispose();
+                }
+            });
+        } else {
+            Texture border = new Texture(gameAssets.questionBorder);
+            Drawable drawable = new TextureRegionDrawable(new TextureRegion(border));
+            imageButton = new ImageButton(drawable);
+        }
         return imageButton;
     }
 
