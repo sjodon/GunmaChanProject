@@ -58,7 +58,12 @@ public class GameAssets extends Month {
     public static String gunmaRainbowBagAnimation = "Gunma_with_bag_small_rainbow2.png";
     public static String gunmaBowTieAnimation = "Gunma_with_bag_small_bow_tie.png";
     public static String gunmaGreenBagAnimation = "Gunma_with_bag_small_green_bag.png";
-    public static String gunmaGreenHatAnimation = "Gunma_with_bag_small_color_hat.png";
+    public static String gunmaBlueHatAnimation = "Gunma_with_bag_small_blue_hat.png";
+    public static String gunmaPinkHatAnimation = "Gunma_with_bag_small_pink_hat.png";
+    public static String gunmaRedHatAnimation = "Gunma_with_bag_small_red_hat.png";
+    public static String gunmaRainbowHatAnimation = "Gunma_with_bag_small_rainbow_hat.png";
+    public static String activeBorder = "brown_border.png";
+    public static String inactiveBorder = "light_brown_border.png";
 
     // Game Screen Assets
     public static String gunmaSpritePath = "sprite_gunma.png";
@@ -68,7 +73,7 @@ public class GameAssets extends Month {
     public static String gunmaWalkAnimationPath = "gunma_sheet.png";
     public static String correctSpritePath = "background/correct.png";
     public static String incorrectSpritePath = "background/incorrect.png";
-    public static String gunmaWalkAnimation = gunmaWalkAnimationMain;
+    public static String gunmaWalkAnimationActive = gunmaWalkAnimationMain;
     public static String onionHungryWalkAnimation = "onion_sheetSweetRoll.png";
     public static String onionStealAnimation = "onion_sheet.png";
     public static String onionSatisfiedAnimation = "onion_sheetSmile.png";

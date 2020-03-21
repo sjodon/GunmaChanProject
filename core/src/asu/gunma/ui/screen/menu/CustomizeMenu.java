@@ -13,17 +13,21 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 
 import java.io.File;
@@ -49,7 +53,7 @@ public class CustomizeMenu implements Screen {
     private GameAssets gameAssets;
 
     private final int SCREEN_BOTTOM_ADJUST = 35;
-    private Animator gunmaWalkAnimation, gunmaGreenBagAnimation, gunmaBowTieAnimation, gunmaGreenHatAnimation, gunmaRainbowBagAnimation;
+    private Animator gunmaWalkAnimation, gunmaGreenBagAnimation, gunmaBowTieAnimation, gunmaRainbowHatAnimation, gunmaRainbowBagAnimation, gunmaBlueHatAnimation, gunmaPinkHatAnimation, gunmaRedHatAnimation;
 
     // Using these are unnecessary but will make our lives easier.
     private Stage stage;
@@ -143,27 +147,49 @@ public class CustomizeMenu implements Screen {
 
         table.setPosition(155, 275);
 
-        this.gunmaWalkAnimation = new Animator(gameAssets.gunmaWalkAnimation, 8, 1, 0.1f);
+        int padding = 10;
+        Texture border = new Texture(gameAssets.inactiveBorder);
+
+        this.gunmaWalkAnimation = new Animator(gameAssets.gunmaWalkAnimationMain, 8, 1, 0.1f);
+        ImageButton gunmaWalkButton = createButton(gameAssets.gunmaWalkAnimationMain);
+        gunmaWalkButton.setPosition(Gdx.graphics.getWidth()/2 - 2*border.getWidth() - 3*padding, Gdx.graphics.getHeight()/2 + padding);
+        stage.addActor(gunmaWalkButton);
 
         this.gunmaGreenBagAnimation = new Animator(gameAssets.gunmaGreenBagAnimation, 8, 1, 0.1f);
+        ImageButton gunmaGreenBagButton = createButton(gameAssets.gunmaGreenBagAnimation);
+        gunmaGreenBagButton.setPosition(Gdx.graphics.getWidth()/2 - border.getWidth() - padding, Gdx.graphics.getHeight()/2 + padding);
+        stage.addActor(gunmaGreenBagButton);
+
         this.gunmaBowTieAnimation = new Animator(gameAssets.gunmaBowTieAnimation, 8, 1, 0.1f);
-        this.gunmaGreenHatAnimation = new Animator(gameAssets.gunmaGreenHatAnimation, 8, 1, 0.1f);
+        ImageButton gunmaBowTieButton = createButton(gameAssets.gunmaBowTieAnimation);
+        gunmaBowTieButton.setPosition(Gdx.graphics.getWidth()/2 + padding, Gdx.graphics.getHeight()/2 + padding);
+        stage.addActor(gunmaBowTieButton);
+
+        this.gunmaBlueHatAnimation = new Animator(gameAssets.gunmaBlueHatAnimation, 8, 1, 0.1f);
+        ImageButton gunmaBlueHatButton = createButton(gameAssets.gunmaBlueHatAnimation);
+        gunmaBlueHatButton.setPosition(Gdx.graphics.getWidth()/2 + border.getWidth() + 3*padding, Gdx.graphics.getHeight()/2 + padding);
+        stage.addActor(gunmaBlueHatButton);
+
+        this.gunmaPinkHatAnimation = new Animator(gameAssets.gunmaPinkHatAnimation, 8, 1, 0.1f);
+        ImageButton gunmaPinkHatButton = createButton(gameAssets.gunmaPinkHatAnimation);
+        gunmaPinkHatButton.setPosition(Gdx.graphics.getWidth()/2 - 2*border.getWidth() - 3*padding, Gdx.graphics.getHeight()/2 - border.getHeight() - padding);
+        stage.addActor(gunmaPinkHatButton);
+
+        this.gunmaRedHatAnimation = new Animator(gameAssets.gunmaRedHatAnimation, 8, 1, 0.1f);
+        ImageButton gunmaRedHatButton = createButton(gameAssets.gunmaRedHatAnimation);
+        gunmaRedHatButton.setPosition(Gdx.graphics.getWidth()/2 - border.getWidth() - padding, Gdx.graphics.getHeight()/2 - border.getHeight() - padding);
+        stage.addActor(gunmaRedHatButton);
+
         this.gunmaRainbowBagAnimation = new Animator(gameAssets.gunmaRainbowBagAnimation, 8, 1, 0.1f);
+        ImageButton gunmaRainbowBagButton = createButton(gameAssets.gunmaRainbowBagAnimation);
+        gunmaRainbowBagButton.setPosition(Gdx.graphics.getWidth()/2 + padding, Gdx.graphics.getHeight()/2 - border.getHeight() - padding);
+        stage.addActor(gunmaRainbowBagButton);
 
-//        font = new BitmapFont(Gdx.files.internal("font-export.fnt")); // needs a font file still
-//        font.setColor(Color.BLACK); // Does nothing at the moment
-//        font.getData().setScale(2);
-//        font.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        this.gunmaRainbowHatAnimation = new Animator(gameAssets.gunmaRainbowHatAnimation, 8, 1, 0.1f);
+        ImageButton gunmaRainbowHatButton = createButton(gameAssets.gunmaRainbowHatAnimation);
+        gunmaRainbowHatButton.setPosition(Gdx.graphics.getWidth()/2 + border.getWidth() + 3*padding, Gdx.graphics.getHeight()/2 - border.getHeight() - padding);
+        stage.addActor(gunmaRainbowHatButton);
 
-        //font file
-//        final String FONT_PATH = "irohamaru-mikami-Regular.ttf";
-//        generator = new FreeTypeFontGenerator(Gdx.files.internal(FONT_PATH));
-
-        //font for vocab word
-//        parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-
-//        parameter.size = 15;
-//        parameter.color = Color.BLACK;
         font = gameAssets.getFont();
 
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
@@ -194,54 +220,39 @@ public class CustomizeMenu implements Screen {
         table.debug();
 
         stage.addActor(backButton);
-
-//        table.setTransform(true);
-//        table.setScale(0.5f);
-//
-//        stage.addActor(table);
-//        stage.addActor(settingsButton);
-//        stage.addActor(backButton);
     }
 
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        Texture border = new Texture("brown_border.png");
+        Texture border = new Texture(gameAssets.inactiveBorder);
 
         int padding = 10;
 
         // SpriteBatch is resource intensive, try to use it for only brief moments
         batch.begin();
 
-        batch.draw(border, Gdx.graphics.getWidth()/2 - 2*border.getWidth() - 3*padding, Gdx.graphics.getHeight()/2 + padding);
         batch.draw(this.gunmaWalkAnimation.getCurrentFrame(delta), Gdx.graphics.getWidth()/2 - 2*border.getWidth() - 3*padding, Gdx.graphics.getHeight()/2 + padding);
 
-        batch.draw(border, Gdx.graphics.getWidth()/2 - border.getWidth() - padding, Gdx.graphics.getHeight()/2 + padding);
         batch.draw(this.gunmaGreenBagAnimation.getCurrentFrame(delta), Gdx.graphics.getWidth()/2 - border.getWidth() - padding, Gdx.graphics.getHeight()/2 + padding);
 
-        batch.draw(border, Gdx.graphics.getWidth()/2 + padding, Gdx.graphics.getHeight()/2 + padding);
         batch.draw(this.gunmaBowTieAnimation.getCurrentFrame(delta), Gdx.graphics.getWidth()/2 + padding, Gdx.graphics.getHeight()/2 + padding);
 
-        batch.draw(border, Gdx.graphics.getWidth()/2 + border.getWidth() + 3*padding, Gdx.graphics.getHeight()/2 + padding);
-        batch.draw(this.gunmaGreenHatAnimation.getCurrentFrame(delta), Gdx.graphics.getWidth()/2 + border.getWidth() + 3*padding, Gdx.graphics.getHeight()/2 + padding);
+        batch.draw(this.gunmaBlueHatAnimation.getCurrentFrame(delta), Gdx.graphics.getWidth()/2 + border.getWidth() + 3*padding, Gdx.graphics.getHeight()/2 + padding);
 
 
 
-        batch.draw(border, Gdx.graphics.getWidth()/2 - 2*border.getWidth() - 3*padding, Gdx.graphics.getHeight()/2 - border.getHeight() - padding);
-        batch.draw(this.gunmaRainbowBagAnimation.getCurrentFrame(delta), Gdx.graphics.getWidth()/2 - 2*border.getWidth() - 3*padding, Gdx.graphics.getHeight()/2 - border.getHeight() - padding);
+        batch.draw(this.gunmaPinkHatAnimation.getCurrentFrame(delta), Gdx.graphics.getWidth()/2 - 2*border.getWidth() - 3*padding, Gdx.graphics.getHeight()/2 - border.getHeight() - padding);
 
-        batch.draw(border, Gdx.graphics.getWidth()/2 - border.getWidth() - padding, Gdx.graphics.getHeight()/2 - border.getHeight() - padding);
+        batch.draw(this.gunmaRedHatAnimation.getCurrentFrame(delta), Gdx.graphics.getWidth()/2 - border.getWidth() - padding, Gdx.graphics.getHeight()/2 - border.getHeight() - padding);
 
-        batch.draw(border, Gdx.graphics.getWidth()/2 + padding, Gdx.graphics.getHeight()/2 - border.getHeight() - padding);
+        batch.draw(this.gunmaRainbowBagAnimation.getCurrentFrame(delta), Gdx.graphics.getWidth()/2 + padding, Gdx.graphics.getHeight()/2 - border.getHeight() - padding);
 
-        batch.draw(border, Gdx.graphics.getWidth()/2 + border.getWidth() + 3*padding, Gdx.graphics.getHeight()/2 - border.getHeight() - padding);
-
+        batch.draw(this.gunmaRainbowHatAnimation.getCurrentFrame(delta), Gdx.graphics.getWidth()/2 + border.getWidth() + 3*padding, Gdx.graphics.getHeight()/2 - border.getHeight() - padding);
 
 
-//        batch.draw(border, Gdx.graphics.getWidth()/2 - 2*border.getWidth() - 2*padding, Gdx.graphics.getHeight()/2 + 2*padding);
-//        batch.draw(border, Gdx.graphics.getWidth()/2 - 2*border.getWidth() - 2*padding, Gdx.graphics.getHeight()/2 - 2*border.getHeight() - 2*padding);
-//        batch.draw(border, Gdx.graphics.getWidth()/2 + 2*padding, Gdx.graphics.getHeight()/2 - 2*border.getHeight() - 2*padding);
+
         batch.end();
 
         stage.act(delta); // optional to pass delta value
@@ -278,5 +289,31 @@ public class CustomizeMenu implements Screen {
         texture.dispose();
         batch.dispose();
         stage.dispose();
+    }
+
+    private ImageButton createButton(String path) {
+        Texture border = new Texture(isActive(path) ? gameAssets.activeBorder : gameAssets.inactiveBorder);
+        Drawable drawable = new TextureRegionDrawable(new TextureRegion(border));
+        ImageButton imageButton = new ImageButton(drawable);
+        imageButton.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                System.out.println(path);
+                gameAssets.gunmaWalkAnimationActive = path;
+
+                speechGDX.stopRecognition();
+                gameMusic.dispose();
+                gameMusic = Gdx.audio.newMusic(Gdx.files.internal(gameAssets.introMusicPath));
+                gameMusic.setLooping(false);
+                gameMusic.setVolume(masterVolume);
+                gameMusic.play();
+                game.setScreen(new CustomizeMenu(game, speechGDX,  gameMusic, dbInterface, previousScreen, activeVocabList, prefs, gameAssets));
+                dispose();
+            }
+        });
+        return imageButton;
+    }
+
+    private boolean isActive(String path) {
+        return path.equals(gameAssets.gunmaWalkAnimationActive);
     }
 }

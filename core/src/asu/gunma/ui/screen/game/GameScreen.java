@@ -188,7 +188,7 @@ public class GameScreen implements Screen {
 
         // Animation initializations
         this.onionWalkAnimation = new Animator(gameAssets.frenemyWalkAnimationPathPerLevel[levelNumber - 1], 4, 2, 0.1f);
-        this.gunmaWalkAnimation = new Animator(gameAssets.gunmaWalkAnimation, 8, 1, 0.1f);
+        this.gunmaWalkAnimation = new Animator(gameAssets.gunmaWalkAnimationActive, 8, 1, 0.1f);
         this.onionHungryWalkAnimation = new Animator(gameAssets.onionHungryWalkAnimation, 4, 2, 0.1f);
         this.onionStealAnimation = new Animator(gameAssets.onionStealAnimation, 4, 2, 0.1f);
         this.onionSatisfiedAnimation = new Animator(gameAssets.onionSatisfiedAnimation, 4, 2, 0.1f);
