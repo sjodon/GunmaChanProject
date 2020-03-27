@@ -22,6 +22,13 @@ import com.badlogic.gdx.audio.Music;
 
 import java.util.ArrayList;
 
+import asu.gunma.MiniGames.Controllers.AsteroidGameController;
+import asu.gunma.MiniGames.Controllers.StartWordScrambleGameController;
+import asu.gunma.MiniGames.Controllers.WordScrambleGameController;
+import asu.gunma.MiniGames.Models.AsteroidGameModel;
+import asu.gunma.MiniGames.Models.WordScrambleGameModel;
+import asu.gunma.MiniGames.Views.AsteroidGameView;
+import asu.gunma.MiniGames.Views.WordScrambleGameView;
 import asu.gunma.ui.util.Animator;
 import asu.gunma.ui.util.BackgroundDrawer;
 import asu.gunma.DatabaseInterface.DbInterface;
@@ -139,6 +146,13 @@ public class MainMenuScreen implements Screen {
         buttonGameSecond = new TextButton(gameAssets.getResourceBundle().getString("Asteroids"), textButtonStyle);
         buttonGameThird = new TextButton(gameAssets.getResourceBundle().getString("WordScramble"), textButtonStyle);
         buttonSettings = new TextButton(gameAssets.getResourceBundle().getString("Settings"), textButtonStyle);
+      //   IMPORTANT: needs localization support
+        buttonTutorial = new TextButton(gameAssets.getResourceBundle().getString("VideoTutorials"), textButtonStyle);
+        buttonFlashcard = new TextButton(gameAssets.getResourceBundle().getString("Flashcards"), textButtonStyle);
+        buttonGameFirst = new TextButton(gameAssets.getResourceBundle().getString("GameName"), textButtonStyle);
+        buttonGameSecond = new TextButton(gameAssets.getResourceBundle().getString("Asteroids"), textButtonStyle);
+        buttonGameThird = new TextButton(gameAssets.getResourceBundle().getString("WordScramble"), textButtonStyle);
+        buttonSettings = new TextButton(gameAssets.getResourceBundle().getString("Settings"), textButtonStyle);
 
         // Actually, should probably custom class this process
         buttonTutorial.pad(15);
@@ -187,7 +201,12 @@ public class MainMenuScreen implements Screen {
         buttonGameSecond.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // TODO: link to asteroids game
+                AsteroidGameModel asteroidGameModel = new AsteroidGameModel(1, 0, 5, activeVList);
+                AsteroidGameController asteroidController = new AsteroidGameController(asteroidGameModel);
+                AsteroidGameView asteroidView = new AsteroidGameView(game, speechGDX, gameMusic,
+                        dbCallback, game.getScreen(), activeVList, prefs, gameAssets,
+                        asteroidController);
+                game.setScreen(asteroidView);
 //                gameMusic.pause();
 //                gameMusic.dispose();
 //                game.setScreen(new GameScreen(game, speechGDX, gameMusic, dbCallback, game.getScreen(), activeVList, prefs, gameAssets));
@@ -197,7 +216,11 @@ public class MainMenuScreen implements Screen {
         buttonGameThird.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // TODO: link to word scramble game
+                //StartWordScrambleGameController startWordScrambleGameController = new StartWordScrambleGameController(game, speechGDX, gameMusic, prefs, activeVList);
+                WordScrambleGameModel wordScrambleModel = new WordScrambleGameModel(0, activeVList);
+                WordScrambleGameController wordScrambleController = new WordScrambleGameController(wordScrambleModel);
+                WordScrambleGameView wordScrambleView = new WordScrambleGameView(game, speechGDX, gameMusic, game.getScreen(), prefs, wordScrambleController);
+                game.setScreen(wordScrambleView);
 //                gameMusic.pause();
 //                gameMusic.dispose();
 //                game.setScreen(new GameScreen(game, speechGDX, gameMusic, dbCallback, game.getScreen(), activeVList, prefs, gameAssets));
