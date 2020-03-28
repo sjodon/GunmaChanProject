@@ -67,6 +67,7 @@ public class MyResources extends ListResourceBundle {
             {"About", "About"},
             {"YourScore", "Your Score:"},
             {"Continue", "Continue"},
+            {"Leaderboard", "Leaderboard"},
 
             {"Language", "Language"},
             {"English", "English"},

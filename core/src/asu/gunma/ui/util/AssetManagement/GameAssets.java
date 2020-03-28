@@ -174,6 +174,37 @@ public class GameAssets extends Month {
     public static String cloud2Path = "background/cloud2.png";
     public static String skyImagePath = "background/skyx2.png";
 
+    // High scores
+    public Score[][] scores = new Score[10][5];
+    public String userNickname = "anonymous";
+
+    public int getLeaderboardScore(int place, int levelNumber) {
+        Score score = scores[place - 1][levelNumber - 1];
+        if(score == null) {
+            return 0;
+        }
+        return score.value;
+    }
+
+    public String getLeaderboardNickname(int place, int levelNumber) {
+        Score score = scores[place - 1][levelNumber - 1];
+        if(score == null) {
+            return "---";
+        }
+        return score.nickname;
+    }
+
+    public void saveUserScore(int score, String nickname, int levelNumber) {
+        // TODO: save user score to cloud
+
+        for(int i = 0; i < 10; i ++) {
+            if(scores[i][levelNumber - 1] == null || score > scores[i][levelNumber - 1].value) {
+                scores[i][levelNumber - 1] = new Score(score, nickname);
+                break;
+            }
+        }
+    }
+
     public static Skin getColorSkin(Color color, String name) {
         Skin skin = new Skin();
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);

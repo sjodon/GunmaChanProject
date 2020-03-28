@@ -207,7 +207,7 @@ public class GameScreen implements Screen {
         this.gameOverPos = Gdx.graphics.getWidth();
         this.satisfiedOnion = Gdx.graphics.getWidth();
 
-        this.lives = 1;
+        this.lives = 5;
         this.isGameOver = false;
         this.willDisappear = false;
 
@@ -470,6 +470,8 @@ public class GameScreen implements Screen {
                 numStars = 1;
             }
             gameAssets.setLevelStars(levelNumber, numStars);
+            gameAssets.saveUserScore(score, gameAssets.userNickname, levelNumber);
+
             addScore(numStars, delta);
 
             gameMusic.dispose();
@@ -535,7 +537,7 @@ public class GameScreen implements Screen {
             tmp.flip(true, false);
             batch.draw(tmp, this.enemyPosition, 40 + this.SCREEN_BOTTOM_ADJUST);
             tmp.flip(true, false);
-            this.enemyPosition -= gameAssets.frenemySpeed[levelNumber - 1] + 5;
+            this.enemyPosition -= gameAssets.frenemySpeed[levelNumber - 1];
             if (this.enemyPosition < 200) {
                 this.takeDamage();
             }

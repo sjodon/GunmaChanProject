@@ -69,7 +69,7 @@ public class MainMenuScreen implements Screen {
         This is based on the Project Proposal, I'd like to change this
         before the final release.
      */
-    private TextButton buttonTutorial, buttonFlashcard, buttonGameFirst, buttonGameSecond, buttonGameThird, buttonSettings;
+    private TextButton buttonTutorial, buttonFlashcard, buttonGameFirst, buttonGameSecond, buttonGameThird, buttonLeaderboard, buttonSettings;
 
     private SpriteBatch batch;
     private Animator onionWalkAnimation;
@@ -173,6 +173,7 @@ public class MainMenuScreen implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 testInt++;
                 System.out.println(testInt);
+                // TODO: add tutorial screen
             }
         });
         buttonFlashcard.addListener(new ClickListener() {
