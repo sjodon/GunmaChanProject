@@ -19,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Timer;
 
 import java.awt.Font;
 import java.util.ArrayList;
@@ -197,6 +198,20 @@ public class LeaderboardScreen implements Screen {
 
         stage.act(delta); // optional to pass delta value
         stage.draw();
+
+        Timer.schedule(new Timer.Task(){
+            @Override
+            public void run() {
+                speechGDX.stopRecognition();
+                gameMusic.dispose();
+                gameMusic = Gdx.audio.newMusic(Gdx.files.internal(gameAssets.introMusicPath));
+                gameMusic.setLooping(false);
+                gameMusic.setVolume(masterVolume);
+                gameMusic.play();
+                game.setScreen(new MainMenuScreen(game, speechGDX, gameMusic, dbCallback, activeVList, prefs, gameAssets));
+                dispose(); // dispose of current GameScreen
+            }
+        }, 3);
 
     }
 

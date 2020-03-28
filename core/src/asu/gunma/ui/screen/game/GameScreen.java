@@ -33,6 +33,7 @@ import java.util.Random;
 import asu.gunma.DatabaseInterface.DbInterface;
 import asu.gunma.DbContainers.VocabWord;
 import asu.gunma.speech.ActionResolver;
+import asu.gunma.ui.screen.menu.LeaderboardScreen;
 import asu.gunma.ui.util.AssetManagement.GameAssets;
 import asu.gunma.ui.screen.menu.MainMenuScreen;
 import asu.gunma.ui.util.Animator;
@@ -207,7 +208,7 @@ public class GameScreen implements Screen {
         this.gameOverPos = Gdx.graphics.getWidth();
         this.satisfiedOnion = Gdx.graphics.getWidth();
 
-        this.lives = 5;
+        this.lives = 1;
         this.isGameOver = false;
         this.willDisappear = false;
 
@@ -537,7 +538,7 @@ public class GameScreen implements Screen {
             tmp.flip(true, false);
             batch.draw(tmp, this.enemyPosition, 40 + this.SCREEN_BOTTOM_ADJUST);
             tmp.flip(true, false);
-            this.enemyPosition -= gameAssets.frenemySpeed[levelNumber - 1];
+            this.enemyPosition -= gameAssets.frenemySpeed[levelNumber - 1] + 5;
             if (this.enemyPosition < 200) {
                 this.takeDamage();
             }
@@ -736,7 +737,7 @@ public class GameScreen implements Screen {
                 gameMusic.setLooping(false);
                 gameMusic.setVolume(masterVolume);
                 gameMusic.play();
-                game.setScreen(new MainMenuScreen(game, speechGDX, gameMusic, dbCallback, activeVList, prefs, gameAssets));
+                game.setScreen(new LeaderboardScreen(game, speechGDX, gameMusic, dbCallback, activeVList, prefs, gameAssets, levelNumber));
                 dispose(); // dispose of current GameScreen
             }
         }, 3);
