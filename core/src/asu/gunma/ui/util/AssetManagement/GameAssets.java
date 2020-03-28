@@ -64,8 +64,9 @@ public class GameAssets extends Month {
     public static String gunmaRainbowHatAnimation = "Gunma_with_bag_small_rainbow_hat.png";
     public static String activeBorder = "brown_border.png";
     public static String inactiveBorder = "light_brown_border.png";
-    public static String questionMark = "question_mark.png";
+    public static String explosionPath = "explosion.png";
     public static String questionBorder = "question_border.png";
+    public static String[] allGunmaAnimations = {gunmaWalkAnimationMain, gunmaGreenBagAnimation, gunmaBowTieAnimation, gunmaBlueHatAnimation, gunmaPinkHatAnimation, gunmaRedHatAnimation, gunmaRainbowBagAnimation, gunmaRainbowHatAnimation};
     public static String[] availableGunmaAnimations = {gunmaWalkAnimationMain};
 
     // Game Screen Assets

@@ -16,14 +16,17 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Timer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -204,7 +207,7 @@ public class GameScreen implements Screen {
         this.gameOverPos = Gdx.graphics.getWidth();
         this.satisfiedOnion = Gdx.graphics.getWidth();
 
-        this.lives = 5;
+        this.lives = 1;
         this.isGameOver = false;
         this.willDisappear = false;
 
@@ -467,7 +470,7 @@ public class GameScreen implements Screen {
                 numStars = 1;
             }
             gameAssets.setLevelStars(levelNumber, numStars);
-            addScore(numStars);
+            addScore(numStars, delta);
 
             gameMusic.dispose();
             // correctSound.dispose();
@@ -532,7 +535,7 @@ public class GameScreen implements Screen {
             tmp.flip(true, false);
             batch.draw(tmp, this.enemyPosition, 40 + this.SCREEN_BOTTOM_ADJUST);
             tmp.flip(true, false);
-            this.enemyPosition -= gameAssets.frenemySpeed[levelNumber - 1];
+            this.enemyPosition -= gameAssets.frenemySpeed[levelNumber - 1] + 5;
             if (this.enemyPosition < 200) {
                 this.takeDamage();
             }
@@ -656,13 +659,22 @@ public class GameScreen implements Screen {
         return randomInt;
     }
 
-    private void addScore(int numStars) {
+    private void addScore(int numStars, float delta) {
         Table table = new Table();
         table.setPosition(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
         Texture stars = new Texture(gameAssets.getStarPath(numStars));
 
+        if(numStars == 3 && !Arrays.asList(gameAssets.availableGunmaAnimations).contains(gameAssets.allGunmaAnimations[levelNumber])) {
+            Texture explosion = new Texture(gameAssets.explosionPath);
+            Animator reward = new Animator(gameAssets.allGunmaAnimations[levelNumber], 8, 1, 0.1f);
+            Texture border = new Texture(gameAssets.activeBorder);
+
+            batch.draw(explosion, Gdx.graphics.getWidth() / 2 - explosion.getWidth() / 8, Gdx.graphics.getHeight() / 2 - explosion.getHeight() / 4 - 20, explosion.getWidth() / 4, explosion.getHeight() / 4);
+            batch.draw(reward.getCurrentFrame(delta * 5), Gdx.graphics.getWidth() / 2 - border.getWidth() / 2, Gdx.graphics.getHeight() / 2 - explosion.getHeight() / 6 - 20);
+        }
+
         batch.draw(this.gunmaFaintedSprite, 70, 10 + this.SCREEN_BOTTOM_ADJUST);
-        batch.draw(stars, Gdx.graphics.getWidth()/2 - stars.getWidth()/4, Gdx.graphics.getHeight()/2 + stars.getHeight()/2, stars.getWidth()/2, stars.getHeight()/2);
+        batch.draw(stars, Gdx.graphics.getWidth()/2 - stars.getWidth()/4, Gdx.graphics.getHeight()/2 + stars.getHeight()/4, stars.getWidth()/2, stars.getHeight()/2);
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
         textButtonStyle.pressedOffsetX = 1;
         textButtonStyle.pressedOffsetY = -1;
@@ -695,10 +707,38 @@ public class GameScreen implements Screen {
         });
 
         continueButton.pad(15);
-        table.add(heading).padBottom(20);
-        table.row();
-        table.add(continueButton);
+        table.add(heading);
+//        table.row();
+//        table.add(continueButton);
 
         stage.addActor(table);
+
+
+//        Timer.schedule(new Timer.Task(){
+//            @Override
+//            public void run() {
+//                Texture explosion = new Texture(gameAssets.explosionPath);
+//
+////                batch.draw(this.gunmaFaintedSprite, 70, 10 + this.SCREEN_BOTTOM_ADJUST);
+//                batch.draw(explosion, Gdx.graphics.getWidth()/2 - explosion.getWidth()/4, Gdx.graphics.getHeight()/2 + explosion.getHeight()/2, explosion.getWidth()/2, explosion.getHeight()/2);
+//            }
+//        }, 3);
+
+        Timer.schedule(new Timer.Task(){
+            @Override
+            public void run() {
+                speechGDX.stopRecognition();
+                isPaused = true;
+                gameMusic.dispose();
+                gameMusic = Gdx.audio.newMusic(Gdx.files.internal(gameAssets.introMusicPath));
+                gameMusic.setLooping(false);
+                gameMusic.setVolume(masterVolume);
+                gameMusic.play();
+                game.setScreen(new MainMenuScreen(game, speechGDX, gameMusic, dbCallback, activeVList, prefs, gameAssets));
+                dispose(); // dispose of current GameScreen
+            }
+        }, 3);
+
+
     }
 }
