@@ -257,7 +257,8 @@ public class AsteroidGameView implements Screen
             buttonFont.draw(batch,"Score: " + controller.getScore(),
                     Gdx.graphics.getWidth() - 160, Gdx.graphics.getHeight() - 16);
 
-            // display every asteroid in the current list
+            // allows the correct number of asteroids to be displayed on screen at specific time
+            // intervals so the asteroids aren't cluttered together
             for (int i = 0; i < controller.getAsteroidList().size(); i++)
             {
                 if (generateAsteroidTimer >= i * 400)
@@ -284,39 +285,6 @@ public class AsteroidGameView implements Screen
             batch.draw(rocketTexture, controller.getPlayer().getPosition().x,
                     controller.getPlayer().getPosition().y, DEFAULT_ASTEROID_SIZE,
                     DEFAULT_ASTEROID_SIZE);
-
-            // allows the correct number of asteroids to be displayed on screen
-            /*
-            while (numAsteroidsOnScreen < controller.getLevel())
-            {
-                if (generateAsteroidTimer > 90)
-                {
-                    int i = 0;
-
-                    while (i < controller.getAsteroidList().size())
-                    {
-                        if (!controller.getAsteroidList().get(i).getIsDisplayed())
-                        {
-                            batch.draw(asteroidTexture, controller.getAsteroidList().get(i).getPosition().x,
-                                    controller.getAsteroidList().get(i).getPosition().y, DEFAULT_ASTEROID_SIZE,
-                                    DEFAULT_ASTEROID_SIZE);
-                            asteroidFont.draw(batch,
-                                    controller.getAsteroidList().get(i).getWord().getEngSpelling(),
-                                    controller.getAsteroidList().get(i).getPosition().x + 8,
-                                    controller.getAsteroidList().get(i).getPosition().y
-                                            + 2 * DEFAULT_ASTEROID_SIZE / 3,
-                                    DEFAULT_ASTEROID_SIZE - 16, 1, true);
-
-                            numAsteroidsOnScreen++;
-                        }
-                    }
-
-                    generateAsteroidTimer = 0;
-                }
-
-                generateAsteroidTimer++;
-            }
-            */
 
             // continue to show rocket explosion
             if (playerExplosionTimer > 0)
@@ -348,8 +316,45 @@ public class AsteroidGameView implements Screen
         // ************************************** END BATCH ****************************************
 
         String spokenWord = speechGDX.getWord();
+        /*
+        ArrayList<String> cWordsList = new ArrayList<String>();
+        ArrayList<String[]> correctWordsList = new ArrayList<String[]>();
+        ArrayList<Boolean> correctList = new ArrayList<Boolean>();
+
+        for (int i = 0; i < controller.getAsteroidList().size(); i++)
+        {
+            if (controller.getAsteroidList().get(i).getIsDisplayed())
+            {
+                cWordsList.add(controller.getAsteroidList().get(i).getWord().getCorrectWords());
+            }
+            else
+            {
+                cWordsList.add("");
+            }
+        }
+
+        for (int i = 0; i < controller.getAsteroidList().size(); i++)
+        {
+            if (controller.getAsteroidList().get(i).getIsDisplayed())
+            {
+                correctWordsList.add(cWordsList.get(i).split("\\s*,\\s*"));
+            }
+            else
+            {
+                correctWordsList.add(new String[0]);
+            }
+        }
+
+        for (int i = 0; i < controller.getAsteroidList().size(); i++)
+        {
+            if (controller.getAsteroidList().get(i).getIsDisplayed())
+            {
+                correctList.add(gradeSystem.grade(correctWordsList.get(i), spokenWord));
+            }
+        }
+        */
+
         String cWords = controller.getAsteroidList().get(0).getWord().getCorrectWords();
-        //System.out.println(cWords);
         String[] correctWords = cWords.split("\\s*,\\s*");
         boolean correct = gradeSystem.grade(correctWords, spokenWord);
 
