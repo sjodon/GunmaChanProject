@@ -183,6 +183,9 @@ public class GameAssets extends Month {
 
         for(int i = 0; i < 10; i ++) {
             if(scores[i][levelNumber - 1] == null || score > scores[i][levelNumber - 1].value) {
+                for(int k = 9; k > i; k--) {
+                    scores[k][levelNumber - 1] = scores[k - 1][levelNumber - 1];
+                }
                 scores[i][levelNumber - 1] = new Score(score, nickname);
                 break;
             }
