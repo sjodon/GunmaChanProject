@@ -218,9 +218,9 @@ public class GameAssets extends Month {
     }
 
     // Add [x] to [arr].
-    public static int[] addTo(int arr[], int x)
+    public static String[] addTo(String arr[], String x)
     {
-        int newarr[] = new int[arr.length + 1];
+        String newarr[] = new String[arr.length + 1];
 
         for (int i = 0; i < arr.length; i++)
             newarr[i] = arr[i];
