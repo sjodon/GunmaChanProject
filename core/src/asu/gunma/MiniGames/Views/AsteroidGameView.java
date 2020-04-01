@@ -80,6 +80,7 @@ public class AsteroidGameView implements Screen
     // timers
     private int playerExplosionTimer;
     private int asteroidExplosionTimer;
+    private int generateAsteroidTimer;
 
     // final asteroid positions
     private float finalAsteroidPositionX;
@@ -89,7 +90,8 @@ public class AsteroidGameView implements Screen
 
     private GameAssets gameAssets;
 
-    boolean isPaused;
+    private boolean isPaused;
+    private int numAsteroidsOnScreen;
 
     // constants
     private static final int DEFAULT_ASTEROID_SIZE = 128;
@@ -129,9 +131,14 @@ public class AsteroidGameView implements Screen
         // sounds
         incorrectSound = Gdx.audio.newMusic(Gdx.files.internal("incorrect_ohno.mp3"));
 
+        // timers
         playerExplosionTimer = 0;
         asteroidExplosionTimer = 0;
+        generateAsteroidTimer = 0;
+
+        // game tracking variables
         isPaused = false;
+        numAsteroidsOnScreen = 0;
     }
 
     // Override Screen class methods
@@ -250,21 +257,66 @@ public class AsteroidGameView implements Screen
             buttonFont.draw(batch,"Score: " + controller.getScore(),
                     Gdx.graphics.getWidth() - 160, Gdx.graphics.getHeight() - 16);
 
+            // display every asteroid in the current list
             for (int i = 0; i < controller.getAsteroidList().size(); i++)
             {
-                batch.draw(rocketTexture, controller.getPlayer().getPosition().x,
-                        controller.getPlayer().getPosition().y, DEFAULT_ASTEROID_SIZE,
-                        DEFAULT_ASTEROID_SIZE);
-                batch.draw(asteroidTexture, controller.getAsteroidList().get(0).getPosition().x,
-                        controller.getAsteroidList().get(0).getPosition().y, DEFAULT_ASTEROID_SIZE,
-                        DEFAULT_ASTEROID_SIZE);
-                asteroidFont.draw(batch,
-                        controller.getAsteroidList().get(0).getWord().getEngSpelling(),
-                        controller.getAsteroidList().get(0).getPosition().x + 8,
-                        controller.getAsteroidList().get(0).getPosition().y
-                                + 2 * DEFAULT_ASTEROID_SIZE / 3,
-                        DEFAULT_ASTEROID_SIZE - 16, 1, true);
+                if (generateAsteroidTimer >= i * 400)
+                {
+                    if (!controller.getAsteroidList().get(i).getIsDisplayed())
+                    {
+                        controller.getAsteroidList().get(i).setIsDisplayed(true);
+                    }
+
+                    batch.draw(asteroidTexture, controller.getAsteroidList().get(i).getPosition().x,
+                            controller.getAsteroidList().get(i).getPosition().y, DEFAULT_ASTEROID_SIZE,
+                            DEFAULT_ASTEROID_SIZE);
+                    asteroidFont.draw(batch,
+                            controller.getAsteroidList().get(i).getWord().getEngSpelling(),
+                            controller.getAsteroidList().get(i).getPosition().x + 8,
+                            controller.getAsteroidList().get(i).getPosition().y
+                                    + 2 * DEFAULT_ASTEROID_SIZE / 3,
+                            DEFAULT_ASTEROID_SIZE - 16, 1, true);
+                }
+                System.out.println(generateAsteroidTimer);
+                generateAsteroidTimer++;
             }
+
+            batch.draw(rocketTexture, controller.getPlayer().getPosition().x,
+                    controller.getPlayer().getPosition().y, DEFAULT_ASTEROID_SIZE,
+                    DEFAULT_ASTEROID_SIZE);
+
+            // allows the correct number of asteroids to be displayed on screen
+            /*
+            while (numAsteroidsOnScreen < controller.getLevel())
+            {
+                if (generateAsteroidTimer > 90)
+                {
+                    int i = 0;
+
+                    while (i < controller.getAsteroidList().size())
+                    {
+                        if (!controller.getAsteroidList().get(i).getIsDisplayed())
+                        {
+                            batch.draw(asteroidTexture, controller.getAsteroidList().get(i).getPosition().x,
+                                    controller.getAsteroidList().get(i).getPosition().y, DEFAULT_ASTEROID_SIZE,
+                                    DEFAULT_ASTEROID_SIZE);
+                            asteroidFont.draw(batch,
+                                    controller.getAsteroidList().get(i).getWord().getEngSpelling(),
+                                    controller.getAsteroidList().get(i).getPosition().x + 8,
+                                    controller.getAsteroidList().get(i).getPosition().y
+                                            + 2 * DEFAULT_ASTEROID_SIZE / 3,
+                                    DEFAULT_ASTEROID_SIZE - 16, 1, true);
+
+                            numAsteroidsOnScreen++;
+                        }
+                    }
+
+                    generateAsteroidTimer = 0;
+                }
+
+                generateAsteroidTimer++;
+            }
+            */
 
             // continue to show rocket explosion
             if (playerExplosionTimer > 0)
@@ -388,9 +440,13 @@ public class AsteroidGameView implements Screen
     {
         for (int i = 0; i < controller.getAsteroidList().size(); i++)
         {
-            // transforms asteroid according to the change in time, the asteroid's velocity,
-            // direction, etc.
-            controller.getAsteroidList().get(i).transformPosition(delta);
+            // only account for asteroids that are currently displayed
+            if (controller.getAsteroidList().get(i).getIsDisplayed())
+            {
+                // transforms asteroid according to the change in time, the asteroid's velocity,
+                // direction, etc.
+                controller.getAsteroidList().get(i).transformPosition(delta);
+            }
         }
     }
 }

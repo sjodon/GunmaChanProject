@@ -106,6 +106,8 @@ public class AsteroidGameModel
             this.level = level;
         else
             this.level = DEFAULT_LEVEL;
+
+        this.level = 2;
     }
 
     private void setNumAddWordsPerLevel()
