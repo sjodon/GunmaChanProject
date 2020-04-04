@@ -67,7 +67,7 @@ public class GameAssets extends Month {
     public static String explosionPath = "explosion.png";
     public static String questionBorder = "question_border.png";
     public static String[] allGunmaAnimations = {gunmaWalkAnimationMain, gunmaGreenBagAnimation, gunmaBowTieAnimation, gunmaBlueHatAnimation, gunmaPinkHatAnimation, gunmaRedHatAnimation, gunmaRainbowBagAnimation, gunmaRainbowHatAnimation};
-    public static String[] availableGunmaAnimations = {gunmaWalkAnimationMain, gunmaGreenBagAnimation, gunmaBowTieAnimation};
+    public String[] availableGunmaAnimations = {gunmaWalkAnimationMain, gunmaGreenBagAnimation, gunmaBowTieAnimation};
 
     // Game Screen Assets
     public static String gunmaSpritePath = "sprite_gunma.png";
@@ -218,7 +218,7 @@ public class GameAssets extends Month {
     }
 
     // Add [x] to [arr].
-    public static String[] addTo(String arr[], String x)
+    public String[] addTo(String arr[], String x)
     {
         String newarr[] = new String[arr.length + 1];
 

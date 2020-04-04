@@ -150,6 +150,7 @@ public class GameScreen implements Screen {
 
     Preferences prefs;
     int levelNumber;
+    int numStars = 0;
 
     public GameScreen(Game game, ActionResolver speechGDX, Music music, DbInterface dbCallback, Screen previous, ArrayList<VocabWord> activeList, Preferences prefs, GameAssets gameAssets, int levelNumber) {
         this.game = game;
@@ -316,6 +317,10 @@ public class GameScreen implements Screen {
 
         backButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
+                String rewardPath = gameAssets.allGunmaAnimations[levelNumber + 2];
+                if(numStars == 3 && !Arrays.asList(gameAssets.availableGunmaAnimations).contains(rewardPath)) {
+                    gameAssets.availableGunmaAnimations = gameAssets.addTo(gameAssets.availableGunmaAnimations, rewardPath);
+                }
                 speechGDX.stopRecognition();
                 isPaused = true;
                 gameMusic.dispose();
@@ -461,7 +466,6 @@ public class GameScreen implements Screen {
                 this.gameOverWalk(delta);
             }
 
-            int numStars = 0;
             if(score >= gameAssets.threeStarRequirement[levelNumber - 1]) {
                 numStars = 3;
             } else if(score >= gameAssets.twoStarRequirement[levelNumber - 1]) {
@@ -671,7 +675,7 @@ public class GameScreen implements Screen {
         if(numStars == 3 && !Arrays.asList(gameAssets.availableGunmaAnimations).contains(rewardPath)) {
             batch.draw(explosion, Gdx.graphics.getWidth() / 2 - explosion.getWidth() / 8, Gdx.graphics.getHeight() / 2 - explosion.getHeight() / 4 - 20, explosion.getWidth() / 4, explosion.getHeight() / 4);
             batch.draw(reward.getCurrentFrame(delta), Gdx.graphics.getWidth() / 2 - border.getWidth() / 2, Gdx.graphics.getHeight() / 2 - explosion.getHeight() / 6 - 20);
-            gameAssets.availableGunmaAnimations = gameAssets.addTo(gameAssets.availableGunmaAnimations, rewardPath);
+//            gameAssets.availableGunmaAnimations = gameAssets.addTo(gameAssets.availableGunmaAnimations, rewardPath);
         }
 
         batch.draw(this.gunmaFaintedSprite, 70, 10 + this.SCREEN_BOTTOM_ADJUST);
