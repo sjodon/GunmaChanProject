@@ -667,16 +667,18 @@ public class GameScreen implements Screen {
         Table table = new Table();
         table.setPosition(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
         Texture stars = new Texture(gameAssets.getStarPath(numStars));
-        Texture explosion = new Texture(gameAssets.explosionPath);
-        String rewardPath = gameAssets.allGunmaAnimations[levelNumber + 2];
-        Animator reward = new Animator(rewardPath, 8, 1, 0.1f);
-        Texture border = new Texture(gameAssets.activeBorder);
 
-        if(numStars == 3 && !Arrays.asList(gameAssets.availableGunmaAnimations).contains(rewardPath)) {
-            batch.draw(explosion, Gdx.graphics.getWidth() / 2 - explosion.getWidth() / 8, Gdx.graphics.getHeight() / 2 - explosion.getHeight() / 4 - 20, explosion.getWidth() / 4, explosion.getHeight() / 4);
-            batch.draw(reward.getCurrentFrame(delta), Gdx.graphics.getWidth() / 2 - border.getWidth() / 2, Gdx.graphics.getHeight() / 2 - explosion.getHeight() / 6 - 20);
+        // reward asset:
+//        Texture explosion = new Texture(gameAssets.explosionPath);
+//        String rewardPath = gameAssets.allGunmaAnimations[levelNumber + 2];
+//        Animator reward = new Animator(rewardPath, 8, 1, 0.1f);
+//        Texture border = new Texture(gameAssets.activeBorder);
+
+//        if(numStars == 3 && !Arrays.asList(gameAssets.availableGunmaAnimations).contains(rewardPath)) {
+//            batch.draw(explosion, Gdx.graphics.getWidth() / 2 - explosion.getWidth() / 8, Gdx.graphics.getHeight() / 2 - explosion.getHeight() / 4 - 20, explosion.getWidth() / 4, explosion.getHeight() / 4);
+//            batch.draw(reward.getCurrentFrame(delta), Gdx.graphics.getWidth() / 2 - border.getWidth() / 2, Gdx.graphics.getHeight() / 2 - explosion.getHeight() / 6 - 20);
 //            gameAssets.availableGunmaAnimations = gameAssets.addTo(gameAssets.availableGunmaAnimations, rewardPath);
-        }
+//        }
 
         batch.draw(this.gunmaFaintedSprite, 70, 10 + this.SCREEN_BOTTOM_ADJUST);
         batch.draw(stars, Gdx.graphics.getWidth()/2 - stars.getWidth()/4, Gdx.graphics.getHeight()/2 + stars.getHeight()/4, stars.getWidth()/2, stars.getHeight()/2);
@@ -713,8 +715,8 @@ public class GameScreen implements Screen {
 
         continueButton.pad(15);
         table.add(heading);
-//        table.row();
-//        table.add(continueButton);
+        table.row();
+        table.add(continueButton);
 
         stage.addActor(table);
 
