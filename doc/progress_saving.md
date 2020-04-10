@@ -24,6 +24,6 @@ the student has achieved for each level.
 
 - `gunmaWalkAnimationActive` stores the student's active avatar skin.
 
-- `userNickname` stores the student's chosen nickname to appear on the leaderboard.
+- `userNickname` stores the student's chosen nickname to appear on the leaderboard (this is part of the [Leaderboard PR](https://github.com/sjodon/GunmaChanProject/pull/6) which has not been merged into master due to memory issues).
 
-- `scores` stores the current high scores and associated nicknames for each level.
+- `scores` stores the current high scores and associated nicknames for each level (this is part of the [Leaderboard PR](https://github.com/sjodon/GunmaChanProject/pull/6) which has not been merged into master due to memory issues).
