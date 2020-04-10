@@ -67,8 +67,8 @@ public class GameAssets extends Month {
     public static String explosionPath = "explosion.png";
     public static String questionBorder = "question_border.png";
     public static String[] allGunmaAnimations = {gunmaWalkAnimationMain, gunmaGreenBagAnimation, gunmaBowTieAnimation, gunmaBlueHatAnimation, gunmaPinkHatAnimation, gunmaRedHatAnimation, gunmaRainbowBagAnimation, gunmaRainbowHatAnimation};
-    public static String[] availableGunmaAnimations = {gunmaWalkAnimationMain, gunmaGreenBagAnimation, gunmaBowTieAnimation, gunmaBlueHatAnimation, gunmaPinkHatAnimation, gunmaRedHatAnimation, gunmaRainbowBagAnimation, gunmaRainbowHatAnimation};
-//    public String[] availableGunmaAnimations = {gunmaWalkAnimationMain, gunmaGreenBagAnimation, gunmaBowTieAnimation};
+//    public static String[] availableGunmaAnimations = {gunmaWalkAnimationMain, gunmaGreenBagAnimation, gunmaBowTieAnimation, gunmaBlueHatAnimation, gunmaPinkHatAnimation, gunmaRedHatAnimation, gunmaRainbowBagAnimation, gunmaRainbowHatAnimation};
+    public String[] availableGunmaAnimations = {gunmaWalkAnimationMain, gunmaGreenBagAnimation, gunmaBowTieAnimation};
 
     // Game Screen Assets
     public static String gunmaSpritePath = "sprite_gunma.png";
@@ -219,15 +219,15 @@ public class GameAssets extends Month {
     }
 
     // Add [x] to [arr].
-    public String[] addTo(String arr[], String x)
+    public void addToAvailableGunma(String x)
     {
-        String newarr[] = new String[arr.length + 1];
+        String newarr[] = new String[availableGunmaAnimations.length + 1];
 
-        for (int i = 0; i < arr.length; i++)
-            newarr[i] = arr[i];
+        for (int i = 0; i < availableGunmaAnimations.length; i++)
+            newarr[i] = availableGunmaAnimations[i];
 
-        newarr[arr.length] = x;
+        newarr[availableGunmaAnimations.length] = x;
 
-        return newarr;
+        availableGunmaAnimations = newarr;
     }
 }
