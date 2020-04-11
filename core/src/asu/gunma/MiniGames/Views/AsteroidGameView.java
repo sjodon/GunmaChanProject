@@ -71,6 +71,7 @@ public class AsteroidGameView implements Screen
 
     // labels
     private Label youLose;
+    private Label youWin;
 
     private ArrayList<GlyphLayout> wordLayoutList;
     private ArrayList<String> asteroidWordList;
@@ -86,7 +87,8 @@ public class AsteroidGameView implements Screen
     private float finalAsteroidPositionX;
     private float finalAsteroidPositionY;
 
-    private Table table;
+    private Table winTable;
+    private Table loseTable;
 
     private GameAssets gameAssets;
 
@@ -151,8 +153,10 @@ public class AsteroidGameView implements Screen
         batch = new SpriteBatch();
         Gdx.input.setInputProcessor(stage);
         this.livesDrawer = new LivesDrawer(this.batch);
-        table = new Table();
-        table.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        loseTable = new Table();
+        loseTable.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        winTable = new Table();
+        winTable.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         // for displaying words on asteroids
         for (int i = 0; i < controller.getAsteroidList().size(); i++)
@@ -220,10 +224,16 @@ public class AsteroidGameView implements Screen
         youLose = new Label("YOU LOSE", youLoseStyle);
         youLose.setFontScale(2);
 
+        Label.LabelStyle youWinStyle = new Label.LabelStyle(buttonFont, Color.WHITE);
+        youWin = new Label("YOU WIN!", youWinStyle);
+        youWin.setFontScale(2);
+
         stage.addActor(backButton);
         stage.addActor(pauseButton);
-        table.add(youLose).padBottom(100);
-        table.row();
+        loseTable.add(youLose).padBottom(100);
+        loseTable.row();
+        winTable.add(youWin).padBottom(100);
+        winTable.row();
 
         // initiate speech recognition
         try {
@@ -235,8 +245,7 @@ public class AsteroidGameView implements Screen
     }
 
     @Override
-    public void render(float delta)
-    {
+    public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         stage.act(delta);
@@ -249,22 +258,19 @@ public class AsteroidGameView implements Screen
         // ************************************* BEGIN BATCH ***************************************
         batch.begin();
 
-        // show the game only if the player still has lives
-        if (controller.getNumLives() > 0)
+        // show the game only if the player still has lives and there are vocabulary words remaining
+        if (controller.getNumLives() > 0 && controller.getActiveVocabList().size() > 0)
         {
             // display lives and score
             this.livesDrawer.render();
-            buttonFont.draw(batch,"Score: " + controller.getScore(),
+            buttonFont.draw(batch, "Score: " + controller.getScore(),
                     Gdx.graphics.getWidth() - 160, Gdx.graphics.getHeight() - 16);
 
             // allows the correct number of asteroids to be displayed on screen at specific time
             // intervals so the asteroids aren't cluttered together
-            for (int i = 0; i < controller.getAsteroidList().size(); i++)
-            {
-                if (generateAsteroidTimer >= i * 400)
-                {
-                    if (!controller.getAsteroidList().get(i).getIsDisplayed())
-                    {
+            for (int i = 0; i < controller.getAsteroidList().size(); i++) {
+                if (generateAsteroidTimer >= i * 400) {
+                    if (!controller.getAsteroidList().get(i).getIsDisplayed()) {
                         controller.getAsteroidList().get(i).setIsDisplayed(true);
                     }
 
@@ -287,8 +293,7 @@ public class AsteroidGameView implements Screen
                     DEFAULT_ASTEROID_SIZE);
 
             // continue to show rocket explosion
-            if (playerExplosionTimer > 0)
-            {
+            if (playerExplosionTimer > 0) {
                 batch.draw(explosionTexture, controller.getPlayer().getPosition().x,
                         controller.getPlayer().getPosition().y, DEFAULT_EXPLOSION_SIZE,
                         DEFAULT_EXPLOSION_SIZE);
@@ -305,174 +310,123 @@ public class AsteroidGameView implements Screen
                 asteroidExplosionTimer++;
             }
         }
-        else
+        else if (controller.getNumLives() <= 0)
         {
-            stage.dispose();
-            stage.addActor(table);
+            stage.addActor(loseTable);
+            stage.draw();
+        }
+        else if (controller.getActiveVocabList().size() <= 0 && controller.getNumLives() > 0)
+        {
+            stage.addActor(winTable);
             stage.draw();
         }
 
         batch.end();
         // ************************************** END BATCH ****************************************
 
-        String spokenWord = speechGDX.getWord();
-
-        ArrayList<String> cWordsList = new ArrayList<String>();
-        ArrayList<String[]> correctWordsList = new ArrayList<String[]>();
-        ArrayList<Boolean> correctList = new ArrayList<Boolean>();
-
-        for (int i = 0; i < controller.getAsteroidList().size(); i++)
+        if (controller.getNumLives() > 0 && controller.getActiveVocabList().size() > 0)
         {
-            if (controller.getAsteroidList().get(i).getIsDisplayed())
-            {
-                cWordsList.add(controller.getAsteroidList().get(i).getWord().getCorrectWords());
-            }
-            else
-            {
-                cWordsList.add("");
-            }
-        }
+            String spokenWord = speechGDX.getWord();
 
-        for (int i = 0; i < controller.getAsteroidList().size(); i++)
-        {
-            if (controller.getAsteroidList().get(i).getIsDisplayed())
-            {
-                correctWordsList.add(cWordsList.get(i).split("\\s*,\\s*"));
-            }
-            else
-            {
-                correctWordsList.add(new String[0]);
-            }
-        }
+            ArrayList<String> cWordsList = new ArrayList<String>();
+            ArrayList<String[]> correctWordsList = new ArrayList<String[]>();
+            ArrayList<Boolean> correctList = new ArrayList<Boolean>();
 
-        for (int i = 0; i < controller.getAsteroidList().size(); i++)
-        {
-            if (controller.getAsteroidList().get(i).getIsDisplayed())
+            for (int i = 0; i < controller.getAsteroidList().size(); i++)
             {
-                correctList.add(gradeSystem.grade(correctWordsList.get(i), spokenWord));
-            }
-            else
-            {
-                correctList.add(false);
-            }
-        }
-
-        for (int i = 0; i < controller.getAsteroidList().size(); i++)
-        {
-            // problem with this if statement
-            if (correctList.get(i).booleanValue() == true)
-            {
-                // print statements are for debugging
-                System.out.println("Correct!");
-
-
-                // get the final position of the asteroid to trigger explosion in that position
-                finalAsteroidPositionX = controller.getAsteroidList().get(i).getPosition().x;
-                finalAsteroidPositionY = controller.getAsteroidList().get(i).getPosition().y;
-
-                if (controller.destroyAsteroid(spokenWord))
+                if (controller.getAsteroidList().get(i).getIsDisplayed())
                 {
-                    System.out.println("Successfully destroyed the asteroid and added a new one to " +
-                            "the screen.");
-
-                    controller.increaseScore();
-
-                    asteroidWordList.remove(i);
-                    asteroidWordList.add(controller.getLevel() - 1,
-                            controller.getAsteroidList().get(controller.getLevel() - 1).getWord().getEngSpelling());
+                    cWordsList.add(controller.getAsteroidList().get(i).getWord().getCorrectWords());
                 }
                 else
-                    System.out.println("Failed to destroy asteroid.");
-
-                asteroidExplosionTimer++;
-
-                break;
+                {
+                    cWordsList.add("");
+                }
             }
 
-            // asteroid colliding with rocket
-            if (controller.getAsteroidList().get(i).getPosition().y < 140)
+            for (int i = 0; i < controller.getAsteroidList().size(); i++)
             {
-                System.out.println("Incorrect!");
-                incorrectSound.setLooping(false);
-                incorrectSound.setVolume(masterVolume);
-                incorrectSound.play();
-                livesDrawer.takeLife();
-                controller.decreaseNumLives();
-                controller.destroyAsteroid(controller.getAsteroidList().get(i).getWord().getEngSpelling());
-
-                // initiate rocket explosion
-                playerExplosionTimer++;
+                if (controller.getAsteroidList().get(i).getIsDisplayed())
+                {
+                    correctWordsList.add(cWordsList.get(i).split("\\s*,\\s*"));
+                }
+                else
+                {
+                    correctWordsList.add(new String[0]);
+                }
             }
 
-            if (playerExplosionTimer > 60)
+            for (int i = 0; i < controller.getAsteroidList().size(); i++)
             {
-                playerExplosionTimer = 0;
+                if (controller.getAsteroidList().get(i).getIsDisplayed())
+                {
+                    correctList.add(gradeSystem.grade(correctWordsList.get(i), spokenWord));
+                }
+                else
+                {
+                    correctList.add(false);
+                }
             }
-            System.out.println(playerExplosionTimer);
 
-            if (asteroidExplosionTimer > 60)
+            for (int i = 0; i < controller.getAsteroidList().size(); i++)
             {
-                asteroidExplosionTimer = 0;
+                // problem with this if statement
+                if (correctList.get(i).booleanValue() == true)
+                {
+                    // print statements are for debugging
+                    System.out.println("Correct!");
+
+
+                    // get the final position of the asteroid to trigger explosion in that position
+                    finalAsteroidPositionX = controller.getAsteroidList().get(i).getPosition().x;
+                    finalAsteroidPositionY = controller.getAsteroidList().get(i).getPosition().y;
+
+                    if (controller.destroyAsteroid(spokenWord))
+                    {
+                        System.out.println("Successfully destroyed the asteroid and added a new one to " +
+                                "the screen.");
+
+                        controller.increaseScore();
+
+                        asteroidWordList.remove(i);
+                        asteroidWordList.add(controller.getLevel() - 1,
+                                controller.getAsteroidList().get(controller.getLevel() - 1).getWord().getEngSpelling());
+                    }
+                    else
+                        System.out.println("Failed to destroy asteroid.");
+
+                    asteroidExplosionTimer++;
+
+                    break;
+                }
+
+                // asteroid colliding with rocket
+                if (controller.getAsteroidList().get(i).getPosition().y < 140)
+                {
+                    System.out.println("Incorrect!");
+                    incorrectSound.setLooping(false);
+                    incorrectSound.setVolume(masterVolume);
+                    incorrectSound.play();
+                    livesDrawer.takeLife();
+                    controller.decreaseNumLives();
+                    controller.destroyAsteroid(controller.getAsteroidList().get(i).getWord().getEngSpelling());
+
+                    // initiate rocket explosion
+                    playerExplosionTimer++;
+                }
+
+                if (playerExplosionTimer > 60)
+                {
+                    playerExplosionTimer = 0;
+                }
+                System.out.println(playerExplosionTimer);
+
+                if (asteroidExplosionTimer > 60)
+                {
+                    asteroidExplosionTimer = 0;
+                }
             }
         }
-
-        /*
-        String cWords = controller.getAsteroidList().get(0).getWord().getCorrectWords();
-        String[] correctWords = cWords.split("\\s*,\\s*");
-        boolean correct = gradeSystem.grade(correctWords, spokenWord);
-
-        if (correct)
-        {
-            // print statements are for debugging
-            System.out.println("Correct!");
-
-            finalAsteroidPositionX = controller.getAsteroidList().get(0).getPosition().x;
-            finalAsteroidPositionY = controller.getAsteroidList().get(0).getPosition().y;
-
-            if (controller.destroyAsteroid(spokenWord))
-            {
-                System.out.println("Successfully destroyed the asteroid and added a new one to " +
-                        "the screen.");
-
-                controller.increaseScore();
-
-                asteroidWordList.remove(0);
-                asteroidWordList.add(0, controller.getAsteroidList().get(0).getWord().getEngSpelling());
-            }
-            else
-                System.out.println("Failed to destroy asteroid.");
-
-            asteroidExplosionTimer++;
-        }
-
-        // asteroid has reached rocket
-        //else if (controller.getAsteroidList().get(0).getPosition().y < 140)
-        if (controller.getAsteroidList().get(0).getPosition().y < 140)
-        {
-            System.out.println("Incorrect!");
-            incorrectSound.setLooping(false);
-            incorrectSound.setVolume(masterVolume);
-            incorrectSound.play();
-            livesDrawer.takeLife();
-            controller.decreaseNumLives();
-            controller.destroyAsteroid(controller.getAsteroidList().get(0).getWord().getEngSpelling());
-
-            // initiate rocket explosion
-            playerExplosionTimer++;
-        }
-
-        if (playerExplosionTimer > 60)
-        {
-            playerExplosionTimer = 0;
-        }
-        System.out.println(playerExplosionTimer);
-
-        if (asteroidExplosionTimer > 60)
-        {
-            asteroidExplosionTimer = 0;
-        }
-
-         */
     }
 
     @Override
