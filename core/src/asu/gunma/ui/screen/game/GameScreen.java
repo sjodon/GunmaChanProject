@@ -16,14 +16,17 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Timer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -147,6 +150,7 @@ public class GameScreen implements Screen {
 
     Preferences prefs;
     int levelNumber;
+    int numStars = 0;
 
     public GameScreen(Game game, ActionResolver speechGDX, Music music, DbInterface dbCallback, Screen previous, ArrayList<VocabWord> activeList, Preferences prefs, GameAssets gameAssets, int levelNumber) {
         this.game = game;
@@ -188,7 +192,7 @@ public class GameScreen implements Screen {
 
         // Animation initializations
         this.onionWalkAnimation = new Animator(gameAssets.frenemyWalkAnimationPathPerLevel[levelNumber - 1], 4, 2, 0.1f);
-        this.gunmaWalkAnimation = new Animator(gameAssets.gunmaWalkAnimation, 8, 1, 0.1f);
+        this.gunmaWalkAnimation = new Animator(gameAssets.gunmaWalkAnimationActive, 8, 1, 0.1f);
         this.onionHungryWalkAnimation = new Animator(gameAssets.onionHungryWalkAnimation, 4, 2, 0.1f);
         this.onionStealAnimation = new Animator(gameAssets.onionStealAnimation, 4, 2, 0.1f);
         this.onionSatisfiedAnimation = new Animator(gameAssets.onionSatisfiedAnimation, 4, 2, 0.1f);
@@ -313,6 +317,10 @@ public class GameScreen implements Screen {
 
         backButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
+                String rewardPath = gameAssets.allGunmaAnimations[levelNumber + 2];
+                if(numStars == 3 && !Arrays.asList(gameAssets.availableGunmaAnimations).contains(rewardPath)) {
+                    gameAssets.addToAvailableGunma(rewardPath);
+                }
                 speechGDX.stopRecognition();
                 isPaused = true;
                 gameMusic.dispose();
@@ -458,7 +466,6 @@ public class GameScreen implements Screen {
                 this.gameOverWalk(delta);
             }
 
-            int numStars = 0;
             if(score >= gameAssets.threeStarRequirement[levelNumber - 1]) {
                 numStars = 3;
             } else if(score >= gameAssets.twoStarRequirement[levelNumber - 1]) {
@@ -467,9 +474,9 @@ public class GameScreen implements Screen {
                 numStars = 1;
             }
             gameAssets.setLevelStars(levelNumber, numStars);
-            addScore(numStars);
+            addScore(numStars, delta);
 
-            gameMusic.dispose();
+            // gameMusic.dispose();
             // correctSound.dispose();
             // incorrectSound.dispose();
             gameOverSound = Gdx.audio.newMusic(Gdx.files.internal(gameAssets.gameEnd));
@@ -656,10 +663,22 @@ public class GameScreen implements Screen {
         return randomInt;
     }
 
-    private void addScore(int numStars) {
+    private void addScore(int numStars, float delta) {
         Table table = new Table();
         table.setPosition(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
         Texture stars = new Texture(gameAssets.getStarPath(numStars));
+
+        // reward asset:
+//        Texture explosion = new Texture(gameAssets.explosionPath);
+        String rewardPath = gameAssets.allGunmaAnimations[levelNumber + 2];
+//        Animator reward = new Animator(rewardPath, 8, 1, 0.1f);
+//        Texture border = new Texture(gameAssets.activeBorder);
+
+        if(numStars == 3 && !Arrays.asList(gameAssets.availableGunmaAnimations).contains(rewardPath)) {
+//            batch.draw(explosion, Gdx.graphics.getWidth() / 2 - explosion.getWidth() / 8, Gdx.graphics.getHeight() / 2 - explosion.getHeight() / 4 - 20, explosion.getWidth() / 4, explosion.getHeight() / 4);
+//            batch.draw(reward.getCurrentFrame(delta), Gdx.graphics.getWidth() / 2 - border.getWidth() / 2, Gdx.graphics.getHeight() / 2 - explosion.getHeight() / 6 - 20);
+            gameAssets.addToAvailableGunma(rewardPath);
+        }
 
         batch.draw(this.gunmaFaintedSprite, 70, 10 + this.SCREEN_BOTTOM_ADJUST);
         batch.draw(stars, Gdx.graphics.getWidth()/2 - stars.getWidth()/4, Gdx.graphics.getHeight()/2 + stars.getHeight()/2, stars.getWidth()/2, stars.getHeight()/2);
@@ -700,5 +719,35 @@ public class GameScreen implements Screen {
         table.add(continueButton);
 
         stage.addActor(table);
+
+
+//        Timer.schedule(new Timer.Task(){
+//            @Override
+//            public void run() {
+//                Texture explosion = new Texture(gameAssets.explosionPath);
+//
+////                batch.draw(this.gunmaFaintedSprite, 70, 10 + this.SCREEN_BOTTOM_ADJUST);
+//                batch.draw(explosion, Gdx.graphics.getWidth()/2 - explosion.getWidth()/4, Gdx.graphics.getHeight()/2 + explosion.getHeight()/2, explosion.getWidth()/2, explosion.getHeight()/2);
+//            }
+//        }, 3);
+
+//        Timer timer = new Timer();
+//
+//        timer.scheduleTask(new Timer.Task(){
+//            @Override
+//            public void run() {
+//                speechGDX.stopRecognition();
+//                isPaused = true;
+//                gameMusic.dispose();
+//                gameMusic = Gdx.audio.newMusic(Gdx.files.internal(gameAssets.introMusicPath));
+//                gameMusic.setLooping(false);
+//                gameMusic.setVolume(masterVolume);
+//                gameMusic.play();
+//                game.setScreen(new MainMenuScreen(game, speechGDX, gameMusic, dbCallback, activeVList, prefs, gameAssets));
+//                dispose(); // dispose of current GameScreen
+//            }
+//        }, 3);
+
+
     }
 }

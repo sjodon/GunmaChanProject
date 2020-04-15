@@ -53,6 +53,23 @@ public class GameAssets extends Month {
     public static String placeholderFrenemyAnimation3Path = "Gunma-chan-Japanese-character-enemy-walk-anim-sheet-04.png";
     public static String placeholderFrenemyAnimation4Path = "Gunma-chan-Japanese-character-enemy-walk-anim-sheet-05.png";
 
+    // Gunma Assets
+    public static String gunmaWalkAnimationMain = "Gunma_with_bag_small.png";
+    public static String gunmaRainbowBagAnimation = "Gunma_with_bag_small_rainbow2.png";
+    public static String gunmaBowTieAnimation = "Gunma_with_bag_small_bow_tie.png";
+    public static String gunmaGreenBagAnimation = "Gunma_with_bag_small_green_bag.png";
+    public static String gunmaBlueHatAnimation = "Gunma_with_bag_small_blue_hat.png";
+    public static String gunmaPinkHatAnimation = "Gunma_with_bag_small_pink_hat.png";
+    public static String gunmaRedHatAnimation = "Gunma_with_bag_small_red_hat.png";
+    public static String gunmaRainbowHatAnimation = "Gunma_with_bag_small_rainbow_hat.png";
+    public static String activeBorder = "brown_border.png";
+    public static String inactiveBorder = "light_brown_border.png";
+    public static String explosionPath = "explosion.png";
+    public static String questionBorder = "question_border.png";
+    public static String[] allGunmaAnimations = {gunmaWalkAnimationMain, gunmaGreenBagAnimation, gunmaBowTieAnimation, gunmaBlueHatAnimation, gunmaPinkHatAnimation, gunmaRedHatAnimation, gunmaRainbowBagAnimation, gunmaRainbowHatAnimation};
+//    public static String[] availableGunmaAnimations = {gunmaWalkAnimationMain, gunmaGreenBagAnimation, gunmaBowTieAnimation, gunmaBlueHatAnimation, gunmaPinkHatAnimation, gunmaRedHatAnimation, gunmaRainbowBagAnimation, gunmaRainbowHatAnimation};
+    public String[] availableGunmaAnimations = {gunmaWalkAnimationMain, gunmaGreenBagAnimation, gunmaBowTieAnimation};
+
     // Game Screen Assets
     public static String gunmaSpritePath = "sprite_gunma.png";
     public static String gunmaFaintedSpritePath = "gunma_fainted.png";
@@ -61,8 +78,7 @@ public class GameAssets extends Month {
     public static String gunmaWalkAnimationPath = "gunma_sheet.png";
     public static String correctSpritePath = "background/correct.png";
     public static String incorrectSpritePath = "background/incorrect.png";
-    //public static String onionWalkAnimation = "onion_sheet.png";
-    public static String gunmaWalkAnimation = "Gunma_with_bag_small.png";
+    public static String gunmaWalkAnimationActive = gunmaWalkAnimationMain;
     public static String onionHungryWalkAnimation = "onion_sheetSweetRoll.png";
     public static String onionStealAnimation = "onion_sheet.png";
     public static String onionSatisfiedAnimation = "onion_sheetSmile.png";
@@ -200,5 +216,18 @@ public class GameAssets extends Month {
         }
 
         shapeRenderer.end();
+    }
+
+    // Add [x] to [arr].
+    public void addToAvailableGunma(String x)
+    {
+        String newarr[] = new String[availableGunmaAnimations.length + 1];
+
+        for (int i = 0; i < availableGunmaAnimations.length; i++)
+            newarr[i] = availableGunmaAnimations[i];
+
+        newarr[availableGunmaAnimations.length] = x;
+
+        availableGunmaAnimations = newarr;
     }
 }

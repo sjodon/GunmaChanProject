@@ -72,6 +72,8 @@ public class MyResources extends ListResourceBundle {
             {"English", "English"},
             {"Japanese", "Japanese"},
 
+            {"CustomizeCharacter", "Customize Character"},
+
 
             {"setLanguageMessage", "日本語"},
         };
