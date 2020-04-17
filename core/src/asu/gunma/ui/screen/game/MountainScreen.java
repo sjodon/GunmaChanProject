@@ -100,7 +100,7 @@ public class MountainScreen implements Screen {
         background = new Texture(gameAssets.backgroundImagePath);
         backgroundDrawer = new MountainBackgroundDrawer(this.batch, this.SCREEN_BOTTOM_ADJUST, gameAssets);
         this.onionWalkAnimation = new Animator(gameAssets.onionWalkAnimationPath, 4, 2, 0.1f);
-        this.gunmaWalkAnimation = new Animator(gameAssets.gunmaWalkAnimationPath, 8, 1, 0.1f);
+        this.gunmaWalkAnimation = new Animator(gameAssets.gunmaWalkAnimationActive, 8, 1, 0.1f);
 
         testSkin = new Skin(Gdx.files.internal("glassy-ui.json"));
 

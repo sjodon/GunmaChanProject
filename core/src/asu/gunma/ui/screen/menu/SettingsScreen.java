@@ -45,7 +45,7 @@ public class SettingsScreen implements Screen {
     private Skin testSkin;
     private Table table, table2, table3, table4, table5, table6;
 
-    private TextButton homeScreenLockButton, googleLoginButton,backButton, googleLogoutButton, setLanguageButton, optionMenuButton;
+    private TextButton homeScreenLockButton, googleLoginButton,backButton, googleLogoutButton, setLanguageButton, optionMenuButton, customMenuButton;
 
     private SpriteBatch batch;
     private Texture texture;
@@ -131,6 +131,12 @@ public class SettingsScreen implements Screen {
         optionMenuButton.setPosition(50, 150);
         optionMenuButton.getLabel().setAlignment(Align.center);
 
+        customMenuButton = new TextButton(gameAssets.getResourceBundle().getString("CustomizeCharacter"), testSkin, "default");
+        customMenuButton.setTransform(true);
+        customMenuButton.setScale(0.5f);
+        customMenuButton.setPosition(50, 75);
+        customMenuButton.getLabel().setAlignment(Align.center);
+
         //font file
 //        final String FONT_PATH = "irohamaru-mikami-Regular.ttf";
 //        generator = new FreeTypeFontGenerator(Gdx.files.internal(FONT_PATH));
@@ -194,6 +200,15 @@ public class SettingsScreen implements Screen {
             }
         });
 
+        customMenuButton.addListener(new ClickListener(){
+            public void clicked(InputEvent event, float x, float y){
+                googleLoginMessage = "";
+                gameMusic.pause();
+                gameMusic.dispose();
+                game.setScreen(new CustomizeMenu(game, speechGDX, gameMusic, dbInterface, game.getScreen(),  activeVocabList, prefs, gameAssets));
+            }
+        });
+
         backButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 googleLoginMessage = "";
@@ -215,6 +230,7 @@ public class SettingsScreen implements Screen {
         stage.addActor(googleLogoutButton);
         stage.addActor(setLanguageButton);
         stage.addActor(optionMenuButton);
+        stage.addActor(customMenuButton);
     }
 
     @Override
