@@ -370,7 +370,6 @@ public class AsteroidGameView implements Screen
 
             for (int i = 0; i < controller.getAsteroidList().size(); i++)
             {
-                // problem with this if statement
                 if (correctList.get(i).booleanValue() == true)
                 {
                     // print statements are for debugging
