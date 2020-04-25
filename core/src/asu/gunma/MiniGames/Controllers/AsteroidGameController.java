@@ -41,6 +41,10 @@ public class AsteroidGameController
         return model.getNumLives();
     }
 
+    public int getNumAddWordsPerLevel() { return model.getNumAddWordsPerLevel(); }
+
+    public int getMaxLevel() { return model.getMaxLevel(); }
+
     public ArrayList<VocabWord> getActiveVocabList()
     {
         return model.getActiveVocabList();
@@ -116,5 +120,11 @@ public class AsteroidGameController
 
         //failed to destroy the asteroid
         return false;
+    }
+
+    public boolean nextLevel()
+    {
+        model.nextLevel();
+        return true;
     }
 }

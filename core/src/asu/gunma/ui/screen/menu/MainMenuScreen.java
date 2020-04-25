@@ -23,7 +23,6 @@ import com.badlogic.gdx.audio.Music;
 import java.util.ArrayList;
 
 import asu.gunma.MiniGames.Controllers.AsteroidGameController;
-import asu.gunma.MiniGames.Controllers.StartWordScrambleGameController;
 import asu.gunma.MiniGames.Controllers.WordScrambleGameController;
 import asu.gunma.MiniGames.Models.AsteroidGameModel;
 import asu.gunma.MiniGames.Models.WordScrambleGameModel;
@@ -215,7 +214,6 @@ public class MainMenuScreen implements Screen {
         buttonGameThird.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                //StartWordScrambleGameController startWordScrambleGameController = new StartWordScrambleGameController(game, speechGDX, gameMusic, prefs, activeVList);
                 WordScrambleGameModel wordScrambleModel = new WordScrambleGameModel(0, activeVList);
                 WordScrambleGameController wordScrambleController = new WordScrambleGameController(wordScrambleModel);
                 WordScrambleGameView wordScrambleView = new WordScrambleGameView(game, speechGDX, gameMusic, game.getScreen(), prefs, wordScrambleController);

@@ -10,6 +10,7 @@ public class AsteroidModel
     private float velocity;
     private float direction;
     private Vector2 position;
+    private boolean isDisplayed;
 
     // constants
     public static final float MIN_VELOCITY = 0.01f;
@@ -32,6 +33,7 @@ public class AsteroidModel
         setVelocity(velocity);
         setDirection(direction);
         setPosition(xPos, yPos);
+        setIsDisplayed(false);
     }
 
     // get methods
@@ -54,6 +56,8 @@ public class AsteroidModel
     {
         return position;
     }
+
+    public boolean getIsDisplayed() { return isDisplayed; }
 
     // set methods
     public void setWord(VocabWord word)
@@ -86,6 +90,11 @@ public class AsteroidModel
             this.position = new Vector2(xPos, yPos);
         else
             this.position = new Vector2(DEFAULT_X_POS, DEFAULT_Y_POS);
+    }
+
+    public void setIsDisplayed(boolean isDisplayed)
+    {
+        this.isDisplayed = isDisplayed;
     }
 
     // other methods
