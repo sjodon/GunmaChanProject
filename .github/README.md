@@ -14,3 +14,5 @@ To load it up in Android studio, import the "build.gradle" file in the root dire
 - [__Speech Recognition Notes__](/doc/speech_recognition.md) : explains the issues we have come across with the speech recognition library used in this game.
 
 - [__Issue List__](/doc/issue_list.md) : summarizes some of the issues in the game that we have not yet resolved.
+
+- [__Asteroid Mini-Game Notes__](/doc/asteroid_mini_game.md) : explains the file structure of the asteroid mini-game and discusses tasks completed and bugs that need fixing.
